@@ -1,0 +1,11 @@
+# Issue 2 handoff
+
+Delivered one immutable `RobotDefinition` in `src/robot/definition.ts` backed by `assets/robot/robot-definition.json`; seven CAD-derived local rigid GLBs; `forwardKinematics(definition, angles)` returning Float64 column-major `linkMatrices`, `flange`, `tool0`, and `emitter`; exact-source preparation, independent numeric/source/export checks and an articulated home/source-overlay preview.
+
+Distances are meters, angles radians. Hard bounds and finite inputs are checked; no controller signs/payload distinction are claimed from CAD alone. Rendering and future IK must consume the same definition and source signs. Link `visualTransform` is identity; vertices already occupy verified link-local frames. Flange coincides with link6; tool0 is +90° local-Y; emitter is tool0 +80 mm. Home `(0,-π/2,+π/2,0,0,0)` gives flange `(968,0,1450)` and emitter `(1048,0,1450)` mm.
+
+Preparation rebuilds seven groups only after exact source hash, parser version and imported count gates. Run `npm ci --prefix tools/robot-assets`, then `prepare`, `test`, `typecheck`, `test:preview` scripts with Node24. Preview script serves a local Three.js harness; it does not introduce application scaffold, part placement, IK or run state. See `docs/verification/issue-02.md` and retained asset evidence for commands, byte hashes, common-unit bounds, measured residuals and screenshots.
+
+The official original-model datasheet facts are retained as a qualified cached primary numerical record, not an original PDF. The incorrect HTML download formerly called a PDF is removed. Source xacro remains the signed-frame authority, actual CAD re-extraction establishes pivot geometry. Preserve supplied provenance and all retained dependency notices.
+
+Next work is issue 3 **only after the user manually merges both issue 1 and issue 2 PRs**. It owns the React/TypeScript/Vite viewer and production build, static asset URLs, actual door transform/clearance and independent representative target checks. Later slices own runtime IK, five-point motion, Stop, downloads, Safari and full production acceptance. Issue 2 must remain open until its PR is manually merged and the orchestrator verifies its mandatory gates. No overall project acceptance is claimed.
