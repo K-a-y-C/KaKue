@@ -14,3 +14,9 @@ for (const [path, hash] of assets) {
 }
 console.log('Verified and staged eight actual CAD caches for same-origin serving.');
 await cp(resolve(root, 'assets/runtime-notices'), resolve(root, 'public/demo-v1/notices'), { recursive: true });
+const source = await readFile(resolve(root, door.source.path));
+if (source.byteLength !== door.source.bytes || createHash('sha256').update(source).digest('hex') !== door.source.sha256) throw new Error('Bundled STEP identity mismatch');
+await writeFile(resolve(root, 'public/demo-v1/door/DOOR-of-CAR.step'), source);
+const parserOutput = resolve(root, 'public/parser/occt-import-js/0.0.23');
+await mkdir(parserOutput, { recursive: true });
+for (const name of ['occt-import-js.js', 'occt-import-js.wasm', 'license.occt-import-js.txt', 'license.occt.txt']) await cp(resolve(root, 'node_modules/occt-import-js/dist', name), resolve(parserOutput, name));
