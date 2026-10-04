@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "path": "3d files/car-front-door-1/DOOR-of-CAR.step",
+    "name": "DOOR-of-CAR.step",
+    "format": "STEP AP214",
+    "units": "millimeter",
+    "provenance": "User-supplied replacement STEP, 2026-10-04; no conversion",
+    "bytes": 14456880,
+    "sha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef"
+  },
+  "importer": {
+    "package": "occt-import-js",
+    "version": "0.0.23",
+    "settings": {
+      "linearUnit": "meter",
+      "linearDeflectionType": "absolute_value",
+      "linearDeflection": 0.001,
+      "angularDeflection": 0.25
+    }
+  },
+  "cache": {
+    "path": "assets/door/door.glb",
+    "units": "meter",
+    "geometryScope": "Triangle surfaces only; original STEP loose edges/wires are preserved in source bytes",
+    "bytes": 4260444,
+    "sha256": "4059bd8e252b8ada125adbcdb1232c4bf26ec5bdd4d8689d8a21ac572e0f9b43",
+    "meshCount": 9,
+    "triangleCount": 137639,
+    "bounds": {
+      "min": [
+        1.4291454553604126,
+        -0.85830157995224,
+        0.367240309715271
+      ],
+      "max": [
+        2.641599416732788,
+        -0.47966140508651733,
+        1.4833567142486572
+      ]
+    }
+  },
+  "verificationEvidence": "docs/verification/door-native-report.json",
+  "placement": {
+    "status": "Unplaced; issue #3 freezes part-to-base transform after independent pose checks"
+  }
+}

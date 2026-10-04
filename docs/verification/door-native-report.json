@@ -1,0 +1,1036 @@
+{
+  "sourceSha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef",
+  "sourceUnits": "millimeter",
+  "unitsEvidence": "AP214 SI_UNIT(.MILLI.,.METRE.) source declaration; native default length unit millimeter",
+  "reader": {
+    "package": "cadquery-ocp",
+    "version": "7.8.1.1",
+    "vtkVersion": "9.3.1",
+    "numpyVersion": "2.4.6",
+    "transferRoots": 1
+  },
+  "topology": {
+    "solids": 0,
+    "shells": 9,
+    "faces": 3064,
+    "valid": false,
+    "invalidFaces": [
+      {
+        "index": 601,
+        "areaMm2": 0.055797925489068895,
+        "faceStatus": [
+          "BRepCheck_Status.BRepCheck_UnorientableShape"
+        ],
+        "wireIssue": "Self-intersecting trimming wire; independently inspected native BRepCheck results"
+      },
+      {
+        "index": 2918,
+        "areaMm2": 3851.495508388274,
+        "faceStatus": [
+          "BRepCheck_Status.BRepCheck_UnorientableShape"
+        ],
+        "wireIssue": "Self-intersecting trimming wire; independently inspected native BRepCheck results"
+      }
+    ],
+    "untriangulatedFaces": [
+      {
+        "index": 755,
+        "areaMm2": 0.756752754151831,
+        "boundsMm": [
+          2414.7809851788734,
+          -800.2739927158287,
+          630.7872636587177,
+          2418.2867950158106,
+          -794.2904144986436,
+          638.2461466319
+        ]
+      }
+    ]
+  },
+  "fullSourceBoundsMm": {
+    "min": [
+      1428.9917301998698,
+      -861.7219501071552,
+      76.15255963910238
+    ],
+    "max": [
+      2641.5994014198623,
+      -479.6126427668809,
+      1483.3572678046833
+    ]
+  },
+  "looseEdgesBelowSurface": [
+    {
+      "index": 0,
+      "boundsMm": [
+        1440.8576078626152,
+        -803.0728357370251,
+        76.15255963910238,
+        1440.8576078626152,
+        -803.0728357370251,
+        545.2692596610754
+      ]
+    }
+  ],
+  "nativeSurfaceBoundsMm": {
+    "min": [
+      1429.1454813502503,
+      -858.2459389273171,
+      367.2402968020126
+    ],
+    "max": [
+      2641.59933977669,
+      -479.6614145,
+      1483.3566679559756
+    ]
+  },
+  "cacheSurfaceBoundsMm": {
+    "min": [
+      1429.1454553604126,
+      -858.30157995224,
+      367.240309715271
+    ],
+    "max": [
+      2641.599416732788,
+      -479.66140508651733,
+      1483.3567142486572
+    ]
+  },
+  "nativeTriangles": 142334,
+  "nativeMeshing": {
+    "absoluteDeflectionMm": 1.0,
+    "angularDeflectionRad": 0.25
+  },
+  "cacheTriangles": 137639,
+  "maximumBoundsDifferenceMm": 0.055641024922920224,
+  "cacheSha256": "4059bd8e252b8ada125adbcdb1232c4bf26ec5bdd4d8689d8a21ac572e0f9b43",
+  "normalsMaximumLengthError": 4.935504338554608e-08,
+  "probes": [
+    {
+      "name": "window",
+      "maximumCacheHitErrorMm": 0,
+      "cacheHitYMm": [],
+      "rayOriginMm": [
+        2100.0,
+        -2000,
+        1200.0
+      ],
+      "rayDirection": [
+        0,
+        1,
+        0
+      ],
+      "hitsMm": []
+    },
+    {
+      "name": "skin",
+      "maximumCacheHitErrorMm": 0.2871506033729929,
+      "cacheHitYMm": [
+        -743.0999875068663,
+        -852.3304746548679
+      ],
+      "rayOriginMm": [
+        2100.0,
+        -2000,
+        750.0
+      ],
+      "rayDirection": [
+        0,
+        1,
+        0
+      ],
+      "hitsMm": [
+        [
+          2100.0,
+          -852.6176252582409,
+          750.0
+        ],
+        [
+          2100.0,
+          -743.1000084,
+          750.0
+        ]
+      ]
+    },
+    {
+      "name": "frame",
+      "maximumCacheHitErrorMm": 0.11421012238707817,
+      "cacheHitYMm": [
+        -483.7063760957854,
+        -486.2842069970049,
+        -481.3613210191505
+      ],
+      "rayOriginMm": [
+        2400.0,
+        -2000,
+        1470.0
+      ],
+      "rayDirection": [
+        0,
+        1,
+        0
+      ],
+      "hitsMm": [
+        [
+          2400.0,
+          -486.398417119392,
+          1470.0
+        ],
+        [
+          2400.0,
+          -483.81291675732996,
+          1470.0
+        ],
+        [
+          2400.0,
+          -481.36145897634265,
+          1470.0
+        ]
+      ]
+    }
+  ],
+  "cacheToNativeTriangleSamples": [
+    {
+      "triangle": 0,
+      "pointMm": [
+        1483.1175009409587,
+        -832.9009016354879,
+        769.4393992424011
+      ],
+      "distanceToNativeTrianglesMm": 1.4788286314113671e-05
+    },
+    {
+      "triangle": 3529,
+      "pointMm": [
+        2628.4711360931396,
+        -534.0216755867004,
+        1440.6829675038655
+      ],
+      "distanceToNativeTrianglesMm": 0.029806183874604028
+    },
+    {
+      "triangle": 7058,
+      "pointMm": [
+        1901.3423124949138,
+        -728.622555732727,
+        674.286683400472
+      ],
+      "distanceToNativeTrianglesMm": 2.6154251669097964e-06
+    },
+    {
+      "triangle": 10587,
+      "pointMm": [
+        2317.4893856048584,
+        -792.222261428833,
+        397.9829450448354
+      ],
+      "distanceToNativeTrianglesMm": 0.10198091458557594
+    },
+    {
+      "triangle": 14116,
+      "pointMm": [
+        1804.7088781992595,
+        -746.2013959884644,
+        522.4621891975403
+      ],
+      "distanceToNativeTrianglesMm": 7.972818604099394e-06
+    },
+    {
+      "triangle": 17645,
+      "pointMm": [
+        1624.09774462382,
+        -738.099992275238,
+        755.1645835240682
+      ],
+      "distanceToNativeTrianglesMm": 3.1480875577472055e-06
+    },
+    {
+      "triangle": 21175,
+      "pointMm": [
+        1693.1617657343547,
+        -730.4216821988424,
+        507.35966364542645
+      ],
+      "distanceToNativeTrianglesMm": 0.07693875221697076
+    },
+    {
+      "triangle": 24704,
+      "pointMm": [
+        2615.567366282145,
+        -492.82941222190857,
+        1476.0820468266804
+      ],
+      "distanceToNativeTrianglesMm": 0.06561517927690756
+    },
+    {
+      "triangle": 28233,
+      "pointMm": [
+        2457.9122066497803,
+        -825.2238829930624,
+        467.1985407670339
+      ],
+      "distanceToNativeTrianglesMm": 0.002070504051271654
+    },
+    {
+      "triangle": 31762,
+      "pointMm": [
+        1603.5148700078328,
+        -728.8851340611776,
+        891.4204438527426
+      ],
+      "distanceToNativeTrianglesMm": 4.237399822164273e-06
+    },
+    {
+      "triangle": 35291,
+      "pointMm": [
+        1506.7220131556194,
+        -780.2064418792725,
+        485.0723147392273
+      ],
+      "distanceToNativeTrianglesMm": 0.011506504738205758
+    },
+    {
+      "triangle": 38820,
+      "pointMm": [
+        1816.1182006200154,
+        -619.9264923731486,
+        1241.800308227539
+      ],
+      "distanceToNativeTrianglesMm": 0.03623478215661531
+    },
+    {
+      "triangle": 42350,
+      "pointMm": [
+        1680.3016265233357,
+        -742.9274519284567,
+        826.5125155448914
+      ],
+      "distanceToNativeTrianglesMm": 2.3480192011754738e-05
+    },
+    {
+      "triangle": 45879,
+      "pointMm": [
+        1547.7558771769206,
+        -773.1335361798605,
+        649.8417456944784
+      ],
+      "distanceToNativeTrianglesMm": 0.00442714588656788
+    },
+    {
+      "triangle": 49408,
+      "pointMm": [
+        1877.1448930104573,
+        -733.1794500350952,
+        525.6885290145874
+      ],
+      "distanceToNativeTrianglesMm": 0.01487038542358014
+    },
+    {
+      "triangle": 52937,
+      "pointMm": [
+        2293.1413650512695,
+        -736.6343935330709,
+        547.9291280110677
+      ],
+      "distanceToNativeTrianglesMm": 0.003502400885369933
+    },
+    {
+      "triangle": 56466,
+      "pointMm": [
+        2435.9230995178223,
+        -792.4909392992655,
+        680.4021000862122
+      ],
+      "distanceToNativeTrianglesMm": 0.03933698670900309
+    },
+    {
+      "triangle": 59996,
+      "pointMm": [
+        1462.1609052022297,
+        -753.0350685119629,
+        985.8615001042684
+      ],
+      "distanceToNativeTrianglesMm": 0.0018153787183957353
+    },
+    {
+      "triangle": 63525,
+      "pointMm": [
+        1488.9674186706543,
+        -804.7815362612406,
+        390.08237918217975
+      ],
+      "distanceToNativeTrianglesMm": 0.01762521782858887
+    },
+    {
+      "triangle": 67054,
+      "pointMm": [
+        1978.2673517862956,
+        -724.403460820516,
+        665.088951587677
+      ],
+      "distanceToNativeTrianglesMm": 8.155124042879652e-06
+    },
+    {
+      "triangle": 70583,
+      "pointMm": [
+        1621.5593814849854,
+        -737.8067374229431,
+        804.1735688845316
+      ],
+      "distanceToNativeTrianglesMm": 0.05144436369504722
+    },
+    {
+      "triangle": 74112,
+      "pointMm": [
+        2286.8875662485757,
+        -735.7914646466573,
+        499.9943971633911
+      ],
+      "distanceToNativeTrianglesMm": 1.7845459102026482e-05
+    },
+    {
+      "triangle": 77641,
+      "pointMm": [
+        2043.6267058054607,
+        -726.0452111562093,
+        774.9713460604349
+      ],
+      "distanceToNativeTrianglesMm": 1.7270680033926817e-06
+    },
+    {
+      "triangle": 81171,
+      "pointMm": [
+        2295.9434191385903,
+        -725.7114847501119,
+        702.6267846425375
+      ],
+      "distanceToNativeTrianglesMm": 0.016120648092733808
+    },
+    {
+      "triangle": 84700,
+      "pointMm": [
+        1679.0241797765095,
+        -680.819551150004,
+        1103.0980745951335
+      ],
+      "distanceToNativeTrianglesMm": 4.266127951444599e-06
+    },
+    {
+      "triangle": 88229,
+      "pointMm": [
+        2591.6360219319663,
+        -586.0705176989237,
+        1356.1132351557414
+      ],
+      "distanceToNativeTrianglesMm": 0.0030735725434340756
+    },
+    {
+      "triangle": 91758,
+      "pointMm": [
+        2507.2449843088784,
+        -795.7925995190939,
+        958.8431318600973
+      ],
+      "distanceToNativeTrianglesMm": 0.011473845062658482
+    },
+    {
+      "triangle": 95287,
+      "pointMm": [
+        1465.5865828196208,
+        -759.9662939707438,
+        959.1486056645712
+      ],
+      "distanceToNativeTrianglesMm": 2.316008863488804e-05
+    },
+    {
+      "triangle": 98817,
+      "pointMm": [
+        1909.4635645548503,
+        -733.1072886784872,
+        650.1386960347494
+      ],
+      "distanceToNativeTrianglesMm": 1.8464082139526156e-05
+    },
+    {
+      "triangle": 102346,
+      "pointMm": [
+        1662.750244140625,
+        -733.572800954183,
+        685.0937803586324
+      ],
+      "distanceToNativeTrianglesMm": 0.007012125023634252
+    },
+    {
+      "triangle": 105875,
+      "pointMm": [
+        2337.6553853352866,
+        -833.4415356318156,
+        844.4023132324219
+      ],
+      "distanceToNativeTrianglesMm": 0.03830795866908449
+    },
+    {
+      "triangle": 109404,
+      "pointMm": [
+        1969.5574442545574,
+        -605.6285500526428,
+        1306.3790400822957
+      ],
+      "distanceToNativeTrianglesMm": 0.00020646435054555602
+    },
+    {
+      "triangle": 112933,
+      "pointMm": [
+        2116.753180821737,
+        -563.0780657132467,
+        1375.8673270543416
+      ],
+      "distanceToNativeTrianglesMm": 0.007123020811350136
+    },
+    {
+      "triangle": 116462,
+      "pointMm": [
+        2173.133134841919,
+        -553.9405544598898,
+        1391.044815381368
+      ],
+      "distanceToNativeTrianglesMm": 0.004013146740589935
+    },
+    {
+      "triangle": 119992,
+      "pointMm": [
+        2472.9777177174888,
+        -538.8342142105103,
+        1424.8377482096355
+      ],
+      "distanceToNativeTrianglesMm": 0.0036867971411033095
+    },
+    {
+      "triangle": 123521,
+      "pointMm": [
+        1532.107909520467,
+        -741.2329316139221,
+        1010.3939771652222
+      ],
+      "distanceToNativeTrianglesMm": 6.120199716333857e-06
+    },
+    {
+      "triangle": 127050,
+      "pointMm": [
+        2491.4427598317466,
+        -740.2381896972656,
+        1047.38187789917
+      ],
+      "distanceToNativeTrianglesMm": 0.013924281950972953
+    },
+    {
+      "triangle": 130579,
+      "pointMm": [
+        2514.7552490234375,
+        -813.0846420923868,
+        371.55382831891376
+      ],
+      "distanceToNativeTrianglesMm": 3.424434205245873e-05
+    },
+    {
+      "triangle": 134108,
+      "pointMm": [
+        2399.2930253346763,
+        -729.9981911977133,
+        593.0850903193156
+      ],
+      "distanceToNativeTrianglesMm": 0.006056317780999976
+    },
+    {
+      "triangle": 137638,
+      "pointMm": [
+        1736.5264495213826,
+        -733.6000204086304,
+        650.6494879722595
+      ],
+      "distanceToNativeTrianglesMm": 2.0850047576459487e-05
+    }
+  ],
+  "nativeToCacheTriangleSamples": [
+    {
+      "triangle": 0,
+      "pointMm": [
+        1483.117527859614,
+        -832.90088860871,
+        769.4394123453327
+      ],
+      "distanceToCacheMm": 1.4789447039013682e-05,
+      "nativeFaceIndex": 0,
+      "distanceToAnalyticFaceMm": 0.006251352722813378
+    },
+    {
+      "triangle": 3649,
+      "pointMm": [
+        1462.2017104940032,
+        -843.0666243416881,
+        602.7865872702379
+      ],
+      "distanceToCacheMm": 0.01779394375527393,
+      "nativeFaceIndex": 59,
+      "distanceToAnalyticFaceMm": 0.036713209007849544
+    },
+    {
+      "triangle": 7299,
+      "pointMm": [
+        2386.391901329517,
+        -717.3831025505812,
+        955.5999750450464
+      ],
+      "distanceToCacheMm": 1.3336652075471138e-05,
+      "nativeFaceIndex": 180,
+      "distanceToAnalyticFaceMm": 0.05555551180901428
+    },
+    {
+      "triangle": 10948,
+      "pointMm": [
+        2429.577700292439,
+        -804.719414258,
+        389.3634093573193
+      ],
+      "distanceToCacheMm": 0.01377831678747954,
+      "nativeFaceIndex": 290,
+      "distanceToAnalyticFaceMm": 0.023112489311039746
+    },
+    {
+      "triangle": 14598,
+      "pointMm": [
+        1480.036785437698,
+        -806.9413247142878,
+        386.0029292136316
+      ],
+      "distanceToCacheMm": 1.2030753000490649e-05,
+      "nativeFaceIndex": 394,
+      "distanceToAnalyticFaceMm": 0.02629241908516485
+    },
+    {
+      "triangle": 18247,
+      "pointMm": [
+        2269.5215700893978,
+        -734.5911276241259,
+        519.7567974594918
+      ],
+      "distanceToCacheMm": 9.015332674660339e-06,
+      "nativeFaceIndex": 472,
+      "distanceToAnalyticFaceMm": 0.010126459802401492
+    },
+    {
+      "triangle": 21897,
+      "pointMm": [
+        1490.853180695092,
+        -815.234267250724,
+        492.80960005276864
+      ],
+      "distanceToCacheMm": 2.9072102811877114e-05,
+      "nativeFaceIndex": 606,
+      "distanceToAnalyticFaceMm": 0.0
+    },
+    {
+      "triangle": 25546,
+      "pointMm": [
+        2317.2343021887355,
+        -785.7072163760496,
+        397.27278058310804
+      ],
+      "distanceToCacheMm": 0.015794412825519834,
+      "nativeFaceIndex": 685,
+      "distanceToAnalyticFaceMm": 0.08198548844709372
+    },
+    {
+      "triangle": 29196,
+      "pointMm": [
+        2421.3640005163325,
+        -824.9849497510332,
+        616.7813635111969
+      ],
+      "distanceToCacheMm": 0.0010985924360296343,
+      "nativeFaceIndex": 763,
+      "distanceToAnalyticFaceMm": 0.0002755314440649875
+    },
+    {
+      "triangle": 32846,
+      "pointMm": [
+        1493.9866695482212,
+        -781.3624703354129,
+        666.5740709612805
+      ],
+      "distanceToCacheMm": 0.02387564761464945,
+      "nativeFaceIndex": 842,
+      "distanceToAnalyticFaceMm": 0.034642918218712446
+    },
+    {
+      "triangle": 36495,
+      "pointMm": [
+        2400.985848614661,
+        -796.9423677851996,
+        545.418691040575
+      ],
+      "distanceToCacheMm": 0.03476489594851389,
+      "nativeFaceIndex": 913,
+      "distanceToAnalyticFaceMm": 0.040576290121617925
+    },
+    {
+      "triangle": 40145,
+      "pointMm": [
+        2360.9431044140624,
+        -723.4605797654939,
+        921.1574294248925
+      ],
+      "distanceToCacheMm": 4.2661620080903523e-07,
+      "nativeFaceIndex": 969,
+      "distanceToAnalyticFaceMm": 0.03538594934069743
+    },
+    {
+      "triangle": 43794,
+      "pointMm": [
+        2530.9948196427645,
+        -507.5298486096761,
+        1440.533663234356
+      ],
+      "distanceToCacheMm": 0.0016556444290490538,
+      "nativeFaceIndex": 1074,
+      "distanceToAnalyticFaceMm": 0.013363720983271894
+    },
+    {
+      "triangle": 47444,
+      "pointMm": [
+        2245.7192875038036,
+        -771.9619830157814,
+        412.2640381444165
+      ],
+      "distanceToCacheMm": 0.03034736964799711,
+      "nativeFaceIndex": 1146,
+      "distanceToAnalyticFaceMm": 0.08351632868857436
+    },
+    {
+      "triangle": 51093,
+      "pointMm": [
+        2324.9745873135666,
+        -736.5909758087793,
+        814.1802709091229
+      ],
+      "distanceToCacheMm": 0.0012386184497131312,
+      "nativeFaceIndex": 1246,
+      "distanceToAnalyticFaceMm": 0.031119162745818874
+    },
+    {
+      "triangle": 54743,
+      "pointMm": [
+        1884.796685313704,
+        -736.654775410506,
+        520.1689737834539
+      ],
+      "distanceToCacheMm": 0.003577283411888869,
+      "nativeFaceIndex": 1280,
+      "distanceToAnalyticFaceMm": 0.034927102120830965
+    },
+    {
+      "triangle": 58393,
+      "pointMm": [
+        2412.1410401326134,
+        -728.6397627441697,
+        649.2121527133405
+      ],
+      "distanceToCacheMm": 0.005717026159691097,
+      "nativeFaceIndex": 1318,
+      "distanceToAnalyticFaceMm": 0.030230956706560837
+    },
+    {
+      "triangle": 62042,
+      "pointMm": [
+        1519.8562967316313,
+        -686.5187897813545,
+        1074.0509754096508
+      ],
+      "distanceToCacheMm": 0.04701228317285479,
+      "nativeFaceIndex": 1406,
+      "distanceToAnalyticFaceMm": 0.0017330266992029249
+    },
+    {
+      "triangle": 65692,
+      "pointMm": [
+        1477.355297100857,
+        -788.8933340734711,
+        920.7571132291655
+      ],
+      "distanceToCacheMm": 6.812923496957249e-06,
+      "nativeFaceIndex": 1518,
+      "distanceToAnalyticFaceMm": 0.14063031380624513
+    },
+    {
+      "triangle": 69341,
+      "pointMm": [
+        2553.905468215653,
+        -600.0617787361934,
+        1300.709654808538
+      ],
+      "distanceToCacheMm": 0.012333788500254357,
+      "nativeFaceIndex": 1597,
+      "distanceToAnalyticFaceMm": 0.029851440839773896
+    },
+    {
+      "triangle": 72991,
+      "pointMm": [
+        1628.3038739140854,
+        -733.5220273946903,
+        812.3028633281001
+      ],
+      "distanceToCacheMm": 7.474591776521262e-06,
+      "nativeFaceIndex": 1687,
+      "distanceToAnalyticFaceMm": 0.007917307618595597
+    },
+    {
+      "triangle": 76640,
+      "pointMm": [
+        2289.7147729367957,
+        -737.9290637018881,
+        502.4091550669071
+      ],
+      "distanceToCacheMm": 0.029141927225597636,
+      "nativeFaceIndex": 1785,
+      "distanceToAnalyticFaceMm": 0.08212048801907702
+    },
+    {
+      "triangle": 80290,
+      "pointMm": [
+        1888.7673005561994,
+        -739.2545390746526,
+        653.6937021766513
+      ],
+      "distanceToCacheMm": 4.459940250945577e-06,
+      "nativeFaceIndex": 1876,
+      "distanceToAnalyticFaceMm": 5.684341886080801e-13
+    },
+    {
+      "triangle": 83939,
+      "pointMm": [
+        2259.013769000007,
+        -724.3849138959357,
+        699.5015911678133
+      ],
+      "distanceToCacheMm": 9.988159831664234e-06,
+      "nativeFaceIndex": 1980,
+      "distanceToAnalyticFaceMm": 4.064304448547773e-09
+    },
+    {
+      "triangle": 87589,
+      "pointMm": [
+        1678.2909189597801,
+        -682.7431203540458,
+        1099.6819539157163
+      ],
+      "distanceToCacheMm": 8.206161681563273e-06,
+      "nativeFaceIndex": 2069,
+      "distanceToAnalyticFaceMm": 0.14361371697377906
+    },
+    {
+      "triangle": 91239,
+      "pointMm": [
+        2500.348885095476,
+        -751.463157578386,
+        1008.0763205478598
+      ],
+      "distanceToCacheMm": 0.01879638557619787,
+      "nativeFaceIndex": 2152,
+      "distanceToAnalyticFaceMm": 0.051517539386412785
+    },
+    {
+      "triangle": 94888,
+      "pointMm": [
+        2495.9346973601737,
+        -715.5074339316907,
+        995.0851005995682
+      ],
+      "distanceToCacheMm": 0.02275516641000628,
+      "nativeFaceIndex": 2214,
+      "distanceToAnalyticFaceMm": 0.01403663484453157
+    },
+    {
+      "triangle": 98538,
+      "pointMm": [
+        2558.7400157313587,
+        -608.5277805053015,
+        1269.6970927509194
+      ],
+      "distanceToCacheMm": 0.0037025983052398443,
+      "nativeFaceIndex": 2269,
+      "distanceToAnalyticFaceMm": 0.010088820072918179
+    },
+    {
+      "triangle": 102187,
+      "pointMm": [
+        1998.7466185524656,
+        -734.7421954304838,
+        505.02521826687456
+      ],
+      "distanceToCacheMm": 7.575578469403204e-06,
+      "nativeFaceIndex": 2375,
+      "distanceToAnalyticFaceMm": 0.07794138766368906
+    },
+    {
+      "triangle": 105837,
+      "pointMm": [
+        1465.760423216222,
+        -807.5623455423435,
+        897.7188101340658
+      ],
+      "distanceToCacheMm": 0.00948843706349789,
+      "nativeFaceIndex": 2466,
+      "distanceToAnalyticFaceMm": 0.0008023292579764878
+    },
+    {
+      "triangle": 109486,
+      "pointMm": [
+        1469.4509959815814,
+        -762.7855194448172,
+        967.0913126327573
+      ],
+      "distanceToCacheMm": 0.020325527475321955,
+      "nativeFaceIndex": 2558,
+      "distanceToAnalyticFaceMm": 0.011396720961829244
+    },
+    {
+      "triangle": 113136,
+      "pointMm": [
+        1773.394708508121,
+        -667.7061261306798,
+        1185.4171392723867
+      ],
+      "distanceToCacheMm": 0.001879802368277837,
+      "nativeFaceIndex": 2677,
+      "distanceToAnalyticFaceMm": 0.010047664357113092
+    },
+    {
+      "triangle": 116786,
+      "pointMm": [
+        1996.3628454076554,
+        -596.9540450268861,
+        1320.9949073645985
+      ],
+      "distanceToCacheMm": 0.005135452381587541,
+      "nativeFaceIndex": 2680,
+      "distanceToAnalyticFaceMm": 0.0020068665934687958
+    },
+    {
+      "triangle": 120435,
+      "pointMm": [
+        2170.1859794995585,
+        -553.7719291330733,
+        1390.2867626163998
+      ],
+      "distanceToCacheMm": 0.0015359688095556488,
+      "nativeFaceIndex": 2682,
+      "distanceToAnalyticFaceMm": 0.0062761322512870175
+    },
+    {
+      "triangle": 124085,
+      "pointMm": [
+        2369.5447054162273,
+        -541.0627023535011,
+        1417.7188868778278
+      ],
+      "distanceToCacheMm": 1.0482046402147707e-05,
+      "nativeFaceIndex": 2692,
+      "distanceToAnalyticFaceMm": 0.005284286377825363
+    },
+    {
+      "triangle": 127734,
+      "pointMm": [
+        2354.740803634522,
+        -541.4656477213031,
+        1416.4010556486917
+      ],
+      "distanceToCacheMm": 0.08646722483376704,
+      "nativeFaceIndex": 2693,
+      "distanceToAnalyticFaceMm": 0.01055006494284749
+    },
+    {
+      "triangle": 131384,
+      "pointMm": [
+        2456.254747510105,
+        -828.7089311246497,
+        846.8978043093093
+      ],
+      "distanceToCacheMm": 0.000973667587859825,
+      "nativeFaceIndex": 2774,
+      "distanceToAnalyticFaceMm": 0.003872414937785821
+    },
+    {
+      "triangle": 135033,
+      "pointMm": [
+        1878.5849649624522,
+        -588.328487116361,
+        1300.6707711100578
+      ],
+      "distanceToCacheMm": 0.1088903470850749,
+      "nativeFaceIndex": 2857,
+      "distanceToAnalyticFaceMm": 0.08195580226923264
+    },
+    {
+      "triangle": 138683,
+      "pointMm": [
+        2457.3919068107493,
+        -730.4750866249633,
+        742.8619062943053
+      ],
+      "distanceToCacheMm": 0.00015884907924529852,
+      "nativeFaceIndex": 2931,
+      "distanceToAnalyticFaceMm": 0.00011262769597619465
+    },
+    {
+      "triangle": 142333,
+      "pointMm": [
+        1736.5264326107729,
+        -733.5999995585835,
+        650.6494680255236
+      ],
+      "distanceToCacheMm": 2.0850046894338448e-05,
+      "nativeFaceIndex": 3063,
+      "distanceToAnalyticFaceMm": 2.2737367544323206e-13
+    }
+  ],
+  "omittedBrowserFaceChecks": [
+    {
+      "nativeFaceIndex": 601,
+      "sampleCount": 121,
+      "maximumDistanceToCacheMm": 0.09831921545735094,
+      "boundsMm": {
+        "min": [
+          1701.5317998668024,
+          -728.6800439323247,
+          971.0259511329785
+        ],
+        "max": [
+          1702.1918630000005,
+          -726.1183495479388,
+          975.7552409936818
+        ]
+      }
+    },
+    {
+      "nativeFaceIndex": 755,
+      "sampleCount": 433,
+      "maximumDistanceToCacheMm": 1.7370172781377358,
+      "boundsMm": {
+        "min": [
+          2414.780985278873,
+          -800.2739940203275,
+          630.7077780447711
+        ],
+        "max": [
+          2418.286794915811,
+          -794.2904145986436,
+          638.3256494703317
+        ]
+      }
+    }
+  ],
+  "maximumAnalyticFaceSampleDistanceMm": 0.14361371697377906,
+  "maximumSampleDistanceMm": 1.7370172781377358,
+  "verificationElapsedSeconds": 71.53876512497663,
+  "limits": "Surface samples are not exhaustive Hausdorff evidence. Open/invalid source topology and missing native triangulation are retained, not repaired. Loose source wires are not triangle picking surfaces."
+}
