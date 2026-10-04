@@ -6,4 +6,4 @@ GitHub issues are the implementation tracker. Read the approved issue backlog an
 
 Specification: `.scratch/robot-door-scan-demo/PRD.md`. Backlog: `.scratch/robot-door-scan-demo/issues/breakdown.md`. Agent workflow: `docs/agents/implementation-guide.md`.
 
-The local workspace has no Git metadata yet. Use a real repository checkout for branches and commits; never assume local changes have been pushed.
+The local workspace is now a real checkout of this repository. Supplied CAD and pinned joint/research source inputs are committed on `sources/verified-inputs` for manual review. Use isolated issue branches/checkouts for implementation; never assume a local commit has been published or a pending PR has landed. Only review branches may be pushed. The user reviews and merges PRs manually; do not push to main.
