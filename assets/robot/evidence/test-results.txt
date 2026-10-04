@@ -1,0 +1,18 @@
+independent exported-core overlay: 361773 vertices, maximum 0.0000306496787504423 mm
+✔ prepared rigid links independently reassemble onto every actual STEP core vertex at home (78293.799542ms)
+✔ preparation explicitly rejects a source whose identity does not authorize the core grouping (249.567583ms)
+✔ home robot flange and scanner emitter coincide with independently measured CAD datums (1.969708ms)
+✔ signed A1 motion carries flange and rigid emitter clockwise and rejects invalid intervals (0.539417ms)
+✔ independently constructed A5 wrist bend carries the flange 153 mm and emitter another 80 mm downward (0.185416ms)
+independent actual STEP axes/flange: [{"entity":"11813","placement":"180850","pointMm":[0,0,309.5],"direction":[0,0,1],"transverseResidualMm":0},{"entity":"11735","placement":"180022","pointMm":[160,97.6400030035658,520],"direction":[0,-1,0],"transverseResidualMm":0},{"entity":"10756","placement":"173989","pointMm":[160.000000000001,-105.000000000004,1300],"direction":[0,1,0],"transverseResidualMm":9.947598300641403e-13},{"entity":"10704","placement":"173050","pointMm":[405.000000000001,-4.09272615797818e-12,1450],"direction":[1,0,0],"transverseResidualMm":4.09272615797818e-12},{"entity":"11262","placement":"176490","pointMm":[815.000003067001,-4.09272615797818e-12,1450],"direction":[0,-1,0],"transverseResidualMm":0.0000030670009891764494},{"entity":"16600","placement":"176460","pointMm":[968.000003067001,-3.22883386694173e-12,1450],"direction":[1,0,0],"transverseResidualMm":3.22883386694173e-12}]
+✔ all compiled signed axes, origins, intervals, speeds and fixed frames match pinned joint source (7.135209ms)
+✔ actual STEP cylinder axes and flange plane independently coincide with compiled home chain (467.552042ms)
+✔ hard intervals and rated speeds agree with qualified official original-model numerical evidence (0.726542ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78647.635542

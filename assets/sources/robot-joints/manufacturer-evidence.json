@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "normalized-manufacturer-numerical-evidence",
+  "model": "KR 16 R1610",
+  "manufacturer": "KUKA Deutschland GmbH",
+  "source": {
+    "url": "https://www.kuka.com/-/media/kuka-downloads/imported/8350ff3ca11642998dbdc81dcc2ed44c/0000262125_it.pdf",
+    "documentNumber": "0000-262-125",
+    "revision": "V5.1",
+    "publicationDate": "2022-09-23",
+    "language": "it",
+    "page": 1,
+    "pageCount": 1,
+    "retrievedDate": "2026-10-04",
+    "retrievalMethod": "web.run open cached PDF text extraction",
+    "reportedContentType": "application/pdf",
+    "reportedCacheAge": "1.6 years",
+    "originalPdfBytesRetained": false,
+    "originalPdfSha256": null
+  },
+  "facts": {
+    "maximumReachMm": 1612,
+    "axisCount": 6,
+    "ratedPayloadKg": 16,
+    "maximumPayloadKg": 20,
+    "approximateMassKg": 245,
+    "joints": [
+      {"name": "A1", "minimumDeg": -185, "maximumDeg": 185, "ratedSpeedDegPerSecond": 200},
+      {"name": "A2", "minimumDeg": -185, "maximumDeg": 65, "ratedSpeedDegPerSecond": 175},
+      {"name": "A3", "minimumDeg": -138, "maximumDeg": 175, "ratedSpeedDegPerSecond": 190},
+      {"name": "A4", "minimumDeg": -350, "maximumDeg": 350, "ratedSpeedDegPerSecond": 430},
+      {"name": "A5", "minimumDeg": -130, "maximumDeg": 130, "ratedSpeedDegPerSecond": 430},
+      {"name": "A6", "minimumDeg": -350, "maximumDeg": 350, "ratedSpeedDegPerSecond": 630}
+    ]
+  },
+  "cachedExtractionEvidence": {
+    "sourcePage": 1,
+    "modelLine0": "KR 16 R1610",
+    "reachLine2": "Massimo raggio d’azione 1612 mm",
+    "axisCountLine11": "Numero assi 6",
+    "motionRangeLines20to25": ["A1 ±185 °", "A2 -185 ° / 65 °", "A3 -138 ° / 175 °", "A4 ±350 °", "A5 ±130 °", "A6 ±350 °"],
+    "ratedSpeedLines27to32": ["A1 200 °/s", "A2 175 °/s", "A3 190 °/s", "A4 430 °/s", "A5 430 °/s", "A6 630 °/s"],
+    "footerLine48": "0000-262-125 / V5.1 / 23.09.2022 / it",
+    "manufacturerLine49": "KUKA Deutschland GmbH"
+  },
+  "liveRetrievalCheck": {
+    "checkedAtUtc": "2026-10-04T17:08:51Z",
+    "initialHttpStatus": 301,
+    "redirectUrl": "https://www.kuka.com/services/downloads",
+    "finalHttpStatus": 200,
+    "finalContentType": "text/html; charset=utf-8",
+    "finalByteLength": 175350,
+    "result": "Download Center HTML, not PDF; excluded as a datasheet source artifact"
+  },
+  "qualification": [
+    "This is a normalized factual record backed by a successful cached text extraction of an official KUKA PDF URL; it is not the original manufacturer PDF or a claim of verified original PDF bytes.",
+    "A later PDF screenshot request returned cache miss; repeated retrieval is not guaranteed. Live official PDF delivery redirected to the Download Center.",
+    "The document identifies the original KR 16 R1610 without the -2 suffix. No newer-variant or reseller specification is substituted.",
+    "Manufacturer ranges and rated speeds corroborate the selected demo variant. They do not establish the supplied CAD payload variant, signed controller directions, articulated geometry, or physical safety.",
+    "Use the separately retained pinned community xacro for joint frames and signed axes, and supplied-CAD measurements for geometry correspondence. The xacro is not an official manufacturer release."
+  ]
+}

@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Supplied robot — asset verification</title><link rel="icon" href="data:,">
+<style>body{margin:0;font:15px system-ui;background:#e9edf1;color:#18222d}canvas{display:block}header{position:absolute;top:16px;left:16px;background:#ffffffeb;border-radius:8px;padding:16px;max-width:380px}h1{font-size:18px;margin:0 0 8px}button{padding:8px;margin:4px}p{line-height:1.4;margin:8px 0}#status{font-family:monospace;font-size:12px}</style>
+<header><h1>Supplied robot CAD verification</h1><p>Seven actual STEP core groups; meters, +Z up. Blue wire overlay is the unchanged source core at the supplied home pose.</p><button id="home">Home</button><button id="wrist">A5 +90°</button><label><input id="overlay" type="checkbox" checked> Source overlay</label><p id="status">Loading actual CAD link assets…</p></header>
+<script type="importmap">{"imports":{"three":"/tools/robot-assets/node_modules/three/build/three.module.js","three/addons/":"/tools/robot-assets/node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {robotDefinition as definition} from '/src/robot/definition.ts';
+import {forwardKinematics} from '/src/robot/forward-kinematics.ts';
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(devicePixelRatio);document.body.append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#e9edf1');
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,30);camera.up.set(0,0,1);camera.position.set(2.9,-3.2,2.5);
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(.4,0,.85);controls.update();
+scene.add(new THREE.HemisphereLight(0xffffff,0x7b8390,2));const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(2,-2,4);scene.add(light);
+const grid=new THREE.GridHelper(4,40,0x67788a,0xcbd2da);grid.rotation.x=Math.PI/2;scene.add(grid);scene.add(new THREE.AxesHelper(.3));
+const loader=new GLTFLoader(),groups=new Map();
+for(const link of definition.links){const loaded=await loader.loadAsync('/assets/robot/'+link.mesh);loaded.scene.matrixAutoUpdate=false;groups.set(link.name,loaded.scene);scene.add(loaded.scene);}
+const source=(await loader.loadAsync('/assets/robot/evidence/source-core.glb')).scene;
+source.traverse(n=>{if(n.isMesh)n.material=new THREE.MeshBasicMaterial({color:0x005de9,wireframe:true,transparent:true,opacity:.18,depthWrite:false});});scene.add(source);
+const tool=new THREE.Group();tool.matrixAutoUpdate=false;scene.add(tool);
+const box=new THREE.Mesh(new THREE.BoxGeometry(...definition.scanner.dimensions),new THREE.MeshStandardMaterial({color:0x253748,roughness:.45}));box.position.fromArray(definition.scanner.tool0ToCenter);tool.add(box);
+const emitter=new THREE.Mesh(new THREE.SphereGeometry(.01,12,8),new THREE.MeshBasicMaterial({color:0xef2424}));emitter.position.fromArray(definition.scanner.tool0ToEmitter);tool.add(emitter);tool.add(new THREE.AxesHelper(.14));
+function setPose(angles){const pose=forwardKinematics(definition,angles);for(const [name,group] of groups)group.matrix.fromArray(pose.linkMatrices[name]);tool.matrix.fromArray(pose.tool0);scene.updateMatrixWorld(true);const mm=Array.from(pose.emitter.slice(12,15),x=>(x*1000).toFixed(1));document.querySelector('#status').textContent=`Verified assets loaded. Emitter (${mm.join(', ')}) mm`;window.robotVerification={angles,emitterMm:mm.map(Number),loaded:true};}
+setPose(definition.home);
+document.querySelector('#home').onclick=()=>setPose(definition.home);
+document.querySelector('#wrist').onclick=()=>setPose([0,-Math.PI/2,Math.PI/2,0,Math.PI/2,0]);
+document.querySelector('#overlay').onchange=e=>source.visible=e.target.checked;
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+renderer.setAnimationLoop(()=>renderer.render(scene,camera));
+</script></html>
