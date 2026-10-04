@@ -1,3 +1,5 @@
+import { loadBundledSource } from '../import/step-import';
+import type { PartAsset } from '../import/types';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -14,14 +16,19 @@ function disposeObject(object: THREE.Object3D) {
     }
   });
 }
-/** Opens the fixed actual scene and returns the complete lifecycle cleanup. */
-export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation) => void, fail: (message: string) => void): () => void {
+export interface SceneHandle { clearPart(): void; replacePart(part: PartAsset): void; dispose(): void }
+/** Owns the scene and replaceable part GPU resources. */
+export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation, part: PartAsset) => void, fail: (message: string) => void): SceneHandle {
   let active = true;
+  const initialization = new AbortController();
+  let currentPart: THREE.Group | undefined;
+  let publishPart: (part: THREE.Group, asset: PartAsset) => void = () => {};
+  const clearPart = () => { if (currentPart) { scene.remove(currentPart); disposeObject(currentPart); currentPart = undefined; } };
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#e8edf1');
   let renderer: THREE.WebGLRenderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
-  catch { fail('WebGL2 is required to display this scene. Use a desktop browser with hardware acceleration enabled, then reload.'); return () => {}; }
+  catch { fail('WebGL2 is required to display this scene. Use a desktop browser with hardware acceleration enabled, then reload.'); return { clearPart() {}, replacePart() {}, dispose() {} }; }
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.domElement.setAttribute('role', 'img');
   renderer.domElement.setAttribute('aria-label', '3D robot and door scene');
@@ -57,7 +64,15 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation)
     scanner.position.fromArray(robotDefinition.scanner.tool0ToCenter); tool.add(scanner);
     const emitter = new THREE.Mesh(new THREE.CircleGeometry(.012, 16), new THREE.MeshBasicMaterial({ color: 0xf34444, side: THREE.DoubleSide }));
     emitter.position.fromArray(robotDefinition.scanner.tool0ToEmitter); tool.add(emitter);
-    const door = await load('door/door.glb'); door.matrixAutoUpdate=false; door.matrix.fromArray(manifest.partToBase); scene.add(door);
+    const door = await load('door/door.glb'); currentPart = door; door.matrixAutoUpdate=false; door.matrix.fromArray(manifest.partToBase); scene.add(door);
+    const bundled = await loadBundledSource({ signal: initialization.signal });
+    const meshes: PartAsset['meshes'] = [];
+    door.traverse(node => {
+      if (!(node instanceof THREE.Mesh)) return;
+      const geometry = node.geometry;
+      meshes.push({ name: node.name, positions: new Float32Array(geometry.getAttribute('position').array), normals: geometry.getAttribute('normal') ? new Float32Array(geometry.getAttribute('normal').array) : undefined, indices: geometry.index ? new Uint32Array(geometry.index.array) : Uint32Array.from({ length: geometry.getAttribute('position').count }, (_, i) => i), faces: [] });
+    });
+    publishPart = (door, asset) => {
     scene.updateMatrixWorld(true);
     const doorSize = new THREE.Box3().setFromObject(door).getSize(new THREE.Vector3());
     const bounds = new THREE.Box3(); scene.children.filter(child => child !== floor && child !== grid && child !== majorGrid && !(child instanceof THREE.Light)).forEach(child => bounds.expandByObject(child));
@@ -68,7 +83,25 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation)
     controls.update();
     renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
     renderer.render(scene,camera);
-    ready({ doorWidthMm: (doorSize.y*1000).toFixed(1), doorHeightMm: (doorSize.z*1000).toFixed(1), robotLinkCount: robotDefinition.links.length, emitterMm: Array.from(pose.emitter.slice(12,15), n => (n*1000).toFixed(1)) });
+    ready({ doorWidthMm: (doorSize.y*1000).toFixed(1), doorHeightMm: (doorSize.z*1000).toFixed(1), robotLinkCount: robotDefinition.links.length, emitterMm: Array.from(pose.emitter.slice(12,15), n => (n*1000).toFixed(1)) }, asset);
+    };
+    publishPart(door, { ...bundled, meshes });
   })().catch(error => { if (active) fail(`Could not load the supplied scene assets. ${error instanceof Error ? error.message : String(error)} Reload after checking the required files.`); });
-  return () => { active=false; observer.disconnect(); controls.dispose(); renderer.setAnimationLoop(null); disposeObject(scene); renderer.dispose(); renderer.domElement.remove(); };
+  return {
+    clearPart,
+    replacePart(part) {
+      if (!active) return;
+      clearPart();
+      const group = new THREE.Group(); group.matrixAutoUpdate = false; group.matrix.fromArray(part.partToBase);
+      for (const mesh of part.meshes) {
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(mesh.positions, 3));
+        geometry.setIndex(new THREE.BufferAttribute(mesh.indices, 1));
+        if (mesh.normals) geometry.setAttribute('normal', new THREE.BufferAttribute(mesh.normals, 3)); else geometry.computeVertexNormals();
+        const object = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x8fa8bc, side: THREE.DoubleSide }));
+        object.userData.cadFaces = mesh.faces; group.add(object);
+      }
+      currentPart = group; scene.add(group); publishPart(group, part);
+    },
+    dispose() { active=false; initialization.abort(); observer.disconnect(); controls.dispose(); renderer.setAnimationLoop(null); disposeObject(scene); renderer.dispose(); renderer.domElement.remove(); } };
 }

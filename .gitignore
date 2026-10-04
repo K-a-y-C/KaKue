@@ -9,3 +9,4 @@ __pycache__/
 .scratch/asset-build/
 
 public/demo-v1/
+public/parser/
