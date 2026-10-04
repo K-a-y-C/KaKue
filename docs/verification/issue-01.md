@@ -93,8 +93,8 @@ python3.12 -m venv /private/tmp/kakue-door-cad-venv
 Optional native preview rendering requires Pillow 12.3.0:
 
 ```sh
-python3.12 -m pip install Pillow==12.3.0
-python3.12 tools/assets/render-door-preview.py /private/tmp/door-native-triangles.json
+/private/tmp/kakue-door-cad-venv/bin/python -m pip install Pillow==12.3.0
+/private/tmp/kakue-door-cad-venv/bin/python tools/assets/render-door-preview.py /private/tmp/door-native-triangles.json
 ```
 
 The tool prints progress for the small-face checks and records elapsed verification time. Original source identity, cache identity, report and preview are retained. Native tools stay in temporary storage; importer notices/source links are retained in `tools/assets/notices`.
