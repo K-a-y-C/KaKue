@@ -18,6 +18,7 @@ Source: ../PRD.md. Issue numbers below are real GitHub identifiers.
 
 Agents may start issues #1 and #2 independently. After both pass, proceed to #3; #4 and #5 can then proceed independently. Honor later dependencies exactly. Each issue links the complete PRD, agent guide and verification records and contains behavioral acceptance criteria and TDD instructions. Source CAD must be available in the agent's checkout; only text planning/research files have been published here.
 
+
 The workspace has no application code to prefactor. Issues 1–2 are independently verifiable asset prerequisites; application issues 3–9 are end-to-end behavior slices, and issue 10 is the final delivery gate. Do not create separate schema, UI, worker, solver, or test-suite tickets.
 
 Every implementation issue uses behavior-driven TDD: write one failing test through a public interface, implement the smallest complete path, repeat, then refactor while green. Favor real integration paths; mock only external boundaries. Browser workflows and independently parsed downloads are acceptance seams. Numerical checks must use independently known fixtures, not merely reproduce implementation calculations. Never write all tests before all implementation. Commit passing increments and preserve the PRD's scope.

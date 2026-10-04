@@ -1,0 +1,54 @@
+{
+  "recordedOn": "2026-10-04",
+  "jointSourceRevision": "07b45e70914e2eb653215de7f95d7e665de9b867",
+  "inputs": [
+    {
+      "path": "3d files/car-front-door-1/DOOR-of-CAR.step",
+      "bytes": 14456880,
+      "sha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef",
+      "role": "authoritative geometry"
+    },
+    {
+      "path": "3d files/Robot/KR22_R1610-KR16_R1610.stp",
+      "bytes": 34148428,
+      "sha256": "8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1",
+      "role": "authoritative geometry"
+    },
+    {
+      "path": "3d files/Robot/KR22_R1610-KR16_R1610.dxf",
+      "bytes": 6941676,
+      "sha256": "78c43317a617cadc9010e3e472822d7015955fa7a81d0594dff9545754411cd0",
+      "role": "reference source"
+    },
+    {
+      "path": "3d files/car-front-door-1/CAR-Front-DOOR_geom-assembly.jpg",
+      "bytes": 163910,
+      "sha256": "34f898ad8ea88ac82a6ce7cb1cdda0dee56ee4bb389a67d568cfc57a5c8bd81f",
+      "role": "reference source"
+    },
+    {
+      "path": "3d files/car-front-door-1/CAR-Front-DOOR_mesh-assembly.jpg",
+      "bytes": 182677,
+      "sha256": "f50b77a25d98278182571b60510c9ddcfaa8d871f182af2db6a93f0fa681697b",
+      "role": "reference source"
+    },
+    {
+      "path": "assets/sources/robot-joints/kr16r1610cybertech_macro.xacro",
+      "bytes": 6458,
+      "sha256": "64441f6721da5e1f2b7daa487526ec59fb03fcd97a63bfbe5875d324de8cde86",
+      "role": "reference source"
+    },
+    {
+      "path": "assets/sources/robot-joints/kr16-r1610-datasheet.pdf",
+      "bytes": 175350,
+      "sha256": "74083e89683311bccea8753c92f07aa78b7a2113c03981c640d0e8de33acbff7",
+      "role": "reference source"
+    },
+    {
+      "path": "assets/sources/robot-joints/LICENSE",
+      "bytes": 11323,
+      "sha256": "6dc0e068dcf3a5bc8e054205b85b7720e1d49265bbc64bf515d2cf79197df69a",
+      "role": "reference source"
+    }
+  ]
+}

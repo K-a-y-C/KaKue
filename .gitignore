@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+dist/
+test-results/
+playwright-report/
+.venv/
+__pycache__/
+*.pyc
+.scratch/asset-build/
