@@ -2,7 +2,7 @@
 
 KaKue is a planned desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** verified robot link assets, an immutable robot definition and an articulated preparation preview are implemented with a locked tooling package and passing tests. The complete door-scan application is still pending the ordered application slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; its ready-for-agent status does not mean asset preparation or acceptance is complete.
+**Current status:** asset preparation tools, derived assets and verification records are being delivered in issues #1 and #2. The complete door-scan application remains pending its ordered implementation slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
