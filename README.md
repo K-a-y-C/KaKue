@@ -24,17 +24,7 @@ Raw CAD and retained joint/research inputs are tracked after the manually merged
 
 The supplied robot's seven core link GLBs are prepared directly from its exact STEP and reassemble at home within 0.000031 mm of the source tessellation. One [immutable robot manifest](assets/robot/robot-definition.json) supplies the signed joint chain, limits, speeds, home and scanner mount to rendering and Float64 FK. The [robot verification record](docs/verification/issue-02.md) includes independent STEP/xacro/manufacturer checks and home/articulation screenshots. Reference robot meshes remain comparison evidence. Manufacturer corroboration is a qualified cached official numerical record; original PDF bytes were unavailable.
 
-Before accepting the demo, freeze and verify the actual door placement, home pose, flange-to-emitter mount, and a representative five-point route. Missing assets must remain explicit; substitutes cannot satisfy acceptance.
-
-## Planned stack
-
-The PRD selects React, TypeScript, Vite, direct Three.js, `occt-import-js` in a Web Worker, and Playwright browser acceptance tests. It specifies Node 24 LTS and a committed lockfile. Exact research version pins are in [web stack research](docs/research/web-stack.md); they are an implementation baseline, not installed or integration-tested dependencies.
-
-The application is a client-side static build. STEP parsing and pose preparation stay local; parser JavaScript and WASM are served as versioned same-origin assets. No backend, account, database, runtime ROS parser, or external conversion service is required.
-
-## Start development
-
-Read the [PRD](.scratch/robot-door-scan-demo/PRD.md), [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
+### Robot preparation
 
 With Node 24 LTS and installed Chrome, the robot asset preparation slice is reproducible:
 
@@ -48,6 +38,20 @@ npm run preview --prefix tools/robot-assets
 ```
 
 Open the verification preview at `http://127.0.0.1:4172`. It shows actual core CAD, a home source overlay and an articulated wrist/scanner pose. Issue 3 introduces the React/Vite application, development/build/production preview scripts and real door placement after both asset PRs are manually merged.
+
+Before accepting the demo, freeze and verify the actual door placement, home pose, flange-to-emitter mount, and a representative five-point route. Missing assets must remain explicit; substitutes cannot satisfy acceptance.
+
+## Planned stack
+
+The PRD selects React, TypeScript, Vite, direct Three.js, `occt-import-js` in a Web Worker, and Playwright browser acceptance tests. It specifies Node 24 LTS and a committed lockfile. Exact research version pins are in [web stack research](docs/research/web-stack.md); they are an implementation baseline, not installed or integration-tested dependencies.
+
+The application is a client-side static build. STEP parsing and pose preparation stay local; parser JavaScript and WASM are served as versioned same-origin assets. No backend, account, database, runtime ROS parser, or external conversion service is required.
+
+## Start development
+
+Read the [PRD](.scratch/robot-door-scan-demo/PRD.md), [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
+
+The first application slice should establish the package manifest, pinned dependencies, lockfile, and working development/build/preview/test scripts. Add their verified commands here once they exist; no installation or run command is currently available.
 
 ## Working in vertical slices with TDD
 
