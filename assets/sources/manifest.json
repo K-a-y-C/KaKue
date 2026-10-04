@@ -43,6 +43,12 @@
       "bytes": 11323,
       "sha256": "6dc0e068dcf3a5bc8e054205b85b7720e1d49265bbc64bf515d2cf79197df69a",
       "role": "reference source"
+    },
+    {
+      "path": "assets/sources/robot-joints/manufacturer-evidence.json",
+      "bytes": 3274,
+      "sha256": "303fee19cb2ab975ed2c7e6da888290e45894860597d3aa6167968ecb92e3d59",
+      "role": "normalized factual evidence; not original PDF bytes"
     }
   ]
 }

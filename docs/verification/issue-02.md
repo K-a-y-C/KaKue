@@ -7,7 +7,7 @@ Verified 2026-10-04. This is the robot asset prerequisite, not final acceptance 
 - Actual robot source: `3d files/Robot/KR22_R1610-KR16_R1610.stp`, 34,148,428 bytes, SHA-256 `8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1`. Preparation rehashes it before any importer group is used and rejects a different source immediately.
 - Pinned joint xacro: revision `07b45e70914e2eb653215de7f95d7e665de9b867`, SHA-256 `64441f6721da5e1f2b7daa487526ec59fb03fcd97a63bfbe5875d324de8cde86`.
 - OCCT importer `0.0.23`, millimeters, absolute 1 mm linear deflection, 0.25 rad angular deflection. Fresh import reproduces 81 meshes and 730,266 triangles. Core groups `[73],[8],[6,7],[0,1,2],[5],[4],[3]` retain 461,499 triangles.
-- Export each group after inverse home transformation and one millimeter-to-meter conversion. Seven local GLBs total approximately 13.9 MB; each exact byte count and SHA-256 is in `assets/robot/robot-definition.json`. Source/core/local bounds and excluded importer indices are retained in `assets/robot/evidence/preparation.json`.
+- Export each group after inverse home transformation and one millimeter-to-meter conversion. Seven local GLBs total 14,230,384 bytes (approximately 13.57 MiB); each exact byte count and SHA-256 is in `assets/robot/robot-definition.json`. Source/core/local bounds and excluded importer indices are retained in `assets/robot/evidence/preparation.json`.
 - Omitted meshes are extra base plates, under-base anchors, ancillary cabling and the over-arm dress attachment. No comparison DAE triangles substitute for supplied CAD geometry. No decimation or fit-to-size scaling occurred.
 
 With Node 24 LTS on PATH:

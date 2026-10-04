@@ -11,3 +11,8 @@ This verifies intake identity and provenance, not door geometry, exported mesh a
 ## Reference-format correction
 
 A subsequent file-format check found the purported manufacturer PDF was download-center HTML. Its hash identified the downloaded bytes but did not validate its format or numerical contents. The file has been removed from the source branch and manifest. All seven remaining retained inputs pass hash/size checks; the manufacturer gate is explicitly pending independent recovery for issue #2. No limits have been silently replaced.
+
+
+## Manufacturer numerical resolution in issue 2
+
+The exact original-model official KUKA Italian datasheet URL yielded a successful cached primary PDF text extraction (document 0000-262-125/V5.1/2022-09-23, page 1). Its six ranges/rated speeds corroborate the selected xacro and compiled robot definition. The normalized factual/provenance record is `assets/sources/robot-joints/manufacturer-evidence.json`; its own byte count and SHA-256 are now in the source manifest. Original PDF bytes remain unavailable because live delivery redirects to HTML, and the record explicitly preserves that qualification. This resolves the manufacturer numerical corroboration gate without representing HTML or reconstructed text as original PDF bytes. All current retained manifest entries pass hash/size checks.
