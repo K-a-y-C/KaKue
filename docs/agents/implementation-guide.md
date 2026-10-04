@@ -1,6 +1,6 @@
 # Implementing the Robot Door Scan Demo
 
-Read the complete [PRD](../../.scratch/robot-door-scan-demo/PRD.md), your issue, its blockers, the [backlog](../../.scratch/robot-door-scan-demo/issues/breakdown.md), and [robot verification](../research/robot-verification.md) before changing code. Product decisions, domain vocabulary, six-joint constants, scanner mounting, CSV schema, and state transitions are specified in the PRD. This guide supplies working context; it does not replace that specification.
+Read the [concise PRD](../../.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the unchanged [full PRD](../../.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Story numbers and specification headings are preserved. Also read your issue, its blockers, the [backlog](../../.scratch/robot-door-scan-demo/issues/breakdown.md), and [robot verification](../research/robot-verification.md) before changing code. Product decisions, domain vocabulary, six-joint constants, scanner mounting, CSV schema, and state transitions are specified in the PRD. This guide supplies working context; it does not replace that specification.
 
 ## Intended result
 

@@ -1,7 +1,7 @@
 # Robot Door Scan Demo — published issue backlog
 
 Target: [K-a-y-C/KaKue](https://github.com/K-a-y-C/KaKue). Status: all 10 implementation issues published with ready-for-agent.
-Source: ../PRD.md. Issue numbers below are real GitHub identifiers.
+Read [../PRD.concise.md](../PRD.concise.md) first; consult the unchanged authoritative [../PRD.md](../PRD.md) only for additional explanation or ambiguity. Both preserve story numbers and specification headings. Issue numbers below are real GitHub identifiers.
 
 | Issue | Vertical slice | Blocked by |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ Source: ../PRD.md. Issue numbers below are real GitHub identifiers.
 | [#9](https://github.com/K-a-y-C/KaKue/issues/9) | Download consistent PLY, CSV and unchanged STEP for every outcome | [#4](https://github.com/K-a-y-C/KaKue/issues/4), [#8](https://github.com/K-a-y-C/KaKue/issues/8) |
 | [#10](https://github.com/K-a-y-C/KaKue/issues/10) | Accept and deliver the complete static demonstration | [#9](https://github.com/K-a-y-C/KaKue/issues/9) |
 
-Agents may start issues #1 and #2 independently. After both pass, proceed to #3; #4 and #5 can then proceed independently. Honor later dependencies exactly. Each issue links the complete PRD, agent guide and verification records and contains behavioral acceptance criteria and TDD instructions. Source CAD must be available in the agent's checkout; only text planning/research files have been published here.
+Agents may start issues #1 and #2 independently. After both pass, proceed to #3; #4 and #5 can then proceed independently. Honor later dependencies exactly. Each issue links the concise PRD first, the full PRD as an optional reference, the agent guide and verification records and contains behavioral acceptance criteria and TDD instructions. Source CAD must be available in the agent's checkout; only text planning/research files have been published here.
 
 
 The workspace has no application code to prefactor. Issues 1–2 are independently verifiable asset prerequisites; application issues 3–9 are end-to-end behavior slices, and issue 10 is the final delivery gate. Do not create separate schema, UI, worker, solver, or test-suite tickets.
