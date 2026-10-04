@@ -1,0 +1,17 @@
+{
+  "method": "VTK 9.3.1 actual mesh triangle first-contact checks; AABB filtering only removes disjoint triangle candidates",
+  "posesChecked": 101,
+  "fractionsPerSegment": 21,
+  "contactSamples": [],
+  "minimumFloorZ": -9.237402509576498e-17,
+  "transitionDurationsSeconds": [
+    5.934215090148088,
+    2.934499780003465,
+    1,
+    2.2362121616729262,
+    2.075350672093673
+  ],
+  "speedBound": "Smoothstep peak derivative1.5 accounted for at10% rated source speeds",
+  "limitations": "Finite21-sample transitions; no continuous collision detection, robot self-collision, physical cell safety or runtime guarantee",
+  "elapsedSeconds": 4.5310200420208275
+}

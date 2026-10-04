@@ -18,7 +18,7 @@ This is a visual planning demonstration. It does not acquire scans, reconstruct 
 
 ## Asset gates
 
-The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Browser picking and final scene placement remain later acceptance gates. Preserve its exact bytes for the original STEP download.
+The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Browser picking remains a later acceptance gate; issue #3 independently freezes scene placement. Preserve its exact bytes for the original STEP download.
 
 Raw CAD and retained joint/research inputs are tracked after the manually merged source-intake PR. The [source manifest](assets/sources/manifest.json) records byte counts and SHA-256 identities; all retained entries were checked on 2026-10-04. The [source notes](assets/sources/README.md) explain provenance, reference-only material, and the retained license. An implementation agent must still recheck the exact geometry hashes in its checkout before asset preparation.
 
@@ -37,9 +37,9 @@ npm run test:preview --prefix tools/robot-assets
 npm run preview --prefix tools/robot-assets
 ```
 
-Open the verification preview at `http://127.0.0.1:4172`. It shows actual core CAD, a home source overlay and an articulated wrist/scanner pose. Issue 3 introduces the React/Vite application, development/build/production preview scripts and real door placement after both asset PRs are manually merged.
+Open the verification preview at `http://127.0.0.1:4172`. It shows actual core CAD, a home source overlay and an articulated wrist/scanner pose. The React/Vite application below uses these accepted links and the independently verified fixed door placement.
 
-Before accepting the demo, freeze and verify the actual door placement, home pose, flange-to-emitter mount, and a representative five-point route. Missing assets must remain explicit; substitutes cannot satisfy acceptance.
+Issue #3 freezes and independently verifies actual door placement, replacement demo home, flange-to-emitter mount and a representative five-point setup route. Runtime motion and final demonstration acceptance remain later gates. Missing assets must remain explicit; substitutes cannot satisfy acceptance.
 
 ### Door preparation
 
@@ -53,11 +53,11 @@ npm --prefix tools/assets run validate:door -- --cache ../../assets/door
 npm test --prefix tools/assets
 ```
 
-The [door manifest](assets/door/manifest.json) records original identity and reproducible cache/settings. The [verification record](docs/verification/issue-01.md) explains independent CAD bounds, sampled accuracy, topology limitations and native reproduction commands. The STEP includes a loose construction edge below the actual door; use **surface** bounds for floor placement. Its two tiny omitted faces remain within the measured 5 mm cache tolerance. Preserve original STEP bytes for the separate unchanged download. No door transform or reachable route is accepted by this slice.
+The [door manifest](assets/door/manifest.json) records original identity and reproducible cache/settings. The [verification record](docs/verification/issue-01.md) explains independent CAD bounds, sampled accuracy, topology limitations and native reproduction commands. The STEP includes a loose construction edge below the actual door; use **surface** bounds for floor placement. Its two tiny omitted faces remain within the measured 5 mm cache tolerance. Preserve original STEP bytes for the separate unchanged download. Door asset verification alone does not establish placement or reach; the issue #3 setup evidence below supplies that separate gate.
 
-## Planned stack
+## Application stack
 
-The PRD selects React, TypeScript, Vite, direct Three.js, `occt-import-js` in a Web Worker, and Playwright browser acceptance tests. It specifies Node 24 LTS and a committed lockfile. Exact research version pins are in [web stack research](docs/research/web-stack.md); they are an implementation baseline, not installed or integration-tested dependencies.
+The PRD selects React, TypeScript, Vite, direct Three.js, `occt-import-js` in a Web Worker, and Playwright browser acceptance tests. It specifies Node 24 LTS and a committed lockfile. Exact installed browser/build pins and their integration results are recorded in [issue #3 verification](docs/verification/issue-03.md). The [web stack research](docs/research/web-stack.md) remains the baseline for later worker slices; those workers are not implemented by the fixed-scene slice.
 
 The application is a client-side static build. STEP parsing and pose preparation stay local; parser JavaScript and WASM are served as versioned same-origin assets. No backend, account, database, runtime ROS parser, or external conversion service is required.
 
@@ -65,7 +65,22 @@ The application is a client-side static build. STEP parsing and pose preparation
 
 Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Also read the [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
 
-The first application slice should establish the package manifest, pinned dependencies, lockfile, and working development/build/preview/test scripts. Add their verified commands here once they exist; the door preparation commands above do not run the application.
+With Node 24 LTS on PATH, from the repository root:
+
+```sh
+npm ci
+npm run dev
+npm run build
+npm run preview
+npm test
+PREVIEW=1 npm test
+```
+
+Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and stage versioned same-origin files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh begins with the fixed demo scene. Drag to orbit, right-drag to pan and scroll to zoom.
+
+The [issue #3 plan](docs/plans/issue-03.md), [browser verification](docs/verification/issue-03.md) and [independent setup evidence](docs/verification/issue-03-geometry.md) record exact commands, actual render screenshots, route solutions and sampled clearance. The [fixed demo manifest](assets/demo/manifest.json) freezes a rigid +90° Z door rotation and placement (nearest surface X=1400 mm; floor Z=0). It also freezes a validated retracted demo home with emitter (900,0,800) mm, replacing the source CAD home for this scene after clearance checks. **Use `manifest.homeAngles` for fresh demo sessions**, while `RobotDefinition.home` retains the measured original CAD pose/provenance. No geometry is scaled or substituted.
+
+Independent setup results are a placement gate; runtime route acceptance and the complete production workflow remain later work. Safari/presenter hardware performance have not yet been accepted.
 
 ## Working in vertical slices with TDD
 
