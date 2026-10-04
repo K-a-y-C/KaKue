@@ -20,7 +20,7 @@ This is a visual planning demonstration. It does not acquire scans, reconstruct 
 
 The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Its AP214 header and millimeter declaration have been checked. Full geometry, dimensions, orientation, tessellation accuracy, and surface-picking validation remain acceptance gates. Preserve its exact bytes for the original STEP download.
 
-Raw CAD is currently supplied in the local workspace. An implementation agent needs these inputs provisioned in its checkout; their availability in the remote repository is not established.
+Raw CAD and retained joint/research inputs are tracked on the source-intake review branch. The [source manifest](assets/sources/manifest.json) records byte counts and SHA-256 identities; all eight entries were checked on 2026-10-04. The [source notes](assets/sources/README.md) explain provenance, reference-only material, and the retained license. An implementation agent must still recheck the exact geometry hashes in its checkout before asset preparation.
 
 The supplied robot's pivot geometry and main-body correspondence have been numerically checked. Runtime preparation remains: derive rigid-link GLBs from the supplied STEP using the PRD's verified mapping, reassemble them at the verified CAD pose, and record the geometry and joint definitions in one immutable manifest used by rendering and kinematics. Reference robot meshes are comparison evidence rather than replacement runtime geometry.
 
