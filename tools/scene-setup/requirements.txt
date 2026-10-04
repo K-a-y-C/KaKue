@@ -1,0 +1,5 @@
+# Setup-only geometry gate, Python 3.12; never application dependencies.
+numpy==2.4.6
+vtk==9.3.1
+# Software pose montage only
+Pillow==12.3.0

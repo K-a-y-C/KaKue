@@ -7,3 +7,5 @@ playwright-report/
 __pycache__/
 *.pyc
 .scratch/asset-build/
+
+public/demo-v1/
