@@ -1,0 +1,37 @@
+{
+  "readyAfterNavigationMs": 569.4000000953674,
+  "assetRequests": [
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/base_link.glb",
+      "bytes": 1435344
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_1.glb",
+      "bytes": 2316988
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_2.glb",
+      "bytes": 3413716
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_3.glb",
+      "bytes": 4255304
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_4.glb",
+      "bytes": 1267704
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_5.glb",
+      "bytes": 1443232
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_6.glb",
+      "bytes": 98096
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/door/door.glb",
+      "bytes": 4260444
+    }
+  ]
+}
