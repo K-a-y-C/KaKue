@@ -102,3 +102,9 @@ The tool prints progress for the small-face checks and records elapsed verificat
 ## Gate boundary
 
 The supplied-door asset gate has measured passing source identity, actual shape/window/unit/surface bounds and reproducible source-derived cache behavior. Topology/sampling limitations are explicit. Door placement, reachability, renderer/picking integration, browser import/download and static production workflow remain acceptance work for issues #3 onward. Do not close #1 until its PR is manually accepted; issue #3 also waits for #2's manual merge.
+
+## PR #13 merge audit
+
+After the user's manual acceptance of robot PR #12, merged `origin/main` at `7dd2f115` into the door review branch. README was the sole conflict. Its resolution preserves the verified robot status, robot preparation/preview commands and qualifications, the door validation/preparation commands, exact-source notes and later application gates.
+
+The accepted robot source/code/assets are byte-identical to that main baseline. Door source/code/cache and native evidence are byte-identical to pre-merge door HEAD `5be8f8f`. The complete combined checks passed on Node 24.19.0: eight robot tests, eight door public tests, TypeScript 5.9.3 typecheck and whitespace checks. Source-manifest identities, door original/cache hashes and all seven robot link hashes were rechecked after conflict resolution. No runtime implementation or geometry changed during the merge. PR #13 remains for manual review; issue #3 waits for that merge.

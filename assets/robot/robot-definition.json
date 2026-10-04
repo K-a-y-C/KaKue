@@ -1,0 +1,621 @@
+{
+  "schemaVersion": 1,
+  "name": "Supplied KR16/KR22 core CAD with verified KR16 R1610 chain",
+  "units": {
+    "length": "meter",
+    "angle": "radian",
+    "matrix": "column-major"
+  },
+  "baseFrame": {
+    "name": "robot-base",
+    "origin": "mounting plane datum",
+    "up": "+Z",
+    "forward": "+X",
+    "handedness": "right"
+  },
+  "source": {
+    "path": "3d files/Robot/KR22_R1610-KR16_R1610.stp",
+    "sha256": "8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1",
+    "bytes": 34148428,
+    "jointRevision": "07b45e70914e2eb653215de7f95d7e665de9b867",
+    "jointPath": "assets/sources/robot-joints/kr16r1610cybertech_macro.xacro",
+    "jointSha256": "64441f6721da5e1f2b7daa487526ec59fb03fcd97a63bfbe5875d324de8cde86"
+  },
+  "importSettings": {
+    "parser": "occt-import-js",
+    "version": "0.0.23",
+    "linearUnit": "millimeter",
+    "linearDeflectionType": "absolute_value",
+    "linearDeflection": 1,
+    "angularDeflection": 0.25
+  },
+  "links": [
+    {
+      "name": "base_link",
+      "mesh": "base_link.glb",
+      "sourceMeshIndices": [
+        73
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "81ee869b4e7be2b42b86caf86e8cc37f51922b330495e29cd174685bcbd2d39d",
+      "bytes": 1435344,
+      "localBounds": {
+        "min": [
+          -0.265349999999966,
+          -0.18816071673604115,
+          -9.2374025095765e-17
+        ],
+        "max": [
+          0.18825,
+          0.18816071673604115,
+          0.28350000000000003
+        ]
+      }
+    },
+    {
+      "name": "link_1",
+      "mesh": "link_1.glb",
+      "sourceMeshIndices": [
+        8
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "b71ee7771f20efcc6a3b3ab4099ca845432e8e98c8bd8f73d4ae716e7b3331a8",
+      "bytes": 2316988,
+      "localBounds": {
+        "min": [
+          -0.1887175179647166,
+          -0.191,
+          -0.26980000000000004
+        ],
+        "max": [
+          0.2818790336365142,
+          0.191,
+          0.1219748370527517
+        ]
+      }
+    },
+    {
+      "name": "link_2",
+      "mesh": "link_2.glb",
+      "sourceMeshIndices": [
+        6,
+        7
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "3c4d2ab926bd58192f0405f082eb516a6600fefdfa3062e4df59fda86fc9faad",
+      "bytes": 3413716,
+      "localBounds": {
+        "min": [
+          -0.13776370468764726,
+          -0.2543978005251761,
+          -0.10434332527725192
+        ],
+        "max": [
+          0.8603336122814649,
+          0.208399999999996,
+          0.09614897708587213
+        ]
+      }
+    },
+    {
+      "name": "link_3",
+      "mesh": "link_3.glb",
+      "sourceMeshIndices": [
+        0,
+        1,
+        2
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "31106365a71017c111a0dae89a8a5b8ded3f9b5295b06db4bd7c26f5ef031573",
+      "bytes": 4255304,
+      "localBounds": {
+        "min": [
+          -0.23820000000000008,
+          -0.112500000000004,
+          -0.12879244651195987
+        ],
+        "max": [
+          0.3100000000000219,
+          0.08336080559386272,
+          0.22199999999999998
+        ]
+      }
+    },
+    {
+      "name": "link_4",
+      "mesh": "link_4.glb",
+      "sourceMeshIndices": [
+        5
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "70622a27f574a60eda35a3558dc00b1c0a5c9ceb476e8146c83ad4d00e7d7d88",
+      "bytes": 1267704,
+      "localBounds": {
+        "min": [
+          -0.35499999693299905,
+          -0.06900000000000411,
+          -0.06899999999999995
+        ],
+        "max": [
+          0.05900000306700093,
+          0.09229999999999591,
+          0.06900000000000017
+        ]
+      }
+    },
+    {
+      "name": "link_5",
+      "mesh": "link_5.glb",
+      "sourceMeshIndices": [
+        4
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "9dec70ae705a78582da960c0dffb6d73c991a297c0880e27904de9137af6ca31",
+      "bytes": 1443232,
+      "localBounds": {
+        "min": [
+          -0.05749999693299901,
+          -0.09256599841450254,
+          -0.057499999999999885
+        ],
+        "max": [
+          0.14450000306700095,
+          0.10799999999999602,
+          0.05750000000000011
+        ]
+      }
+    },
+    {
+      "name": "link_6",
+      "mesh": "link_6.glb",
+      "sourceMeshIndices": [
+        3
+      ],
+      "visualTransform": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "sha256": "26ea2162e902fd07dac6f22569e0e7b470ed0b6eaa3072a1fc8020c99dd0fdba",
+      "bytes": 98096,
+      "localBounds": {
+        "min": [
+          -0.013999996932999026,
+          -0.033484111610400984,
+          -0.03349999999999986
+        ],
+        "max": [
+          3.0670008754896116e-9,
+          0.033484111610394544,
+          0.033436461512691196
+        ]
+      }
+    }
+  ],
+  "joints": [
+    {
+      "name": "A1",
+      "parent": "base_link",
+      "child": "link_1",
+      "origin": [
+        0,
+        0,
+        0.52
+      ],
+      "originRotation": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        0,
+        0,
+        -1
+      ],
+      "lower": -3.2288591161895095,
+      "upper": 3.2288591161895095,
+      "ratedSpeed": 3.490658503988659,
+      "demoSpeed": 0.34906585039886595
+    },
+    {
+      "name": "A2",
+      "parent": "link_1",
+      "child": "link_2",
+      "origin": [
+        0.16,
+        0,
+        0
+      ],
+      "originRotation": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "lower": -3.2288591161895095,
+      "upper": 1.1344640137963142,
+      "ratedSpeed": 3.0543261909900767,
+      "demoSpeed": 0.3054326190990077
+    },
+    {
+      "name": "A3",
+      "parent": "link_2",
+      "child": "link_3",
+      "origin": [
+        0.78,
+        0,
+        0
+      ],
+      "originRotation": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "lower": -2.4085543677521746,
+      "upper": 3.0543261909900767,
+      "ratedSpeed": 3.3161255787892263,
+      "demoSpeed": 0.33161255787892263
+    },
+    {
+      "name": "A4",
+      "parent": "link_3",
+      "child": "link_4",
+      "origin": [
+        0.655,
+        0,
+        0.15
+      ],
+      "originRotation": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        -1,
+        0,
+        0
+      ],
+      "lower": -6.1086523819801535,
+      "upper": 6.1086523819801535,
+      "ratedSpeed": 7.504915783575617,
+      "demoSpeed": 0.7504915783575618
+    },
+    {
+      "name": "A5",
+      "parent": "link_4",
+      "child": "link_5",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "originRotation": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "lower": -2.2689280275926285,
+      "upper": 2.2689280275926285,
+      "ratedSpeed": 7.504915783575617,
+      "demoSpeed": 0.7504915783575618
+    },
+    {
+      "name": "A6",
+      "parent": "link_5",
+      "child": "link_6",
+      "origin": [
+        0.153,
+        0,
+        0
+      ],
+      "originRotation": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        -1,
+        0,
+        0
+      ],
+      "lower": -6.1086523819801535,
+      "upper": 6.1086523819801535,
+      "ratedSpeed": 10.995574287564276,
+      "demoSpeed": 1.0995574287564276
+    }
+  ],
+  "home": [
+    0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0,
+    0,
+    0
+  ],
+  "flangeLink": "link_6",
+  "linkToFlange": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "flangeToTool0": [
+    0,
+    0,
+    -1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "flangeToEmitter": [
+    0,
+    0,
+    -1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0.08,
+    0,
+    0,
+    1
+  ],
+  "scanner": {
+    "dimensions": [
+      0.08,
+      0.06,
+      0.08
+    ],
+    "tool0ToCenter": [
+      0,
+      0,
+      0.04
+    ],
+    "tool0ToEmitter": [
+      0,
+      0,
+      0.08
+    ],
+    "opticalAxis": [
+      0,
+      0,
+      1
+    ]
+  },
+  "omissions": {
+    "sourceMeshIndices": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80
+    ],
+    "reason": "Additional base plates, under-base anchors, ancillary cabling and over-arm dress attachment excluded; only verified main bodies animate."
+  },
+  "notices": [
+    "assets/sources/robot-joints/LICENSE",
+    "assets/robot/notices/README.md"
+  ]
+}
