@@ -37,8 +37,8 @@ Use Node 24 LTS and a committed lockfile. Later latest metadata can change; veri
 - Full OpenCascade.js: broader CAD manipulation API than this import-and-byte-passthrough requirement needs.
 - Server rendering, backend CAD service, physics/collision engine, cloud point-cloud store: no corresponding MVP requirement.
 
-## Asset caveat
+## Authoritative asset
 
-[CAD Exchanger documents CATPart-to-STEP conversion](https://cadexchanger.com/catpart-to-step/). A converter with a licensed CATIA reader is required for the supplied door. A GLB/STL-only result cannot satisfy a genuine unchanged STEP download. The source CATPart must not be renamed or replaced with a different part.
+The user supplied the replacement `3d files/car-front-door-1/DOOR-of-CAR.step` on 2026-10-04. It is the sole demo door; all earlier door inputs and conversion research are superseded. No CATPart conversion is required. Preserve the exact supplied STEP bytes and verify its geometry independently under issue #1. A derived GLB cache does not replace the source STEP for download.
 
 No additional web research tools were installed. The agent-reach search command was unavailable, so primary-source web/registry access was used. Its optional version check could not be verified because of network/DNS failure.
