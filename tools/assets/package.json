@@ -1,0 +1,12 @@
+{
+  "name": "kakue-asset-preparation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test door.test.mjs",
+    "validate:door": "node door.mjs validate",
+    "prepare:door": "node door.mjs prepare"
+  },
+  "engines": { "node": ">=24" },
+  "dependencies": { "occt-import-js": "0.0.23" }
+}

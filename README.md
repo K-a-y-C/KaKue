@@ -2,7 +2,7 @@
 
 KaKue is a planned desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** this workspace contains specifications and research, not an implemented application. There is no package manifest, lockfile, development server, or runnable test suite yet. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; its ready-for-agent status does not mean asset preparation or acceptance is complete.
+**Current status:** asset preparation tools, derived assets and verification records are being delivered in issues #1 and #2. The complete door-scan application remains pending its ordered implementation slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
@@ -18,9 +18,21 @@ This is a visual planning demonstration. It does not acquire scans, reconstruct 
 
 ## Asset gates
 
-The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Its AP214 header and millimeter declaration have been checked. Full geometry, dimensions, orientation, tessellation accuracy, and surface-picking validation remain acceptance gates. Preserve its exact bytes for the original STEP download.
+The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Browser picking and final scene placement remain later acceptance gates. Preserve its exact bytes for the original STEP download.
 
 Raw CAD is currently supplied in the local workspace. An implementation agent needs these inputs provisioned in its checkout; their availability in the remote repository is not established.
+
+Door preparation (Node 24 LTS, from the repository root):
+
+```sh
+npm ci --prefix tools/assets
+npm --prefix tools/assets run validate:door
+npm --prefix tools/assets run prepare:door
+npm --prefix tools/assets run validate:door -- --cache ../../assets/door
+npm test --prefix tools/assets
+```
+
+The [door manifest](assets/door/manifest.json) records original identity and reproducible cache/settings. The [verification record](docs/verification/issue-01.md) explains independent CAD bounds, sampled accuracy, topology limitations and native reproduction commands. The STEP includes a loose construction edge below the actual door; use **surface** bounds for floor placement. Its two tiny omitted faces remain within the measured 5 mm cache tolerance. Preserve original STEP bytes for the separate unchanged download. No door transform or reachable route is accepted by this slice.
 
 The supplied robot's pivot geometry and main-body correspondence have been numerically checked. Runtime preparation remains: derive rigid-link GLBs from the supplied STEP using the PRD's verified mapping, reassemble them at the verified CAD pose, and record the geometry and joint definitions in one immutable manifest used by rendering and kinematics. Reference robot meshes are comparison evidence rather than replacement runtime geometry.
 
@@ -36,7 +48,7 @@ The application is a client-side static build. STEP parsing and pose preparation
 
 Read the [PRD](.scratch/robot-door-scan-demo/PRD.md), [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
 
-The first application slice should establish the package manifest, pinned dependencies, lockfile, and working development/build/preview/test scripts. Add their verified commands here once they exist; no installation or run command is currently available.
+The first application slice should establish the package manifest, pinned dependencies, lockfile, and working development/build/preview/test scripts. Add their verified commands here once they exist; the door preparation commands above do not run the application.
 
 ## Working in vertical slices with TDD
 
