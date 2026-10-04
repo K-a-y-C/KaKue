@@ -19,4 +19,12 @@ if (source.byteLength !== door.source.bytes || createHash('sha256').update(sourc
 await writeFile(resolve(root, 'public/demo-v1/door/DOOR-of-CAR.step'), source);
 const parserOutput = resolve(root, 'public/parser/occt-import-js/0.0.23');
 await mkdir(parserOutput, { recursive: true });
-for (const name of ['occt-import-js.js', 'occt-import-js.wasm', 'license.occt-import-js.txt', 'license.occt.txt']) await cp(resolve(root, 'node_modules/occt-import-js/dist', name), resolve(parserOutput, name));
+const parser = JSON.parse(await readFile(resolve(root, 'node_modules/occt-import-js/package.json')));
+if (parser.version !== '0.0.23') throw new Error('Unexpected STEP parser version');
+const parserHashes = {};
+for (const name of ['occt-import-js.js', 'occt-import-js.wasm', 'license.occt-import-js.txt', 'license.occt.txt']) {
+  const bytes = await readFile(resolve(root, 'node_modules/occt-import-js/dist', name));
+  parserHashes[name] = { bytes: bytes.byteLength, sha256: createHash('sha256').update(bytes).digest('hex') };
+  await writeFile(resolve(parserOutput, name), bytes);
+}
+await writeFile(resolve(parserOutput, 'manifest.json'), JSON.stringify({ package: parser.name, version: parser.version, source: 'https://registry.npmjs.org/occt-import-js/-/occt-import-js-0.0.23.tgz', files: parserHashes }, null, 2));

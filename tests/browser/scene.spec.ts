@@ -5,7 +5,7 @@ test('presenter opens the actual fixed robot and door scene', async ({ page }, t
   page.on('pageerror', error => errors.push(error.message));
   const meshes = new Set<string>();
   page.on('response', response => { if (response.url().endsWith('.glb') && response.ok()) meshes.add(new URL(response.url()).pathname); });
-  await page.goto('/');
+  await page.goto('./');
   await expect(page.getByRole('heading', { name: 'Robot Door Scan Demo' })).toBeVisible();
   await expect(page.getByRole('status')).toHaveText('Scene ready — inspect the fixed door and robot.');
   await expect(page.getByRole('img', { name: '3D robot and door scene' })).toBeVisible();
@@ -23,7 +23,7 @@ test('presenter opens the actual fixed robot and door scene', async ({ page }, t
 
 test('missing supplied door cache has a readable asset outcome', async ({ page }) => {
   await page.route('**/demo-v1/door/door.glb', route => route.fulfill({ status: 404, body: 'Missing door' }));
-  await page.goto('/');
+  await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('Required asset unavailable: door/door.glb');
   await expect(page.getByRole('status')).toHaveText('Scene unavailable.');
 });
@@ -38,8 +38,9 @@ test('WebGL2 unavailable reports the browser requirement', async ({ page }) => {
       return original.apply(this, args);
     } as typeof original;
   });
-  await page.goto('/');
+  await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('WebGL2 is required');
+  await expect(page.getByLabel('Import STEP')).toBeDisabled();
   await expect(page.getByRole('status')).toHaveText('Scene unavailable.');
   expect(errors).toEqual([]);
 });
@@ -47,7 +48,7 @@ test('WebGL2 unavailable reports the browser requirement', async ({ page }) => {
 
 test('orbit, pan and zoom inspect the camera without changing scene measurements', async ({ page }, testInfo) => {
   test.setTimeout(60000);
-  await page.goto('/');
+  await page.goto('./');
   await expect(page.getByRole('status')).toContainText('Scene ready');
   const scene = page.getByRole('img', { name: '3D robot and door scene' });
   const fixed = await page.locator('dl').innerText();
