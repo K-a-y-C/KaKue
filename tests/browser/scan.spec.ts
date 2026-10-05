@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures';
 
 test('Run keeps the laser on from first approach through transit; Stop extinguishes and freezes it',async({page})=>{
  test.setTimeout(60000);

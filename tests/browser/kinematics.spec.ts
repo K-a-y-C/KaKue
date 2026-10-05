@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 test.skip(process.env.PREVIEW === '1', 'Source-module numeric fixtures run through development Vite; production workflow uses the public UI.');
 test('preflight accepts a supplied door target using mounted emitter and preserves the surface point', async ({ page }) => {
   await page.goto('./');

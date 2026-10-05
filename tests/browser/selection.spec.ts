@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 test('stationary actual door skin click appends a numbered coordinate row', async ({ page }, info) => {
   await page.goto('./');
   await expect(page.getByRole('status')).toContainText('Scene ready');
@@ -40,17 +40,11 @@ test('cancelled touch recovers for a subsequent single click', async ({ page }) 
   await expect(page.getByRole('row')).toHaveCount(2);
 });
 
-test('unverified bundled STEP prevents selection even when the cache is visible', async ({ page }) => {
-  let sourceRequested!: () => void;
-  const requested=new Promise<void>(resolve => { sourceRequested=resolve; });
-  let release!: () => void;
-  const held=new Promise<void>(resolve => { release=resolve; });
-  await page.route('**/demo-v1/door/DOOR-of-CAR.step',async route => { sourceRequested(); await held; await route.fulfill({status:404,body:'Missing source'}); });
-  await page.goto('./'); await requested;
-  await page.mouse.click(704,498);
-  await expect(page.getByRole('row')).toHaveCount(1);
-  release(); await expect(page.getByRole('alert')).toContainText('Required asset unavailable');
-  await page.mouse.click(704,498); await expect(page.getByRole('row')).toHaveCount(1);
+test('an unavailable verified CAD cache cannot unlock the workspace or selection',async({page})=>{
+ await page.route('**/demo-v1/door/door.glb',route=>route.fulfill({status:404,body:'Missing verified cache'}));
+ await page.goto('./');await expect(page.getByRole('alert')).toContainText('Required asset unavailable');
+ await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Run',exact:true})).toHaveCount(0);
 });
 
 test('duplicates retain numbered order and stable stored surface coordinates while camera changes', async ({ page }, info) => {
@@ -66,7 +60,7 @@ test('duplicates retain numbered order and stable stored surface coordinates whi
   }
   await page.mouse.move(560,450); await page.mouse.down(); await page.mouse.move(620,470,{steps:10}); await page.mouse.up(); await page.mouse.wheel(0,-100);
   expect(await rows.nth(1).innerText()).toBe(first); await expect(rows).toHaveCount(3);
-  await page.getByRole('heading',{ name:'Selected points (2)' }).scrollIntoViewIfNeeded();
+  await page.getByRole('heading',{ name:'Selected points 2' }).scrollIntoViewIfNeeded();
   await page.screenshot({path:info.outputPath('selected-1440.png')});
   await page.setViewportSize({width:1280,height:800}); await page.screenshot({path:info.outputPath('selected-1280.png')});
   await rows.last().scrollIntoViewIfNeeded(); await page.screenshot({path:info.outputPath('selected-scrolled-1280.png')});
@@ -77,7 +71,7 @@ test('outside release, empty window, floor, robot and scanner clicks are ignored
   for (const [x,y] of [[691,452],[400,425],[583,497],[320,800],[50,170]]) { await page.mouse.click(x,y); await expect(page.getByRole('row')).toHaveCount(1); }
   await page.mouse.move(704,498); await page.mouse.down(); await page.mouse.move(1200,498); await page.mouse.up();
   await expect(page.getByRole('row')).toHaveCount(1);
-  await page.reload(); await expect(page.getByRole('status')).toContainText('Scene ready');
+  await page.reload(); await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');await expect(page.getByRole('status')).toContainText('Scene ready');
   await page.mouse.move(704,498); await page.mouse.down(); await page.mouse.move(714,498); await page.mouse.move(704,498); await page.mouse.up();
   await expect(page.getByRole('row')).toHaveCount(1);
 });

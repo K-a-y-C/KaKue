@@ -45,3 +45,7 @@ Issue #21 supersedes endpoint-only laser activation and joint chords from #6–#
 8. Provide a concise handoff: behavior delivered, public contracts/evidence, tests run, remaining limitations and next unblocked tickets. Commit passing increments. Never close your ticket with failed or unverified mandatory acceptance criteria.
 
 Source assets and numeric verification are prerequisites, not a request to build horizontal application layers. There is no existing code to prefactor initially. Issue 3 introduces application/test scaffolding as part of the actual scene-loading tracer bullet. Issue 7 proves and freezes the accepted five-point route against the runtime solver; issue 10 verifies the full production workflow on the target browsers and presenter hardware. Earlier scene placement checks must be recorded honestly and reconciled with that runtime gate.
+
+## Import-first branding — final user amendment
+
+Start with the provided KaKue Automation logo and import screen. No scene/scan controls/CAD requests before the user selects a valid STEP. Initialize the workspace with the actual selected source: exact hash-matching supplied CAD may use its accepted cache, all other STEP uses the parser worker. Retain the user's original File/name, never replace it with bundled bytes. Reload returns to the import screen. Shared browser scan fixtures now explicitly import the supplied file before exercising the unchanged motion/export gates. See [plan](../plans/import-first-workspace.md).

@@ -21,7 +21,7 @@ A rectangular scanner is attached rigidly to the robot wrist. Its emitter produc
 
 The demonstration follows one sequence:
 
-1. Open the application and load the prepared demo door, or import its STEP file.
+1. Open the branded import screen, then import STEP to reveal the actual CAD/robot workspace.
 2. Orbit, pan, and zoom the camera to inspect the fixed scene.
 3. Click the door surface to add numbered markers and coordinate rows.
 4. Press Run. The application checks target poses using the actual robot chain and joint limits.
@@ -48,7 +48,7 @@ The operator does not delete or reorder points, move the door, select another ro
 1. As a presenter, I want the app to show a six-axis robot and an automotive door immediately after the demo asset loads, so that the purpose is clear.
 2. As a presenter, I want the robot geometry to correspond to the actual supplied robot, so that the movement demonstration represents the intended machine.
 3. As a presenter, I want the supplied door geometry to be used, so that the demonstration relates to my chosen part.
-4. As a presenter, I want the prepared door available as a bundled demo asset, so that I can demonstrate without navigating to a local file every time.
+4. As a presenter, I want the verified supplied-door cache available after importing byte-identical CAD, retaining the selected File. The user's 2026-10-05 import-first amendment supersedes automatic startup.
 5. As an operator, I want to import a STEP file, so that I can demonstrate loading the part rather than only displaying a hardcoded mesh.
 6. As an operator, I want an honest loading message and readable import error, so that I know when a model is ready or cannot be opened.
 7. As an operator, I want original CAD dimensions preserved, so that the robot and door have compatible physical size.
@@ -125,7 +125,7 @@ The sole source asset is `3d files/car-front-door-1/DOOR-of-CAR.step`. Ignore ev
 
 Input identity: 14,456,880 bytes; SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Initial text inspection found valid ISO-10303-21 opening/closing markers, an AP214 AUTOMOTIVE_DESIGN schema, and millimeter length units. This inspection does not establish full parse success, geometric bounds, topology, or picking accuracy.
 
-Reopen the supplied STEP in an independent CAD reader, verify its recognizable door shape and actual selectable surfaces/window opening, and record its millimeter bounding box. Preserve its complete original bytes for unchanged download. Optionally generate a GLB startup cache from this same STEP, retaining provenance, settings and hashes. A preview mesh or the supplied JPGs alone do not satisfy import/download acceptance.
+Reopen the supplied STEP in an independent CAD reader, verify its recognizable door shape and actual selectable surfaces/window opening, and record its millimeter bounding box. Preserve its complete original bytes for unchanged download. Optionally generate a GLB verified import cache from this same STEP, retaining provenance, settings and hashes. A preview mesh or the supplied JPGs alone do not satisfy import/download acceptance.
 
 No CATPart conversion task remains. Direct browser CATPart import is still excluded. Missing or invalid STEP geometry must be explicit in development; never substitute an older door or an image-derived model. Record source provenance as user-supplied replacement STEP; do not invent a conversion history.
 
@@ -214,7 +214,7 @@ Store both part-local and robot-base positions for selected points. Calculate ro
 
 The page has one compact toolbar, a large viewport occupying about 75–80% of available width, and a narrow side panel containing the point list and run status. The download area appears with the terminal run result. Avoid the proprietary screenshot’s dense menus, device panels, branding, and fixtures.
 
-The toolbar contains Import STEP, the source model name, stand-off in millimeters, Run, and Stop. The prepared demo door loads by default once the asset gate is complete. Import STEP replaces it, clears the previous selections/results, and returns the robot to the prepared home pose as part of a new session. Import is disabled while preparing/running. Reload is the simplest way to start again.
+User amendment (2026-10-05): show the supplied KaKue Automation logo and a branded import screen first. No canvas, scan controls, CAD requests or parser workers before file selection. A validated first import reveals the workspace; a header/document toolbar contains branding, source name and import, and the scan inspector contains stand-off, Run and Stop. Reuse the verified supplied-door GLB only for an exact SHA-256 match of the selected file, retaining that original File; other STEP uses the parser worker. Import STEP replaces it, clears the previous selections/results, and returns the robot to the prepared home pose as part of a new session. Import is disabled while preparing/running. Reload returns to the import screen.
 
 Show a three-quarter perspective view that contains the whole robot, door, scanner, and floor. Use OrbitControls for orbit/pan/zoom with a target near the center of the robot/door interaction. Fit the camera after load, without changing geometry scale. Retain readable lighting, restrained gray materials for the door, and the supplied robot’s recognizable appearance. A small datum indicator and an on-screen hint, “Click the door to add scan points,” are sufficient.
 
@@ -228,7 +228,7 @@ Run requires at least one point and loaded/verified assets. Stop is enabled duri
 
 `occt-import-js` parses STEP locally inside a Web Worker. Its documented formats do not include CATPart. Explicitly request meter output and use absolute linear deflection starting at 0.001 m and angular deflection starting at 0.25 radians. Verify those tessellation settings against the door; a nominal setting alone is not an accuracy guarantee.
 
-Build indexed Three BufferGeometry per imported mesh. Preserve source face associations if returned. Either load the prepared STEP through the same importer or use a GLB generated from it as a startup cache, with the original STEP stored separately for download. Both paths must produce consistent units, placement, and picking coordinates.
+Build indexed Three BufferGeometry per imported mesh. Preserve source face associations if returned. Either load the prepared STEP through the same importer or use a GLB generated from it as a verified cache after identity-matching import, with the original STEP stored separately for download. Both paths must produce consistent units, placement, and picking coordinates.
 
 Keep the original File/Blob or a separate complete byte copy. Transferring the only ArrayBuffer into a worker detaches it and would break unchanged STEP export. Worker results use transferable typed arrays to avoid repeatedly copying large mesh arrays.
 
@@ -353,7 +353,7 @@ Test observable behavior and file contents rather than component implementation 
 
 ### Browser acceptance
 
-- Load the prepared actual door; confirm robot, door, scanner, and floor are present and UI reaches selecting.
+- Begin with the import screen and explicitly import the supplied actual door; confirm robot, door, scanner, and floor are present and UI reaches selecting.
 - Upload a known valid STEP; confirm a fresh session, fixed placement, unchanged size, cleared selections, home pose, and stored source identity.
 - Select at least five known visible surface locations; verify marker numbering, list order, approximate known robot-base coordinates, and normalized approach-side normals.
 - Orbit and drag the camera; confirm no extra point. Click robot, floor, scanner, laser, and window opening; confirm no extra point.

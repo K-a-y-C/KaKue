@@ -1,6 +1,6 @@
 import {measuredEmitter} from '../helpers/measured-emitter';
 import {Matrix4,Quaternion} from 'three';
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures';
 
 test('selected door points run in order with progress and post-dwell visits',async({page})=>{
   test.setTimeout(90000);
