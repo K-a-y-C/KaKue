@@ -23,9 +23,10 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   let active = true;
   const initialization = new AbortController();
   let currentPart: THREE.Group | undefined;
+  let partReady = false;
   let selection: ReturnType<typeof surfaceSelection> | undefined;
   let publishPart: (part: THREE.Group, asset: PartAsset) => void = () => {};
-  const clearPart = () => { selection?.clear(); if (currentPart) { scene.remove(currentPart); disposeObject(currentPart); currentPart = undefined; } };
+  const clearPart = () => { partReady=false; selection?.clear(); if (currentPart) { scene.remove(currentPart); disposeObject(currentPart); currentPart = undefined; } };
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#e8edf1');
   let renderer: THREE.WebGLRenderer;
@@ -38,7 +39,7 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   const camera = new THREE.PerspectiveCamera(40, 1, .01, 30);
   camera.up.set(0, 0, 1);
   const controls = new OrbitControls(camera, renderer.domElement);
-  selection = surfaceSelection(renderer.domElement, camera, scene, () => currentPart, selected);
+  selection = surfaceSelection(renderer.domElement, camera, scene, () => partReady ? currentPart : undefined, selected);
   controls.enableDamping = true;
   scene.add(new THREE.HemisphereLight(0xffffff, 0x7c8896, 2));
   const light = new THREE.DirectionalLight(0xffffff, 3); light.position.set(2, -3, 4); scene.add(light);
@@ -76,6 +77,7 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
       meshes.push({ name: node.name, positions: new Float32Array(geometry.getAttribute('position').array), normals: geometry.getAttribute('normal') ? new Float32Array(geometry.getAttribute('normal').array) : undefined, indices: geometry.index ? new Uint32Array(geometry.index.array) : Uint32Array.from({ length: geometry.getAttribute('position').count }, (_, i) => i), faces: [] });
     });
     publishPart = (door, asset) => {
+    partReady=true;
     scene.updateMatrixWorld(true);
     const doorSize = new THREE.Box3().setFromObject(door).getSize(new THREE.Vector3());
     const bounds = new THREE.Box3(); scene.children.filter(child => child !== selection?.markers && child !== floor && child !== grid && child !== majorGrid && !(child instanceof THREE.Light)).forEach(child => bounds.expandByObject(child));

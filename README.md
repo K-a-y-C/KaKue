@@ -2,7 +2,7 @@
 
 KaKue is a planned desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Surface selection, run controls and downloads remain later ordered slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
+**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Run controls and downloads remain later ordered slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
@@ -18,7 +18,7 @@ This is a visual planning demonstration. It does not acquire scans, reconstruct 
 
 ## Asset gates
 
-The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Browser picking remains a later acceptance gate; issue #3 independently freezes scene placement. Preserve its exact bytes for the original STEP download.
+The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Issue #5 verifies actual browser picking; issue #3 independently freezes scene placement. Preserve its exact bytes for the original STEP download.
 
 Raw CAD and retained joint/research inputs are tracked after the manually merged source-intake PR. The [source manifest](assets/sources/manifest.json) records byte counts and SHA-256 identities; all retained entries were checked on 2026-10-04. The [source notes](assets/sources/README.md) explain provenance, reference-only material, and the retained license. An implementation agent must still recheck the exact geometry hashes in its checkout before asset preparation.
 
@@ -76,7 +76,7 @@ npm test
 PREVIEW=1 npm test
 ```
 
-Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and the exact bundled STEP, then stage versioned same-origin caches, source and parser/WASM files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh begins with the fixed demo scene. Choose **Import STEP** to replace the active part with a local `.step` or `.stp` file (case-insensitive, at most 50 MiB). Empty, oversized and unsupported files preserve the active part; eligible imports start a fresh home-pose session and show indeterminate loading. Parsing failure leaves an unready session with import available for recovery. Original source bytes stay in memory for later export; reload releases the session. All imported parts use the same frozen placement without scaling or automatic positioning. Drag to orbit, right-drag to pan and scroll to zoom.
+Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and the exact bundled STEP, then stage versioned same-origin caches, source and parser/WASM files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh begins with the fixed demo scene. Choose **Import STEP** to replace the active part with a local `.step` or `.stp` file (case-insensitive, at most 50 MiB). Empty, oversized and unsupported files preserve the active part; eligible imports start a fresh home-pose session and show indeterminate loading. Parsing failure leaves an unready session with import available for recovery. Original source bytes stay in memory for later export; reload releases the session. All imported parts use the same frozen placement without scaling or automatic positioning. Drag to orbit, right-drag to pan and scroll to zoom. Click visible door skin to append numbered markers and matching XYZ rows (robot-base millimeters, one decimal). Duplicate clicks stay separate. Camera gestures, multitouch, outside releases, foreground robot/scanner/floor and the empty window opening cannot select. Selections are append-only; eligible import or reload clears them.
 
 To build and verify a non-root deployment, use the same base for build and preview:
 
@@ -85,6 +85,8 @@ BASE_PATH=/scan-demo/ npm run build
 BASE_PATH=/scan-demo/ npm run preview
 BASE_PATH=/scan-demo/ PREVIEW=1 npm test
 ```
+
+The [surface selection verification](docs/verification/issue-05.md) and [handoff](docs/handoffs/issue-05.md) record the picking/gesture tests and independent position/normal fixture.
 
 The [STEP import verification](docs/verification/issue-04.md) and [handoff](docs/handoffs/issue-04.md) record TDD cycles, exact source bytes, independent unit fixtures and production worker/WASM checks. Test failures injected at worker/network seams exercise recovery; successful imports use the real parser.
 

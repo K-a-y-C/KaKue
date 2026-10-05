@@ -14,13 +14,32 @@ export function surfaceSelection(canvas: HTMLCanvasElement, camera: THREE.Camera
   const markers = new THREE.Group(); scene.add(markers);
   let count = 0;
   const ray = new THREE.Raycaster();
+  let down: { id: number; x: number; y: number; dragged: boolean } | undefined;
+  const pointers = new Set<number>();
+  const track = (event: PointerEvent) => { pointers.add(event.pointerId); if (pointers.size>1) down=undefined; };
+  const start = (event: PointerEvent) => { if (event.button!==0) { down=undefined; return; } if (pointers.size>1) { down=undefined; return; } down = { id: event.pointerId, x: event.clientX, y: event.clientY, dragged: false }; };
+  const move = (event: PointerEvent) => { if (down && Math.hypot(event.clientX-down.x, event.clientY-down.y)>5) down.dragged=true; };
   const up = (event: PointerEvent) => {
+    const gesture=down; down=undefined; pointers.delete(event.pointerId);
+    if (!gesture || gesture.id!==event.pointerId || gesture.dragged || Math.hypot(event.clientX-gesture.x,event.clientY-gesture.y)>5) return;
     const root = part(); if (!root) return;
     const rect = canvas.getBoundingClientRect();
+    if (event.clientX<rect.left || event.clientX>=rect.right || event.clientY<rect.top || event.clientY>=rect.bottom) return;
     ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1, -(event.clientY-rect.top)/rect.height*2+1), camera);
     root.updateWorldMatrix(true, true);
     const hit = ray.intersectObject(root, true)[0];
     if (!hit || !hit.face || !(hit.object instanceof THREE.Mesh)) return;
+    const occluders: THREE.Mesh[] = [];
+    scene.updateMatrixWorld(true);
+    scene.traverseVisible(node => {
+      if (!(node instanceof THREE.Mesh)) return;
+      let ancestor: THREE.Object3D | null = node;
+      while (ancestor) { if (ancestor===root || ancestor===markers) return; ancestor=ancestor.parent; }
+      const materials=Array.isArray(node.material)?node.material:[node.material];
+      if (materials.some(material => material.visible && (!material.transparent || material.opacity===1))) occluders.push(node);
+    });
+    const obstruction=ray.intersectObjects(occluders,false)[0];
+    if (obstruction && obstruction.distance<hit.distance-1e-6) return;
     const mesh = hit.object;
     const local = mesh.worldToLocal(hit.point.clone());
     const position = mesh.geometry.getAttribute('position');
@@ -41,7 +60,11 @@ export function surfaceSelection(canvas: HTMLCanvasElement, camera: THREE.Camera
     const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false, depthWrite: false })); marker.position.copy(hit.point); marker.scale.set(.06,.06,1); marker.renderOrder=1; markers.add(marker);
     selected(point);
   };
-  canvas.addEventListener('pointerup', up);
-  const clear = () => { for (const child of [...markers.children]) { const sprite=child as THREE.Sprite; sprite.material.map?.dispose(); sprite.material.dispose(); markers.remove(child); } count=0; };
-  return { markers, clear, dispose() { canvas.removeEventListener('pointerup',up); clear(); scene.remove(markers); } };
+  const cancel = (event: PointerEvent) => { pointers.delete(event.pointerId); down=undefined; };
+  window.addEventListener('pointerdown', track, true);
+  window.addEventListener('pointercancel', cancel);
+  window.addEventListener('pointerup', cancel);
+  canvas.addEventListener('pointerdown', start); canvas.addEventListener('pointermove', move); canvas.addEventListener('pointerup', up);
+  const clear = () => { for (const child of [...markers.children]) { const sprite=child as THREE.Sprite; sprite.material.map?.dispose(); sprite.material.dispose(); markers.remove(child); } count=0; down=undefined; pointers.clear(); };
+  return { markers, clear, dispose() { window.removeEventListener('pointerdown',track,true); window.removeEventListener('pointercancel',cancel); window.removeEventListener('pointerup',cancel); canvas.removeEventListener('pointerdown',start); canvas.removeEventListener('pointermove',move); canvas.removeEventListener('pointerup',up); clear(); scene.remove(markers); } };
 }
