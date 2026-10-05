@@ -1,6 +1,6 @@
 # Robot Door Scan Demo — Product Requirements Document
 
-Status: ready-for-agent · Source version: 1.2 (2026-10-05) · Owner: Kakue
+Status: ready-for-agent · Source version: 1.3 (2026-10-05) · Owner: Kakue
 
 Concise companion to [PRD.md](PRD.md), which is authoritative and synchronized for issue #21. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
 
@@ -239,7 +239,7 @@ All selections/outcomes, IDs/order preserved. Surface XYZ exactly matches PLY ba
 
 ### 11. Performance, compatibility, and delivery
 
-Current desktop Chrome/Edge; current Safari/macOS smoke test. WebGL2/WASM/pointing device/sufficient asset memory required; mobile/broad version support excluded. Readable 1280×800 and 1440×900; ≥30 FPS representative run on presenter hardware; responsive UI/camera during parsing/preflight. Measure actual asset load/production transfer sizes, not npm unpacked size. Preprocess/decimate only within surface/pose tolerances.
+Current desktop Chrome is the final browser target, following the user's 2026-10-05 Chrome-only clarification recorded in README. Edge/Safari are excluded from this release gate. WebGL2/WASM/pointing device/sufficient asset memory required; mobile/broad version support excluded. Readable 1280×800 and 1440×900; ≥30 FPS representative run on presenter hardware; responsive UI/camera during parsing/preflight. Measure actual asset load/production transfer sizes, not npm unpacked size. Preprocess/decimate only within surface/pose tolerances.
 
 Deliver reproducible dev/build/preview commands, prepared static assets, license notices, verification record/browser acceptance tests. Static HTTPS hosting; no provider specified. Local browser uploads; no persistence; refresh=fresh session.
 
@@ -250,7 +250,7 @@ Deliver reproducible dev/build/preview commands, prepared static assets, license
 3. **Selection:** door picking/numbering/coordinates/order/drag filtering. Gate: independent hits/transforms within ±5 mm.
 4. **Motion:** manifest FK/full-pose bounded IK/preflight/interpolation/stand-off/laser/progress/Stop. Gate: five-point runtime route, bounds/residuals/truthful failures/Stop.
 5. **Exports:** shared snapshots/byte-preserving STEP. Gate: independent parsers/counts/coordinates/metadata/matching STEP hashes.
-6. **Demo acceptance:** actual-assets production browser workflow/layout/Safari/presenter performance. Gate: all criteria, no unexplained substitutes.
+6. **Demo acceptance:** actual-assets production browser workflow/layout/Chrome/presenter performance. Gate: all criteria, no unexplained substitutes.
 
 No implementation is claimed. Stage 1 freezes asset-dependent placements/home; never defer to operator/runtime UI.
 
@@ -270,7 +270,7 @@ At specification time no codebase/test suite/prior seam exists. Agreed baseline:
 - Capture all three downloads. Parse CSV/PLY with independent readers and compare point count, ID/order correspondence, surface coordinates, normals, frame, and units. Compare STEP input/output SHA-256.
 - Confirm stopped/blocked exports retain every selected point and distinguish visited/not-visited/problem rows.
 - Exercise malformed STEP, unsupported CATPart upload, zero-point Run, worker failure, and WebGL2 unavailability with understandable outcomes.
-- Run the same workflow against the static production build, including worker/WASM URL resolution and asset downloads. Smoke-test Safari.
+- Run the same workflow against the static production build, including worker/WASM URL resolution and asset downloads. Run current desktop Chrome acceptance.
 
 ### Independent geometry and math checks
 

@@ -1,0 +1,205 @@
+{
+  "mode": "static-production-software-WebGL",
+  "origin": "http://127.0.0.1:4174",
+  "requests": [
+    {
+      "url": "http://127.0.0.1:4174/",
+      "status": 200,
+      "type": "text/html"
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/index-BhAxdHmR.css",
+      "status": 200,
+      "type": "text/css"
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/index-Dh95ZbOi.js",
+      "status": 200,
+      "type": "text/javascript"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/base_link.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_1.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_2.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_3.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_4.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_5.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_6.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/door/door.glb",
+      "status": 200,
+      "type": "model/gltf-binary"
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/door/DOOR-of-CAR.step",
+      "status": 200,
+      "type": ""
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/step.worker-knQcvfcx.js",
+      "status": 200,
+      "type": "text/javascript"
+    },
+    {
+      "url": "http://127.0.0.1:4174/parser/occt-import-js/0.0.23/occt-import-js.js",
+      "status": 200,
+      "type": "text/javascript"
+    },
+    {
+      "url": "http://127.0.0.1:4174/parser/occt-import-js/0.0.23/occt-import-js.wasm",
+      "status": 200,
+      "type": "application/wasm"
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/preflight.worker-BbmP-5G7.js",
+      "status": 200,
+      "type": "text/javascript"
+    }
+  ],
+  "transfers": [
+    {
+      "url": "http://127.0.0.1:4174/",
+      "requestBodySize": 0,
+      "requestHeadersSize": 665,
+      "responseBodySize": 403,
+      "responseHeadersSize": 238
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/index-BhAxdHmR.css",
+      "requestBodySize": 0,
+      "requestHeadersSize": 587,
+      "responseBodySize": 884,
+      "responseHeadersSize": 346
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/index-Dh95ZbOi.js",
+      "requestBodySize": 0,
+      "requestHeadersSize": 572,
+      "responseBodySize": 240847,
+      "responseHeadersSize": 355
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/base_link.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 543,
+      "responseBodySize": 1435344,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_1.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 540,
+      "responseBodySize": 2316988,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_2.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 540,
+      "responseBodySize": 3413716,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_3.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 540,
+      "responseBodySize": 4255304,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_4.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 540,
+      "responseBodySize": 1267704,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_5.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 540,
+      "responseBodySize": 1443232,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/robot/link_6.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 540,
+      "responseBodySize": 98096,
+      "responseHeadersSize": 275
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/door/door.glb",
+      "requestBodySize": 0,
+      "requestHeadersSize": 537,
+      "responseBodySize": 4260444,
+      "responseHeadersSize": 279
+    },
+    {
+      "url": "http://127.0.0.1:4174/demo-v1/door/DOOR-of-CAR.step",
+      "requestBodySize": 0,
+      "requestHeadersSize": 545,
+      "responseBodySize": 3822982,
+      "responseHeadersSize": 290
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/step.worker-knQcvfcx.js",
+      "requestBodySize": 0,
+      "requestHeadersSize": 425,
+      "responseBodySize": 0,
+      "responseHeadersSize": 301
+    },
+    {
+      "url": "http://127.0.0.1:4174/parser/occt-import-js/0.0.23/occt-import-js.js",
+      "requestBodySize": 0,
+      "requestHeadersSize": 488,
+      "responseBodySize": 26944,
+      "responseHeadersSize": 302
+    },
+    {
+      "url": "http://127.0.0.1:4174/parser/occt-import-js/0.0.23/occt-import-js.wasm",
+      "requestBodySize": 0,
+      "requestHeadersSize": 486,
+      "responseBodySize": 7604031,
+      "responseHeadersSize": 278
+    },
+    {
+      "url": "http://127.0.0.1:4174/assets/preflight.worker-BbmP-5G7.js",
+      "requestBodySize": 0,
+      "requestHeadersSize": 430,
+      "responseBodySize": 0,
+      "responseHeadersSize": 303
+    }
+  ],
+  "import": {
+    "elapsedMs": 15905,
+    "animationFrames": 51,
+    "maxFrameGapMs": 797.9000000000015
+  }
+}

@@ -328,7 +328,7 @@ Coordinate file names derive from a sanitized model basename with selected-point
 
 ### 11. Performance, compatibility, and delivery
 
-Target current desktop Chrome/Edge first and smoke-test current Safari on macOS. The demo requires WebGL2, WebAssembly, a pointing device, and sufficient memory for the chosen asset. Mobile touch layouts and broad browser/version support are excluded.
+Target current desktop Chrome for final browser acceptance, following the user's 2026-10-05 Chrome-only clarification recorded in README. Edge and Safari are excluded from this release gate. The demo requires WebGL2, WebAssembly, a pointing device, and sufficient memory for the chosen asset. Mobile touch layouts and broad browser/version support are excluded.
 
 Target a readable layout at 1280×800 and 1440×900, at least 30 frames per second during the representative run on the presenter’s machine, and responsive camera/UI during STEP parsing and pose preparation. Measure actual asset load and production bundle transfer sizes; do not equate an npm package’s unpacked size with network size. Preprocess/decimate visual assets without exceeding the selected surface/pose acceptance tolerance.
 
@@ -341,7 +341,7 @@ Deliver a reproducible development command, a production build, a preview comman
 3. **Add point selection.** Implement door-only surface picking, numbered markers, coordinates, ordered point state, and camera-drag filtering. Gate: independent known hits and frame conversion within ±5 mm.
 4. **Add motion.** Implement manifest-based FK, bounded full-pose IK, preflight, joint interpolation, scanner stand-off, continuous laser scanning, progress, and Stop. Gate: five-point route completes with validated joint bounds and pose residuals; failures and Stop remain truthful.
 5. **Add exports.** Implement identical selected-point snapshots for PLY/CSV and byte-preserving STEP download. Gate: independent parsers confirm counts/coordinates/metadata; input and downloaded STEP hashes match.
-6. **Accept the demonstration.** Run browser acceptance against the actual assets and production build, inspect layout at target sizes, perform Safari smoke test, and measure performance on the presenter’s machine. Gate: all acceptance criteria pass with no unexplained geometry substitutions.
+6. **Accept the demonstration.** Run browser acceptance against the actual assets and production build, inspect layout at target sizes, perform Chrome acceptance, and measure performance on the presenter’s machine. Gate: all acceptance criteria pass with no unexplained geometry substitutions.
 
 No application implementation is claimed by this document. Asset-dependent numeric placements/home values are produced and frozen by stage 1, not deferred to the operator or runtime UI.
 
@@ -363,7 +363,7 @@ Test observable behavior and file contents rather than component implementation 
 - Capture all three downloads. Parse CSV/PLY with independent readers and compare point count, ID/order correspondence, surface coordinates, normals, frame, and units. Compare STEP input/output SHA-256.
 - Confirm stopped/blocked exports retain every selected point and distinguish visited/not-visited/problem rows.
 - Exercise malformed STEP, unsupported CATPart upload, zero-point Run, worker failure, and WebGL2 unavailability with understandable outcomes.
-- Run the same workflow against the static production build, including worker/WASM URL resolution and asset downloads. Smoke-test Safari.
+- Run the same workflow against the static production build, including worker/WASM URL resolution and asset downloads. Run current desktop Chrome acceptance.
 
 ### Independent geometry and math checks
 
