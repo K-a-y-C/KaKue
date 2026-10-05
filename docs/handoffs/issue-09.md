@@ -1,0 +1,11 @@
+# Issue #9 handoff
+
+Builds on merged #4/#8/#21 at c2b4494. Keeps the React/TypeScript/Vite/direct Three.js stack and exact supplied assets; no new dependencies. [Technical plan](../plans/issue-09.md), [verification](../verification/issue-09.md).
+
+Terminal completed/blocked/stopped/failed results expose three separate downloads. `captureDownloadSnapshot` owns copied/frozen selected surface XYZ (robot-base mm), approach-side normals, original IDs/order, terminal status codes/reasons, actual stand-off, desired emitter targets and visited-only endpoint residuals. The original immutable source Blob/name/hash is retained. PLY/CSV share that snapshot and six-decimal surface formatting; intermediate #21 waypoints and scene/laser geometry never become points. The UI captures after terminal status updates settle; camera changes and cancelled worker responses cannot rewrite it. Eligible import unmounts downloads and establishes a fresh session.
+
+CSV uses all 18 PRD columns, CRLF UTF-8, rectangular quoting and plain-text diagnostic protection. Nonfinite/inconsistent export values produce a readable error, while genuine original STEP remains available. Original STEP returns the retained Blob unchanged and preserves safe basename/extension. Point files are disabled without points/source; unready sessions expose no downloads. Each explicit click initiates one file; object URLs are released after browser initiation or on snapshot replacement/unmount.
+
+Only visited rows publish accepted endpoint residuals. Preflight-ready-but-unvisited, interrupted, outside-reach and unsolved rows remain in order with empty residuals. Preparation Stop still exports desired targets computed from the retained surface/normal and selected stand-off, without claiming any attempted pose.
+
+#10 may use the production download suite and retained five-point files/hash report as its final workflow gate. Keep the existing frozen placement/home/scanner mount and source notices. Review #9 manually before merging; #10's review branch may stack on this reviewed implementation at the user's request. Final delivery needs production network/MIME, layout, responsiveness and presenter hardware performance evidence; test timing with software WebGL alone does not satisfy the FPS requirement.
