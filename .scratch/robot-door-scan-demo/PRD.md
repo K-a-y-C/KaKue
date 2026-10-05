@@ -252,7 +252,7 @@ For surface position p and unit approach-side normal n, the scanner-emitter targ
 
 The target is an emitter pose, not a wrist position. Convert it to the required flange pose by composing the inverse of the calibrated-in-the-demo flange-to-emitter transform. Omitting this transform would put the wrong point on the robot at the target.
 
-Render a rigid scanner-attached red fan with a filled 240 mm wide sheet (opacity 0.28) and 61 dense red rays (opacity 0.65). Axial reach equals the selected stand-off in meters, including 500 mm; off-axis rays are correspondingly longer and retain the same 240 mm patch width. Activate on movement toward the first point after whole-route preflight and keep on continuously during approach, transitions and endpoint dwells. It is off in selecting/preparing and completed/blocked/stopped/failed states; Stop immediately extinguishes it. The fan follows the actual articulated emitter pose, with no independent aiming or repositioning. Exclude it from selection and exports; no acquired measurements, new door geometry, physical laser model, dense point cloud or reconstruction. Written visual requirements are actionable; no unavailable screenshot-match claim.
+Render a rigid scanner-attached 3D red rectangular projection volume, as amended by the user on 2026-10-05 after #9/#10. An 80×60 mm aperture expands into a filled 240×180 mm rectangular end. Four translucent side walls (opacity 0.16), a 13×9 grid of 117 rays (opacity 0.40), and the filled end (opacity 0.38) show depth and a surface area rather than a line. Axial reach equals the selected stand-off in meters, including 500 mm; off-axis rays are correspondingly longer and keep the same rectangular end dimensions. These dimensions are illustrative, not a measured physical scanner specification. Activate on movement toward the first point after whole-route preflight and keep on continuously during approach, transitions and endpoint dwells. It is off in selecting/preparing and completed/blocked/stopped/failed states; Stop immediately extinguishes it. The fan follows the actual articulated emitter pose, with no independent aiming or repositioning. Exclude it from selection and exports; no acquired measurements, new door geometry, physical laser model, dense point cloud or reconstruction. Written visual requirements are actionable; no unavailable screenshot-match claim.
 
 ### 8. Robot kinematics and sequence execution
 
@@ -417,9 +417,9 @@ Retain robot verification measurements and screenshots, replacement door provena
 - [Damped least-squares inverse-kinematics survey](https://mathweb.ucsd.edu/~sbuss/ResearchWeb/ikmethods/iksurvey.pdf): primary numerical-method reference; the bounds, orientation weights, seeds, and acceptance criteria are application decisions.
 - [Playwright downloads](https://playwright.dev/docs/downloads): browser-level file verification.
 
-### Current inputs and unresolved asset facts
+### Specification-time inputs and unresolved asset facts (historical)
 
-The local workspace contains planning/research documents and user-supplied source CAD, with no application implementation yet. The issue tracker is now GitHub `K-a-y-C/KaKue`; implementation slices are published in blocker order. The PRD's domain vocabulary and explicit design decisions are authoritative.
+At specification time, the local workspace contained planning/research documents and user-supplied source CAD, with no application implementation yet. The issue tracker is now GitHub `K-a-y-C/KaKue`; implementation slices are published in blocker order. The PRD's domain vocabulary and explicit design decisions are authoritative.
 
 The user replaced all earlier door inputs with `3d files/car-front-door-1/DOOR-of-CAR.step`. Only this door is accepted. The robot input is `3d files/Robot/KR22_R1610-KR16_R1610.stp`, matching the verified source hash. Source CAD is available in the user's local workspace; an agent working in another checkout must ensure the exact inputs are provisioned before asset-dependent work and must never silently substitute geometry. Text planning documents are published to GitHub; raw CAD availability there must be checked rather than assumed.
 
@@ -432,3 +432,7 @@ Direct STEP cylinder and flange-plane measurements locate the shoulder at (160,0
 Actual tessellation and exact nearest-triangle sampling subsequently established the core-link grouping and residuals recorded above. The supplied and reference whole-file visuals are not identical, so the final decision is to retain the supplied CAD's main bodies and omit the extra fixture/dress components. The researched chain is used directly; the mismatching OPW file is excluded. Source limits/speeds are used for this chosen demo variant without claiming that exterior CAD can distinguish payload variants or validate real-controller signs.
 
 The research installed/downloaded geometry tools only into isolated temporary storage. Verification images and measurement reports have been retained with the project's research documents. The web application itself has not been built or tested yet.
+
+### Current delivery evidence (2026-10-05)
+
+The implementation now exists with accepted supplied assets, frozen placement/home/mount, actual five-point runtime scans and independently checked downloads. Static Chrome/layout/hardware acceptance is recorded in [issue #10 verification](../../docs/verification/issue-10.md); the final user amendment and declared hardware scheduling conditions are in [rectangular laser verification](../../docs/verification/laser-volume.md). The earlier specification-time notes above remain historical context, not the current implementation status.

@@ -94,7 +94,7 @@ The [STEP import verification](docs/verification/issue-04.md) and [handoff](docs
 
 The [issue #3 plan](docs/plans/issue-03.md), [browser verification](docs/verification/issue-03.md) and [independent setup evidence](docs/verification/issue-03-geometry.md) record exact commands, actual render screenshots, route solutions and sampled clearance. The [fixed demo manifest](assets/demo/manifest.json) freezes a rigid +90° Z door rotation and placement (nearest surface X=1400 mm; floor Z=0). It also freezes a validated retracted demo home with emitter (900,0,800) mm, replacing the source CAD home for this scene after clearance checks. **Use `manifest.homeAngles` for fresh demo sessions**, while `RobotDefinition.home` retains the measured original CAD pose/provenance. No geometry is scaled or substituted.
 
-Independent setup results are a placement gate; runtime route acceptance and the complete production workflow remain later work. Presenter hardware and production acceptance are now recorded under issue #10 below. Final browser acceptance is Chrome only following the user’s 2026-10-05 clarification.
+Independent setup results establish placement; runtime route and complete production acceptance are now retained in the issue #7/#21/#10 evidence. Presenter hardware and production acceptance are now recorded under issue #10 below. Final browser acceptance is Chrome only following the user’s 2026-10-05 clarification.
 
 ## Working in vertical slices with TDD
 
@@ -134,7 +134,7 @@ With Node 24 and Chrome, `npm test -- tests/browser/route.spec.ts` exercises ord
 
 ## Continuous scan (#21)
 
-The existing React/TypeScript/Vite/Three.js stack now preflights a surface-position polyline with shortest-arc emitter orientation and the selected normal offset. Intermediate bounded IK waypoints and the actual smoothstep joint interpolants are validated with conservative between-sample error bounds. Opposite-side normals or unsolved transitions block the whole run with a readable point diagnostic. The fan is a 240 mm sheet (opacity 0.28) with 61 dense red rays (opacity 0.65), with axial reach equal to stand-off, inclusive 50–500 mm. It follows the actual emitter and stays on during approach, motion and endpoint dwells.
+The existing React/TypeScript/Vite/Three.js stack now preflights a surface-position polyline with shortest-arc emitter orientation and the selected normal offset. Intermediate bounded IK waypoints and the actual smoothstep joint interpolants are validated with conservative between-sample error bounds. Opposite-side normals or unsolved transitions block the whole run with a readable point diagnostic. The final user amendment replaces the sheet with a 3D rectangular red volume: 80×60 mm aperture, translucent side walls, 117 rays and a filled 240×180 mm end, with axial reach equal to stand-off, inclusive 50–500 mm. It follows the actual emitter and stays on during approach, motion and endpoint dwells.
 
 ```sh
 npm run test:numerical
@@ -177,6 +177,10 @@ npm run preview
 
 Upload the **complete dist directory** to a static HTTPS host. Serve `.wasm` as `application/wasm`, worker `.js` as JavaScript, and retain all versioned assets/notices. Use a matching `BASE_PATH=/scan-demo/` for a non-root build/preview/tests/release verification. No application server, account, database, runtime CDN or cloud conversion is required. The original STEP remains in browser memory until fresh import/reload.
 
-The release target is current desktop **Chrome**, following your Chrome-only clarification of 2026-10-05. Both 1280×800 and 1440×900 layouts are checked, including resizing and terminal downloads. `test:presenter` opens hardware Chrome instead of SwiftShader and measures the actual five-point route at retina 2× on macOS. The local Apple M1/Chrome 151 measurements passed the **≥30 FPS gate at both sizes** (latest ~30 FPS; earlier ~60 FPS); actual STEP parsing and five-point preflight also remain responsive. Measurements apply to that hardware and those dimensions. On another presentation machine, run the same gate before using it.
+The release target is current desktop **Chrome**, following your Chrome-only clarification of 2026-10-05. Both 1280×800 and 1440×900 layouts are checked, including resizing and terminal downloads. `test:presenter` opens hardware Chrome instead of SwiftShader, disables Chrome battery-saver/background frame caps in the temporary test browser, and measures the actual five-point route at retina 2× on macOS. The local Apple M1/Chrome 151 measurements passed the **≥30 FPS gate at both sizes** (latest ~30 FPS; earlier ~60 FPS); actual STEP parsing and five-point preflight also remain responsive. Measurements apply to that hardware and those dimensions. On another presentation machine, run the same gate before using it.
 
 See the [technical plan](docs/plans/issue-10.md), [verification/network/performance evidence](docs/verification/issue-10.md), [release inventory](docs/verification/issue-10-release.json) and [handoff](docs/handoffs/issue-10.md). The existing main-bundle size warning is qualified alongside actual transferred byte measurements; npm unpacked size is not a download measurement.
+
+### Rectangular 3D laser projection
+
+The wrist-mounted projection now has a filled rectangular end and visible depth. Its 80×60 mm aperture expands to a 240×180 mm footprint through translucent side walls and a 13×9 grid of rays. These are illustrative dimensions; selected CAD points and all three downloads remain unchanged. Reach follows the accepted 50–500 mm stand-off, and Stop immediately extinguishes the entire volume. [Plan](docs/plans/laser-volume.md), [verification](docs/verification/laser-volume.md), [handoff](docs/handoffs/laser-volume.md).

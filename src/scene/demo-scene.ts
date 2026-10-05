@@ -37,9 +37,12 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   };
   const setLaser = (enabled: boolean, distance=.1) => { if (laser) { laser.visible=enabled; laser.scale.z=distance; } if(laser){
       // Read local geometry extents; world bounds change as the wrist rotates.
-      const sheet=laser.children[0] as THREE.Mesh;sheet.geometry.computeBoundingBox();
-      renderer.domElement.dataset.fanReachM=String(sheet.geometry.boundingBox!.max.z*laser.scale.z);
-      renderer.domElement.dataset.fanWidthM=(sheet.geometry.boundingBox!.max.x-sheet.geometry.boundingBox!.min.x).toFixed(2);
+      const volume=laser.children[0] as THREE.Mesh;volume.geometry.computeBoundingBox();
+      renderer.domElement.dataset.fanReachM=String(volume.geometry.boundingBox!.max.z*laser.scale.z);
+      renderer.domElement.dataset.fanWidthM=(volume.geometry.boundingBox!.max.x-volume.geometry.boundingBox!.min.x).toFixed(2);
+      renderer.domElement.dataset.fanHeightM=(volume.geometry.boundingBox!.max.y-volume.geometry.boundingBox!.min.y).toFixed(2);
+      const end=(laser.children[2] as THREE.Mesh).geometry.getAttribute('position');
+      renderer.domElement.dataset.fanEndCornersM=JSON.stringify(Array.from({length:end.count},(_,i)=>[end.getX(i),end.getY(i),end.getZ(i)*laser!.scale.z].map(value=>Number(value.toFixed(6)))));
       renderer.domElement.dataset.fanRays=String((laser.children[1] as THREE.LineSegments).geometry.getAttribute('position').count/2);
     } renderer.domElement.dataset.laser=String(enabled); };
   let selection: ReturnType<typeof surfaceSelection> | undefined;
@@ -86,13 +89,27 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
     scanner.position.fromArray(robotDefinition.scanner.tool0ToCenter); tool.add(scanner);
     const emitter = new THREE.Mesh(new THREE.CircleGeometry(.012, 16), new THREE.MeshBasicMaterial({ color: 0xf34444, side: THREE.DoubleSide }));
     emitter.position.fromArray(robotDefinition.scanner.tool0ToEmitter); tool.add(emitter);
-    const fanGeometry = new THREE.BufferGeometry();
-    fanGeometry.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,-.12,0,1,.12,0,1],3));
+    // Normalized axial length: setLaser scales only Z to the accepted stand-off.
+    const near=[[-.04,-.03,0],[.04,-.03,0],[.04,.03,0],[-.04,.03,0]];
+    const far=[[-.12,-.09,1],[.12,-.09,1],[.12,.09,1],[-.12,.09,1]];
+    const walls:number[]=[];
+    for(let i=0;i<4;i++){
+      const j=(i+1)%4;
+      walls.push(...near[i],...near[j],...far[j],...near[i],...far[j],...far[i]);
+    }
+    walls.push(...near[0],...near[1],...near[2],...near[0],...near[2],...near[3]);
+    const volumeGeometry=new THREE.BufferGeometry();volumeGeometry.setAttribute('position',new THREE.Float32BufferAttribute(walls,3));
     laser=new THREE.Group();
-    laser.add(new THREE.Mesh(fanGeometry,new THREE.MeshBasicMaterial({color:0xff2020,transparent:true,opacity:.28,side:THREE.DoubleSide,depthWrite:false})));
-    const ribs:number[]=[];for(let i=0;i<=60;i++)ribs.push(0,0,0,-.12+.24*i/60,0,1);
-    const ribGeometry=new THREE.BufferGeometry();ribGeometry.setAttribute('position',new THREE.Float32BufferAttribute(ribs,3));
-    laser.add(new THREE.LineSegments(ribGeometry,new THREE.LineBasicMaterial({color:0xff1010,transparent:true,opacity:.65,depthWrite:false})));
+    laser.add(new THREE.Mesh(volumeGeometry,new THREE.MeshBasicMaterial({color:0xff2020,transparent:true,opacity:.16,side:THREE.DoubleSide,depthWrite:false})));
+    const rays:number[]=[];
+    for(let row=0;row<9;row++)for(let column=0;column<13;column++){
+      const x=column/12-.5,y=row/8-.5;
+      rays.push(.08*x,.06*y,0,.24*x,.18*y,1);
+    }
+    const rayGeometry=new THREE.BufferGeometry();rayGeometry.setAttribute('position',new THREE.Float32BufferAttribute(rays,3));
+    laser.add(new THREE.LineSegments(rayGeometry,new THREE.LineBasicMaterial({color:0xff1010,transparent:true,opacity:.4,depthWrite:false})));
+    const endGeometry=new THREE.BufferGeometry();endGeometry.setAttribute('position',new THREE.Float32BufferAttribute(far.flat(),3));endGeometry.setIndex([0,1,2,0,2,3]);
+    laser.add(new THREE.Mesh(endGeometry,new THREE.MeshBasicMaterial({color:0xff1010,transparent:true,opacity:.38,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1})));
     laser.position.fromArray(robotDefinition.scanner.tool0ToEmitter); laser.visible=false; tool.add(laser);
     setJoints(manifest.homeAngles); setLaser(false);
     const door = await load('door/door.glb'); currentPart = door; door.matrixAutoUpdate=false; door.matrix.fromArray(manifest.partToBase); scene.add(door);
