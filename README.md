@@ -2,7 +2,7 @@
 
 KaKue is a planned desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Run controls and downloads remain later ordered slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
+**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Ordered multi-point playback, Stop and downloads remain later ordered slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
@@ -76,7 +76,7 @@ npm test
 PREVIEW=1 npm test
 ```
 
-Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and the exact bundled STEP, then stage versioned same-origin caches, source and parser/WASM files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh begins with the fixed demo scene. Choose **Import STEP** to replace the active part with a local `.step` or `.stp` file (case-insensitive, at most 50 MiB). Empty, oversized and unsupported files preserve the active part; eligible imports start a fresh home-pose session and show indeterminate loading. Parsing failure leaves an unready session with import available for recovery. Original source bytes stay in memory for later export; reload releases the session. All imported parts use the same frozen placement without scaling or automatic positioning. Drag to orbit, right-drag to pan and scroll to zoom. Click visible door skin to append numbered markers and matching XYZ rows (robot-base millimeters, one decimal). Duplicate clicks stay separate. Camera gestures, multitouch, outside releases, foreground robot/scanner/floor and the empty window opening cannot select. Selections are append-only; eligible import or reload clears them.
+Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and the exact bundled STEP, then stage versioned same-origin caches, source and parser/WASM files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh begins with the fixed demo scene. Choose **Import STEP** to replace the active part with a local `.step` or `.stp` file (case-insensitive, at most 50 MiB). Empty, oversized and unsupported files preserve the active part; eligible imports start a fresh home-pose session and show indeterminate loading. Parsing failure leaves an unready session with import available for recovery. Original source bytes stay in memory for later export; reload releases the session. All imported parts use the same frozen placement without scaling or automatic positioning. Drag to orbit, right-drag to pan and scroll to zoom. Click visible door skin to append numbered markers and matching XYZ rows (robot-base millimeters, one decimal). Duplicate clicks stay separate. Camera gestures, multitouch, outside releases, foreground robot/scanner/floor and the empty window opening cannot select. Selections are append-only; eligible import or reload clears them. For this slice select exactly one point, choose a stand-off from 50–300 mm (default 100) and press **Run**. Controls and selection lock during preparation/movement; completed, blocked and failed sessions cannot rerun. A fresh import restores the validated demo home. The endpoint must meet 5 mm emitter and 5° axis/full-orientation limits before moving, then shows an illustrative red laser fan for one second. Failed preflight leaves the robot at home. Motion uses conservative 10%-rated joint speeds; it makes no collision or controller claim.
 
 To build and verify a non-root deployment, use the same base for build and preview:
 
@@ -86,13 +86,15 @@ BASE_PATH=/scan-demo/ npm run preview
 BASE_PATH=/scan-demo/ PREVIEW=1 npm test
 ```
 
+The [scanner visit verification](docs/verification/issue-06.md) and [handoff](docs/handoffs/issue-06.md) record bounded pose acceptance, independent math checks, actual dwell observations and production behavior.
+
 The [surface selection verification](docs/verification/issue-05.md) and [handoff](docs/handoffs/issue-05.md) record the picking/gesture tests and independent position/normal fixture.
 
 The [STEP import verification](docs/verification/issue-04.md) and [handoff](docs/handoffs/issue-04.md) record TDD cycles, exact source bytes, independent unit fixtures and production worker/WASM checks. Test failures injected at worker/network seams exercise recovery; successful imports use the real parser.
 
 The [issue #3 plan](docs/plans/issue-03.md), [browser verification](docs/verification/issue-03.md) and [independent setup evidence](docs/verification/issue-03-geometry.md) record exact commands, actual render screenshots, route solutions and sampled clearance. The [fixed demo manifest](assets/demo/manifest.json) freezes a rigid +90° Z door rotation and placement (nearest surface X=1400 mm; floor Z=0). It also freezes a validated retracted demo home with emitter (900,0,800) mm, replacing the source CAD home for this scene after clearance checks. **Use `manifest.homeAngles` for fresh demo sessions**, while `RobotDefinition.home` retains the measured original CAD pose/provenance. No geometry is scaled or substituted.
 
-Independent setup results are a placement gate; runtime route acceptance and the complete production workflow remain later work. Safari/presenter hardware performance have not yet been accepted.
+Independent setup results are a placement gate; runtime route acceptance and the complete production workflow remain later work. Presenter hardware performance has not yet been accepted. Final browser acceptance is Chrome only following the user’s 2026-10-05 clarification.
 
 ## Working in vertical slices with TDD
 
@@ -106,7 +108,7 @@ For each behavior, use a red–green–refactor loop:
 
 Use the full browser workflow as the primary acceptance seam. Supplement it with independent geometry/coordinate fixtures and downloaded-file readers. Avoid tests that merely duplicate implementation math or assert private component structure. Synthetic STEP fixtures can test errors and accuracy, but cannot replace the supplied door for final acceptance.
 
-Required evidence includes correct surface picking and drag filtering, ordered five-point motion within joint limits, emitter residuals within 5 mm and 5°, truthful blocked/Stop outcomes, identical selected surface coordinates in PLY/CSV, and an unchanged STEP hash. Verify the static production build, target desktop layouts, Chrome/Edge, Safari smoke behavior, and the PRD's performance target on the presenter's machine.
+Required evidence includes correct surface picking and drag filtering, ordered five-point motion within joint limits, emitter residuals within 5 mm and 5°, truthful blocked/Stop outcomes, identical selected surface coordinates in PLY/CSV, and an unchanged STEP hash. Verify the static production build, target desktop layouts, Chrome (user waived Safari/Edge on 2026-10-05), and the PRD's performance target on the presenter's machine.
 
 ## Project references
 
