@@ -1,6 +1,6 @@
 # Web stack research — 2026-10-04
 
-Decision: React + TypeScript + Vite + direct Three.js, browser STEP import using occt-import-js, immutable preprocessed robot definition/link meshes, and a fixed-six-joint numerical IK module. The full product contract and acceptance criteria are in the PRD.
+Decision: React + TypeScript + Vite + direct Three.js, browser STEP import using occt-import-js, immutable preprocessed robot definition/link meshes, and a fixed-six-joint numerical IK module. Read the [concise PRD](../../.scratch/robot-door-scan-demo/PRD.concise.md) first for the product contract and acceptance criteria; consult the unchanged [full PRD](../../.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity.
 
 ## Package baseline
 
