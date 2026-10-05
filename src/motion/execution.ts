@@ -11,10 +11,12 @@ export function transitionDuration(from: readonly number[], to: readonly number[
 export function visit(from: readonly number[], to: readonly number[], apply: (angles: number[])=>void, laser:(on:boolean)=>void, signal: AbortSignal): Promise<void> {
   const duration=transitionDuration(from,to)*1000;
   return new Promise((resolve,reject)=> {
+    let settled=false;
     let frame=0, start: number|undefined, dwellStart: number|undefined;
-    const cancelled=()=> { cancelAnimationFrame(frame); laser(false); reject(new DOMException('Sequence cancelled','AbortError')); };
+    const cancelled=()=> { if(settled)return; settled=true; signal.removeEventListener('abort',cancelled); cancelAnimationFrame(frame); try { laser(false); } catch { /* Cancellation still settles if renderer cleanup fails. */ } reject(new DOMException('Sequence cancelled','AbortError')); };
     signal.addEventListener('abort',cancelled,{once:true});
     const tick=(now:number)=> {
+      if (settled) return;
       if (signal.aborted) return cancelled();
       try {
       start ??=now;
@@ -22,10 +24,10 @@ export function visit(from: readonly number[], to: readonly number[], apply: (an
       if (elapsed<duration) apply(interpolateJoints(from,to,elapsed/duration));
       // The frame timestamp predates FK/render work; dwell starts after actual laser activation.
       else { apply([...to]); laser(true); dwellStart ??=Math.max(now,performance.now()); }
-      if (dwellStart!==undefined && now-dwellStart>=1000) { laser(false); signal.removeEventListener('abort',cancelled); resolve(); }
+      if (dwellStart!==undefined && now-dwellStart>=1000) { settled=true; laser(false); signal.removeEventListener('abort',cancelled); resolve(); }
       else frame=requestAnimationFrame(tick);
-      } catch (error) { signal.removeEventListener('abort',cancelled); laser(false); reject(error); }
+      } catch (error) { settled=true; signal.removeEventListener('abort',cancelled); try { laser(false); } catch { /* Preserve the original execution failure. */ } reject(error); }
     };
-    frame=requestAnimationFrame(tick);
+    if(signal.aborted)cancelled();else frame=requestAnimationFrame(tick);
   });
 }
