@@ -33,7 +33,7 @@ for(const standOffMm of [50,500])test(`${standOffMm} mm is accepted and the rigi
  await run.click();await expect(input).toBeDisabled();
  await expect(canvas).toHaveAttribute('data-laser','true',{timeout:15000});
  await expect(canvas).toHaveAttribute('data-fan-reach-m',String(standOffMm/1000));
- await expect(canvas).toHaveAttribute('data-fan-width-m','0.12');
+ await expect(canvas).toHaveAttribute('data-fan-width-m','0.24');
  await expect(canvas).toHaveAttribute('data-fan-rays','61');
  await page.waitForFunction(()=>document.querySelector('canvas')?.getAttribute('data-joint-angles')===(window as any).fanPlan?.points[0].angles?.join(','));
  await page.screenshot({path:`docs/verification/issue-21-fan-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.png`});

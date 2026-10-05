@@ -87,10 +87,10 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
     const emitter = new THREE.Mesh(new THREE.CircleGeometry(.012, 16), new THREE.MeshBasicMaterial({ color: 0xf34444, side: THREE.DoubleSide }));
     emitter.position.fromArray(robotDefinition.scanner.tool0ToEmitter); tool.add(emitter);
     const fanGeometry = new THREE.BufferGeometry();
-    fanGeometry.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,-.06,0,1,.06,0,1],3));
+    fanGeometry.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,-.12,0,1,.12,0,1],3));
     laser=new THREE.Group();
     laser.add(new THREE.Mesh(fanGeometry,new THREE.MeshBasicMaterial({color:0xff2020,transparent:true,opacity:.28,side:THREE.DoubleSide,depthWrite:false})));
-    const ribs:number[]=[];for(let i=0;i<=60;i++)ribs.push(0,0,0,-.06+.12*i/60,0,1);
+    const ribs:number[]=[];for(let i=0;i<=60;i++)ribs.push(0,0,0,-.12+.24*i/60,0,1);
     const ribGeometry=new THREE.BufferGeometry();ribGeometry.setAttribute('position',new THREE.Float32BufferAttribute(ribs,3));
     laser.add(new THREE.LineSegments(ribGeometry,new THREE.LineBasicMaterial({color:0xff1010,transparent:true,opacity:.65,depthWrite:false})));
     laser.position.fromArray(robotDefinition.scanner.tool0ToEmitter); laser.visible=false; tool.add(laser);

@@ -1,0 +1,11 @@
+# Issue 21 handoff
+
+Builds on landed #8, prior to #9. Same React/TypeScript/Vite/direct Three.js stack and exact supplied CAD. Technical plan: [issue-21](../plans/issue-21.md). Evidence: [verification](../verification/issue-21.md).
+
+Run preflights the entire ordered route, including adaptive surface-facing intermediate targets and the exact smoothstep joint interpolants with between-sample position/orientation bounds. Shortest-arc endpoint emitter orientation supplies the interpolated approach normal; positions follow the selected surface polyline plus the recorded stand-off. Antipodal normals/unsolved or unvalidated transitions block the entire sequence. Home approach establishes stand-off on arrival. No collision/physical-controller/coverage claim.
+
+RunPlan now records `standOffMm` and copied selected points. Each PlannedPoint retains its original surface point, desired endpoint emitter/flange targets, endpoint joint/residual/status/reason data and adds `path: ScanStep[]` (joint angles, duration, from/target emitter matrices and continuous error bounds). `duration` is the sum of its path times; endpoint `angles` is the final path pose. Never export these extra waypoints as selected surface points. Execution consumes this path, maintains a wrist-attached 240 mm/61-ray laser from first approach through all transitions/dwells, and marks Visited only after its endpoint dwell. Stop immediately turns it off, freezes actual joints, preserves visited/diagnostic/unattempted rows and rejects stale callbacks.
+
+For #9, retain the full set of original SelectedPoint coordinates/normals/order plus terminal statuses/reasons and the exact selected stand-off, with one immutable DownloadSnapshot shared by PLY/CSV. Emitter target columns remain separate from surface coordinates. Use terminal point statuses to leave unattempted/unsolved CSV residuals empty; preflight residuals alone do not establish a completed visit. Original source bytes are untouched. Fresh import/reload restores selecting/home. This slice introduces no download writers or controls.
+
+#10 still owns final cross-browser/Safari and presenter FPS/export acceptance. Review and merge this PR manually before continuing #9.
