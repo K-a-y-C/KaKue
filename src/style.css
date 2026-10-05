@@ -3,3 +3,5 @@ input[type=file]{display:block;width:100%;margin-top:8px;font:inherit;font-size:
 
  table { width:100%; border-collapse:collapse; font-size:11px; font-variant-numeric:tabular-nums; } th,td { padding:6px 2px; text-align:right; border-bottom:1px solid #dce4e9; } aside { overflow:auto; }
 input[type=number]{display:block;width:100%;padding:7px;margin:6px 0 12px;border:1px solid #bdcbd5;border-radius:4px;font:inherit}button{padding:8px 18px;border:0;border-radius:4px;background:#234e6a;color:white;font:inherit;cursor:pointer}button:disabled{opacity:.45;cursor:default}
+
+[aria-label="Downloads"] button { display:block; width:100%; margin:8px 0; padding:8px; font-size:13px; }
