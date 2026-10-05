@@ -7,3 +7,5 @@ The application stack is React, TypeScript, Vite, direct Three.js, local STEP/IK
 Source intake precedes implementation. Issues #1 and #2 are independently ready and may have separate agents. Issue #3 depends on both; #4 and #5 depend on #3; #6 → #7 → #8 follows motion; #9 depends on #4 and #8; #10 is the final actual-asset production gate. Inspect verified deliverables as well as issue state before starting a dependent slice. Pending PRs must not be described as landed or accepted.
 
 Each issue records its plan in docs/plans, commands and results in docs/verification, and its next-step handoff in docs/handoffs. Do not close issues or claim final acceptance with unverified mandatory gates. Browser/hardware checks must describe the browser and machine actually used.
+
+Browser acceptance update (2026-10-05): the user explicitly requested Chrome only and waived Safari/Edge checks. Final production acceptance uses installed Chrome on this Mac, including real hardware performance measurement; software-rendered regression tests do not establish the FPS gate.
