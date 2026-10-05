@@ -1,7 +1,7 @@
 # Robot Door Scan Demo — published issue backlog
 
 Target: [K-a-y-C/KaKue](https://github.com/K-a-y-C/KaKue). Status: all 10 implementation issues published with ready-for-agent.
-Read [../PRD.concise.md](../PRD.concise.md) first; consult the unchanged authoritative [../PRD.md](../PRD.md) only for additional explanation or ambiguity. Both preserve story numbers and specification headings. Issue numbers below are real GitHub identifiers.
+Read [../PRD.concise.md](../PRD.concise.md) first; consult the synchronized authoritative [../PRD.md](../PRD.md) only for additional explanation or ambiguity. Both preserve story numbers and specification headings. Issue numbers below are real GitHub identifiers.
 
 | Issue | Vertical slice | Blocked by |
 | --- | --- | --- |
@@ -159,3 +159,7 @@ Deliver the complete actual-asset workflow as a reproducible static production b
 ## Publication
 
 Use the skill's What to build / Acceptance criteria / Blocked by template. Include story references and TDD approach in What to build. Publish blockers first and replace draft identifiers with real issue URLs. All slices are ready-for-agent specifications whose blockers and input availability must be honored. No CATPart conversion ticket remains.
+
+## Issue #21 — changed scan behavior
+
+[Issue #21](https://github.com/K-a-y-C/KaKue/issues/21), blocked by landed #8, takes priority before #9. It supersedes this backlog’s historical #6/#7 requirements for 50–300 mm, laser-off transit and endpoint-only joint chords. Current requirements are 50–500 mm, continuous dense wrist-attached laser and preflighted surface-facing intermediate motion. See synchronized PRD §§7–8, technical plan and verification.

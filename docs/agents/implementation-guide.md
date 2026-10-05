@@ -1,10 +1,10 @@
 # Implementing the Robot Door Scan Demo
 
-Read the [concise PRD](../../.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the unchanged [full PRD](../../.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Story numbers and specification headings are preserved. Also read your issue, its blockers, the [backlog](../../.scratch/robot-door-scan-demo/issues/breakdown.md), and [robot verification](../research/robot-verification.md) before changing code. Product decisions, domain vocabulary, six-joint constants, scanner mounting, CSV schema, and state transitions are specified in the PRD. This guide supplies working context; it does not replace that specification.
+Read the [concise PRD](../../.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the synchronized [full PRD](../../.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Story numbers and specification headings are preserved. Also read your issue, its blockers, the [backlog](../../.scratch/robot-door-scan-demo/issues/breakdown.md), and [robot verification](../research/robot-verification.md) before changing code. Product decisions, domain vocabulary, six-joint constants, scanner mounting, CSV schema, and state transitions are specified in the PRD. This guide supplies working context; it does not replace that specification.
 
 ## Intended result
 
-A desktop browser app shows one actual articulated six-axis robot and one fixed automotive door, lets the presenter append surface points, preflights all scanner target poses, visits them in selection order with a brief red laser fan, and exports PLY/CSV plus unchanged STEP. This is a simulation with truthful completed, blocked, stopped and failed outcomes. There is no backend, database, persistence, account, physical scanning, controller connection or collision planning.
+A desktop browser app shows one actual articulated six-axis robot and one fixed automotive door, lets the presenter append surface points, preflights all scanner target poses, visits them in selection order with a continuous dense red laser fan, and exports PLY/CSV plus unchanged STEP. This is a simulation with truthful completed, blocked, stopped and failed outcomes. There is no backend, database, persistence, account, physical scanning, controller connection or collision planning.
 
 The app is React + TypeScript + Vite with direct Three.js. STEP parsing and bounded numerical IK use local workers. Same-origin versioned parser/WASM assets must resolve in the production build. The PRD's dependency table is a research baseline, not an installed/verified lockfile. Verify compatible available versions when installing and record any justified change. Do not build future features ahead of your ticket.
 
@@ -23,11 +23,15 @@ Render robot primary bodies derived from its supplied STEP. Use the pinned verif
 
 - Right-handed robot-base frame: +Z up, +X toward the door; floor Z=0. Internal distances are meters, angles radians; UI and exports use millimeters. Never scale a model to fit.
 - Surface points and approach-side unit normals are primary selection data. Scanner target is `p + stand_off*n`, facing `-n`; flange target must account for the emitter mount. Surface coordinates are never replaced by emitter/flange coordinates in exports.
-- Home is `(0°, -90°, +90°, 0°, 0°, 0°)` unless a validated replacement is recorded. Default stand-off is 100 mm, allowed 50–300 mm. Accept poses only within hard joint bounds and independently recomputed ≤5 mm/≤5° residuals.
+- Home is `(0°, -90°, +90°, 0°, 0°, 0°)` unless a validated replacement is recorded. Default stand-off is 100 mm, allowed 50–500 mm. Accept poses only within hard joint bounds and independently recomputed ≤5 mm/≤5° residuals.
 - Session states: loading → selecting → preparing → running → completed; blocked/stopped/failed are truthful terminal alternatives. Selection, import and settings lock during preparation/running. Terminal runs do not rerun; fresh import/reload starts again.
 - Public contracts: PartAsset, RobotDefinition, SelectedPoint, RunPlan, RunState and DownloadSnapshot as defined in the PRD. Keep related complexity behind small cohesive interfaces; internal helpers are not public APIs. Use Float64 for motion math.
 - Preserve source bytes before worker transfer. Cancelled/replaced sessions reject stale callbacks. All selected points survive terminal outcomes and use one immutable download snapshot.
 - Points are append-only; no delete/reorder/undo, pause/reset, user placement controls, arbitrary robot selection or automatic route planning.
+
+## Continuous scan — issue #21 requirement change
+
+Issue #21 supersedes endpoint-only laser activation and joint chords from #6–#7; complete it before #9. Preflight endpoints and every executed scan interpolant. Use a surface-position polyline, shortest-arc full emitter orientation and its interpolated normal offset; reject antipodal normals. Keep actual wrist-attached laser on from first approach through all transitions/dwells, off terminally and on Stop. Home approach establishes stand-off on arrival. Validate intermediate poses plus between-sample error bounds, finite hard intervals and smoothstep peak speeds. The 120 mm filled fan/61 rays scales axial reach to the actual 50–500 mm stand-off. Original SelectedPoint/source identity and endpoint data remain available for the immutable #9 snapshot; waypoint samples are simulation planning data, never extra selected/export points. See [technical plan](../plans/issue-21.md).
 
 ## Working one issue at a time
 

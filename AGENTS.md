@@ -1,6 +1,6 @@
 # Agent instructions
 
-This repository implements the Robot Door Scan Demo. Before work, read `docs/agents/implementation-guide.md`, `.scratch/robot-door-scan-demo/PRD.concise.md` first (consult the unchanged `.scratch/robot-door-scan-demo/PRD.md` only for additional explanation or ambiguity), your GitHub issue and its blockers. Use the PRD's domain vocabulary and acceptance gates.
+This repository implements the Robot Door Scan Demo. Before work, read `docs/agents/implementation-guide.md`, `.scratch/robot-door-scan-demo/PRD.concise.md` first (consult the synchronized `.scratch/robot-door-scan-demo/PRD.md` only for additional explanation or ambiguity), your GitHub issue and its blockers. Use the PRD's domain vocabulary and acceptance gates.
 
 The sole door input is `3d files/car-front-door-1/DOOR-of-CAR.step`. Ignore all earlier door assets; no CATPart conversion is required. Verify input hashes and availability before asset-dependent work. Never substitute geometry.
 
