@@ -17,13 +17,25 @@ function disposeObject(object: THREE.Object3D) {
     }
   });
 }
-export interface SceneHandle { clearPart(): void; replacePart(part: PartAsset): void; dispose(): void }
+export interface SceneHandle { clearPart(): void; replacePart(part: PartAsset): void; setSelectionEnabled(enabled: boolean): void; setJoints(angles: readonly number[]): void; setLaser(enabled: boolean, distance?: number): void; dispose(): void }
 /** Owns the scene and replaceable part GPU resources. */
 export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation, part: PartAsset) => void, fail: (message: string) => void, selected: (point: SelectedPoint) => void): SceneHandle {
   let active = true;
   const initialization = new AbortController();
   let currentPart: THREE.Group | undefined;
   let partReady = false;
+  let selectionEnabled = true;
+  const robotLinks = new Map<string, THREE.Group>();
+  let wrist: THREE.Group | undefined;
+  let laser: THREE.Mesh | undefined;
+  const setJoints = (angles: readonly number[]) => {
+    const pose = forwardKinematics(robotDefinition, angles);
+    for (const link of robotDefinition.links) robotLinks.get(link.name)?.matrix.fromArray(pose.linkMatrices[link.name]).multiply(new THREE.Matrix4().fromArray(link.visualTransform));
+    wrist?.matrix.fromArray(pose.tool0);
+    renderer.domElement.dataset.jointAngles = angles.join(',');
+    renderer.domElement.dataset.emitterPose = Array.from(pose.emitter).join(',');
+  };
+  const setLaser = (enabled: boolean, distance=.1) => { if (laser) { laser.visible=enabled; laser.scale.z=distance; } renderer.domElement.dataset.laser=String(enabled); };
   let selection: ReturnType<typeof surfaceSelection> | undefined;
   let publishPart: (part: THREE.Group, asset: PartAsset) => void = () => {};
   const clearPart = () => { partReady=false; selection?.clear(); if (currentPart) { scene.remove(currentPart); disposeObject(currentPart); currentPart = undefined; } };
@@ -31,7 +43,7 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   scene.background = new THREE.Color('#e8edf1');
   let renderer: THREE.WebGLRenderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
-  catch { fail('WebGL2 is required to display this scene. Use a desktop browser with hardware acceleration enabled, then reload.'); return { clearPart() {}, replacePart() {}, dispose() {} }; }
+  catch { fail('WebGL2 is required to display this scene. Use a desktop browser with hardware acceleration enabled, then reload.'); return { clearPart() {}, replacePart() {}, setSelectionEnabled() {}, setJoints() {}, setLaser() {}, dispose() {} }; }
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.domElement.setAttribute('role', 'img');
   renderer.domElement.setAttribute('aria-label', '3D robot and door scene');
@@ -39,7 +51,7 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   const camera = new THREE.PerspectiveCamera(40, 1, .01, 30);
   camera.up.set(0, 0, 1);
   const controls = new OrbitControls(camera, renderer.domElement);
-  selection = surfaceSelection(renderer.domElement, camera, scene, () => partReady ? currentPart : undefined, selected);
+  selection = surfaceSelection(renderer.domElement, camera, scene, () => partReady && selectionEnabled ? currentPart : undefined, selected);
   controls.enableDamping = true;
   scene.add(new THREE.HemisphereLight(0xffffff, 0x7c8896, 2));
   const light = new THREE.DirectionalLight(0xffffff, 3); light.position.set(2, -3, 4); scene.add(light);
@@ -61,13 +73,18 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
     const pose = forwardKinematics(robotDefinition, manifest.homeAngles);
     for (const link of robotDefinition.links) {
       const group = await load('robot/'+link.mesh); group.matrixAutoUpdate = false;
-      group.matrix.fromArray(pose.linkMatrices[link.name]).multiply(new THREE.Matrix4().fromArray(link.visualTransform)); scene.add(group);
+      group.matrix.fromArray(pose.linkMatrices[link.name]).multiply(new THREE.Matrix4().fromArray(link.visualTransform)); scene.add(group); robotLinks.set(link.name,group);
     }
-    const tool = new THREE.Group(); tool.matrixAutoUpdate = false; tool.matrix.fromArray(pose.tool0); scene.add(tool);
+    const tool = new THREE.Group(); tool.matrixAutoUpdate = false; tool.matrix.fromArray(pose.tool0); scene.add(tool); wrist=tool;
     const scanner = new THREE.Mesh(new THREE.BoxGeometry(...robotDefinition.scanner.dimensions as [number,number,number]), new THREE.MeshStandardMaterial({ color: 0x273e51, roughness: .4 }));
     scanner.position.fromArray(robotDefinition.scanner.tool0ToCenter); tool.add(scanner);
     const emitter = new THREE.Mesh(new THREE.CircleGeometry(.012, 16), new THREE.MeshBasicMaterial({ color: 0xf34444, side: THREE.DoubleSide }));
     emitter.position.fromArray(robotDefinition.scanner.tool0ToEmitter); tool.add(emitter);
+    const fanGeometry = new THREE.BufferGeometry();
+    fanGeometry.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,-.09,0,1,.09,0,1],3));
+    laser=new THREE.Mesh(fanGeometry,new THREE.MeshBasicMaterial({color:0xff2020,transparent:true,opacity:.5,side:THREE.DoubleSide,depthWrite:false}));
+    laser.position.fromArray(robotDefinition.scanner.tool0ToEmitter); laser.visible=false; tool.add(laser);
+    setJoints(manifest.homeAngles); setLaser(false);
     const door = await load('door/door.glb'); currentPart = door; door.matrixAutoUpdate=false; door.matrix.fromArray(manifest.partToBase); scene.add(door);
     const bundled = await loadBundledSource({ signal: initialization.signal });
     const meshes: PartAsset['meshes'] = [];
@@ -94,9 +111,10 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   })().catch(error => { if (active) fail(`Could not load the supplied scene assets. ${error instanceof Error ? error.message : String(error)} Reload after checking the required files.`); });
   return {
     clearPart,
+    setSelectionEnabled(enabled) { selectionEnabled=enabled; }, setJoints, setLaser,
     replacePart(part) {
       if (!active) return;
-      clearPart();
+      clearPart(); setJoints(manifest.homeAngles); setLaser(false);
       const group = new THREE.Group(); group.matrixAutoUpdate = false; group.matrix.fromArray(part.partToBase);
       for (const mesh of part.meshes) {
         const geometry = new THREE.BufferGeometry();
