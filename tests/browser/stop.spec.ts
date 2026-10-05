@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures';
 
 async function loadPoints(page:import('@playwright/test').Page) {
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');

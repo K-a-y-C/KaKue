@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures';
 import {writeFile} from 'node:fs/promises';
 const evidencePrefix=process.env.EVIDENCE_PREFIX??'issue-10';
 

@@ -1,4 +1,4 @@
-import {test,expect,type Page} from '@playwright/test';
+import {test,expect,type Page} from './fixtures';
 import {readFile} from 'node:fs/promises';
 
 async function load(page:Page,clicks=[[704,498]]) {
@@ -169,12 +169,12 @@ for(const outcome of ['dwell-stop','worker-failure','render-failure'] as const)t
  const step=await download(page,'Download original STEP');expect(step.bytes).toEqual(await readFile('3d files/car-front-door-1/DOOR-of-CAR.step'));
 });
 
-test('zero selections and a missing genuine source cannot expose substitute downloads',async({page})=>{
+test('zero selections and a fresh unimported session cannot expose substitute downloads',async({page})=>{
  await load(page,[]);await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:/Download/})).toHaveCount(0);
- await page.route('**/demo-v1/door/DOOR-of-CAR.step',route=>route.fulfill({status:404}));await page.reload();
- await expect(page.getByRole('alert')).toContainText('Required asset unavailable');
- await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:/Download/})).toHaveCount(0);
+ await page.reload();
+ await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Run',exact:true})).toHaveCount(0);await expect(page.getByRole('button',{name:/Download/})).toHaveCount(0);
 });
 
 test('five actual surface selections complete and all three downloads agree in production',async({page})=>{

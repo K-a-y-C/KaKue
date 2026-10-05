@@ -1,6 +1,6 @@
 import manifest from '../../assets/demo/manifest.json';
 import doorManifest from '../../assets/door/manifest.json';
-import type { PartAsset } from './types';
+import type { InitialPart, PartAsset } from './types';
 export class StepImportError extends Error {
   constructor(readonly code: string, message: string) { super(message); this.name = 'StepImportError'; }
 }
@@ -46,4 +46,13 @@ export async function loadBundledSource({ signal }: { signal: AbortSignal }): Pr
   if (sourceHash !== doorManifest.source.sha256) throw new Error('Bundled STEP identity mismatch.');
   signal.throwIfAborted();
   return { sourceName: doorManifest.source.name, sourceFormat: 'STEP', source, sourceHash, sourceUnits: doorManifest.source.units, outputUnits: 'meter', partToBase: manifest.partToBase };
+}
+
+/** Reuse the accepted cache only for byte-identical supplied CAD selected by the user. */
+export async function prepareInitialStep(file: File, {signal}: {signal: AbortSignal}): Promise<InitialPart> {
+  validateStepFile(file);signal.throwIfAborted();
+  const bytes=await file.arrayBuffer();signal.throwIfAborted();
+  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),n=>n.toString(16).padStart(2,'0')).join('');signal.throwIfAborted();
+  if(hash===doorManifest.source.sha256)return {cacheSource:{sourceName:file.name,sourceFormat:'STEP',source:file,sourceHash:hash,sourceUnits:doorManifest.source.units,outputUnits:'meter',partToBase:manifest.partToBase}};
+  return {part:await importStep(file,{signal})};
 }

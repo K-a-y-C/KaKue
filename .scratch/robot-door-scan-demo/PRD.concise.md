@@ -1,6 +1,6 @@
 # Robot Door Scan Demo — Product Requirements Document
 
-Status: ready-for-agent · Source version: 1.4 (2026-10-05) · Owner: Kakue
+Status: ready-for-agent · Source version: 1.5 (2026-10-05) · Owner: Kakue
 
 Concise companion to [PRD.md](PRD.md), which is authoritative and synchronized for issue #21. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
 
@@ -10,7 +10,7 @@ Demonstrate robot scan planning in a desktop browser: show the actual supplied d
 
 ## Solution
 
-One fixed robot and upright door share a grid floor; a rigid wrist scanner displays an illustrative red laser fan without acquiring data. Load the prepared door or import STEP → orbit/pan/zoom → append numbered surface points → set stand-off → Run preflights every pose → move from home in selection order with a continuous surface-facing laser scan if all pass → show progress and truthful terminal outcome → separately download PLY, CSV and unchanged loaded STEP. Fresh import/reload starts over. Placement and dimensions are fixed; no fixtures, tables, placement/scale/robot-selection controls, point editing, pause or reset.
+One fixed robot and upright door share a grid floor; a rigid wrist scanner displays an illustrative red laser fan without acquiring data. Open the branded import screen → import STEP to reveal the workspace → orbit/pan/zoom → append numbered surface points → set stand-off → Run preflights every pose → move from home in selection order with a continuous surface-facing laser scan if all pass → show progress and truthful terminal outcome → separately download PLY, CSV and unchanged loaded STEP. Fresh import/reload starts over. Placement and dimensions are fixed; no fixtures, tables, placement/scale/robot-selection controls, point editing, pause or reset.
 
 ### Success criteria
 
@@ -31,7 +31,7 @@ Original IDs are preserved for GitHub issue references; each row states the acto
 1. Presenter: show robot and door after demo load; make the purpose clear.
 2. Presenter: use actual supplied robot geometry; represent the intended machine.
 3. Presenter: use supplied door geometry; demonstrate the chosen part.
-4. Presenter: bundle the prepared door; avoid repeated local-file navigation.
+4. Presenter: retain the verified supplied-door cache; use it only after importing byte-identical CAD (user import-first amendment, 2026-10-05).
 5. Operator: import STEP; demonstrate loading rather than a hardcoded mesh.
 6. Operator: show honest loading/readable import errors; identify readiness/failure.
 7. Operator: preserve CAD dimensions; maintain compatible robot/door sizes.
@@ -98,7 +98,7 @@ Versioned same-origin parser JS/WASM, explicit WASM URL and correct MIME type mu
 
 Sole source: `3d files/car-front-door-1/DOOR-of-CAR.step`, user-supplied 2026-10-04; 14,456,880 bytes; SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Initial inspection found ISO-10303-21 opening/closing markers, AP214 AUTOMOTIVE_DESIGN and millimeters; it does not prove parsing, bounds, topology or picking accuracy. Ignore all older doors/CATPart; no conversion remains. JPGs are references only.
 
-Independently reopen STEP in a CAD reader; verify recognizable shape, actual selectable surfaces/window opening, and millimeter bounding box. Preserve complete bytes. Optional GLB startup cache must derive from this STEP and retain settings/provenance/hashes; preview meshes/JPGs do not satisfy import/download acceptance. Missing/invalid geometry is explicit; never substitute older/image-derived geometry or invent conversion history. Browser CATPart import is excluded.
+Independently reopen STEP in a CAD reader; verify recognizable shape, actual selectable surfaces/window opening, and millimeter bounding box. Preserve complete bytes. Optional GLB verified import cache must derive from this STEP and retain settings/provenance/hashes; preview meshes/JPGs do not satisfy import/download acceptance. Missing/invalid geometry is explicit; never substitute older/image-derived geometry or invent conversion history. Browser CATPart import is excluded.
 
 #### Robot gate
 
@@ -151,7 +151,7 @@ Home `(0°, −90°, +90°, 0°, 0°, 0°)` matches supplied CAD and intervals; 
 
 ### 5. Viewer and interface
 
-Compact toolbar, viewport ~75–80% width, narrow point/status panel; downloads appear with terminal result. Toolbar: Import STEP, source name, stand-off mm, Run, Stop. Load prepared door by default after gate; import replaces model, clears selections/results, restores home/new session. Disable import in preparing/running; reload restarts.
+Compact toolbar, viewport ~75–80% width, narrow point/status panel; downloads appear with terminal result. Application header/document toolbar: KaKue logo, Scan Studio and source name/import; scan inspector: stand-off mm, Run, Stop. User amendment (2026-10-05): start with the supplied KaKue logo and import screen, no canvas/scan controls/CAD requests. A validated first import reveals the workspace; only an exact supplied-door SHA match can use the verified cache, retaining the selected File. Other STEP parses locally. Later import replaces model, clears selections/results, restores home/new session. Disable import in preparing/running; reload returns to the import screen.
 
 Three-quarter perspective contains robot/door/scanner/floor. OrbitControls orbit/pan/zoom target interaction center; fit camera after load without scaling. Readable lighting, restrained gray door, recognizable supplied robot; small datum/hint “Click the door to add scan points.” No dense proprietary menus/device panels/branding/fixtures.
 
@@ -260,7 +260,7 @@ At specification time no codebase/test suite/prior seam exists. Agreed baseline:
 
 ### Browser acceptance
 
-- Load the prepared actual door; confirm robot, door, scanner, and floor are present and UI reaches selecting.
+- Begin with the import screen and explicitly import the supplied actual door; confirm robot, door, scanner, and floor are present and UI reaches selecting.
 - Upload a known valid STEP; confirm a fresh session, fixed placement, unchanged size, cleared selections, home pose, and stored source identity.
 - Select at least five known visible surface locations; verify marker numbering, list order, approximate known robot-base coordinates, and normalized approach-side normals.
 - Orbit and drag the camera; confirm no extra point. Click robot, floor, scanner, laser, and window opening; confirm no extra point.

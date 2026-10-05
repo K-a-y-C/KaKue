@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { resolve } from 'node:path';
 const box = resolve('tests/fixtures/box-mm.step');
 test('operator imports STEP at its physical size and starts at demo home', async ({ page }) => {
@@ -52,7 +52,7 @@ test('import ownership retains exact bytes after transfer and bundled source ide
   expect(result.bundledBytes).toBe(14456880);
 });
 
-test('replacement rejects stale callbacks and reload restores the bundled fresh session', async ({ page }) => {
+test('replacement rejects stale callbacks and reload returns to import before a fresh session', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('status')).toContainText('Scene ready');
   // Worker is an external seam: deliver an already queued old result after cancellation.
@@ -83,6 +83,8 @@ test('replacement rejects stale callbacks and reload restores the bundled fresh 
   await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
   await expect(page.locator('dl')).toContainText('900.0, 0.0, 800.0 mm');
   await page.reload();
+  await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
+  await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');
   await expect(page.getByRole('status')).toContainText('Scene ready');
   await expect(page.getByText('DOOR-of-CAR.step', { exact: true })).toBeVisible();
   await expect(page.locator('dl')).toContainText('1212.5 × 1116.1 mm');
