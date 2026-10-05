@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "deploymentBase": "/",
+  "package": "kakue-robot-door-scan-demo",
+  "version": "0.1.0",
+  "sourceDoorSha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef",
+  "sourceRobotSha256": "8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1",
+  "dependencies": {
+    "occt-import-js": "0.0.23",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "three": "0.186.1"
+  },
+  "files": [
+    {
+      "path": "assets/index-BhAxdHmR.css",
+      "bytes": 2011,
+      "sha256": "dbdf09c4d8b85bdb1c843f5b0fed455acec1023e06844619f9996603d02a49f7"
+    },
+    {
+      "path": "assets/index-Dh95ZbOi.js",
+      "bytes": 892611,
+      "sha256": "9ffb8f9dd7f81a66b4fda26a80f795b7b4bbd06cdea4ccdc8cece7b4f1599b46"
+    },
+    {
+      "path": "assets/preflight.worker-BbmP-5G7.js",
+      "bytes": 103407,
+      "sha256": "4ab8267df1fac74583d5893f0026cf565842e47e50cfe5b5ed73814148fb93f9"
+    },
+    {
+      "path": "assets/step.worker-knQcvfcx.js",
+      "bytes": 2945,
+      "sha256": "068382e33243eb9a18f33a9a552fa1810ebe2988f789a3f1f91ae0a62d50480d"
+    },
+    {
+      "path": "demo-v1/door/DOOR-of-CAR.step",
+      "bytes": 14456880,
+      "sha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef"
+    },
+    {
+      "path": "demo-v1/door/door.glb",
+      "bytes": 4260444,
+      "sha256": "4059bd8e252b8ada125adbcdb1232c4bf26ec5bdd4d8689d8a21ac572e0f9b43"
+    },
+    {
+      "path": "demo-v1/notices/README.md",
+      "bytes": 1154,
+      "sha256": "8afd5f3dcb9865875e58e6b4ffeec8a85ada6810ed432c32e7802d42283ad9a9"
+    },
+    {
+      "path": "demo-v1/notices/react-LICENSE",
+      "bytes": 1088,
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+    },
+    {
+      "path": "demo-v1/notices/react-dom-LICENSE",
+      "bytes": 1088,
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+    },
+    {
+      "path": "demo-v1/notices/scheduler-LICENSE",
+      "bytes": 1088,
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+    },
+    {
+      "path": "demo-v1/notices/three-LICENSE",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    },
+    {
+      "path": "demo-v1/robot/base_link.glb",
+      "bytes": 1435344,
+      "sha256": "81ee869b4e7be2b42b86caf86e8cc37f51922b330495e29cd174685bcbd2d39d"
+    },
+    {
+      "path": "demo-v1/robot/link_1.glb",
+      "bytes": 2316988,
+      "sha256": "b71ee7771f20efcc6a3b3ab4099ca845432e8e98c8bd8f73d4ae716e7b3331a8"
+    },
+    {
+      "path": "demo-v1/robot/link_2.glb",
+      "bytes": 3413716,
+      "sha256": "3c4d2ab926bd58192f0405f082eb516a6600fefdfa3062e4df59fda86fc9faad"
+    },
+    {
+      "path": "demo-v1/robot/link_3.glb",
+      "bytes": 4255304,
+      "sha256": "31106365a71017c111a0dae89a8a5b8ded3f9b5295b06db4bd7c26f5ef031573"
+    },
+    {
+      "path": "demo-v1/robot/link_4.glb",
+      "bytes": 1267704,
+      "sha256": "70622a27f574a60eda35a3558dc00b1c0a5c9ceb476e8146c83ad4d00e7d7d88"
+    },
+    {
+      "path": "demo-v1/robot/link_5.glb",
+      "bytes": 1443232,
+      "sha256": "9dec70ae705a78582da960c0dffb6d73c991a297c0880e27904de9137af6ca31"
+    },
+    {
+      "path": "demo-v1/robot/link_6.glb",
+      "bytes": 98096,
+      "sha256": "26ea2162e902fd07dac6f22569e0e7b470ed0b6eaa3072a1fc8020c99dd0fdba"
+    },
+    {
+      "path": "index.html",
+      "bytes": 391,
+      "sha256": "05b6080675bd4e3c0c252cedf18802af141c494646d226fefb6a92494523d76d"
+    },
+    {
+      "path": "parser/occt-import-js/0.0.23/license.occt-import-js.txt",
+      "bytes": 27030,
+      "sha256": "7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe"
+    },
+    {
+      "path": "parser/occt-import-js/0.0.23/license.occt.txt",
+      "bytes": 26936,
+      "sha256": "090f8eb6ba63e72887c1f89b009fb1656cfda02d83b6e9805b20468520a5d77f"
+    },
+    {
+      "path": "parser/occt-import-js/0.0.23/manifest.json",
+      "bytes": 726,
+      "sha256": "717d66dd53c9de88cc0dc04d4c5fb090ed98281029b31c1ab096b8a53976d843"
+    },
+    {
+      "path": "parser/occt-import-js/0.0.23/occt-import-js.js",
+      "bytes": 96871,
+      "sha256": "3fb44ce11d00611f9b3f3c5775d520ebab48930c1f08279b7b1316f05f0d3379"
+    },
+    {
+      "path": "parser/occt-import-js/0.0.23/occt-import-js.wasm",
+      "bytes": 7604031,
+      "sha256": "33391fc9d94ea5c869a6718488bf0a9a464222bac9bdc764dfe1690cef281952"
+    }
+  ],
+  "totalBytes": 41710166
+}

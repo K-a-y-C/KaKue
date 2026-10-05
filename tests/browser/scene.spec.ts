@@ -1,13 +1,13 @@
 import { writeFile } from 'node:fs/promises';
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 test('presenter opens the actual fixed robot and door scene', async ({ page }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   const meshes = new Set<string>();
   page.on('response', response => { if (response.url().endsWith('.glb') && response.ok()) meshes.add(new URL(response.url()).pathname); });
   await page.goto('./');
-  await expect(page.getByRole('heading', { name: 'Robot Door Scan Demo' })).toBeVisible();
-  await expect(page.getByRole('status')).toHaveText('Scene ready — inspect the fixed door and robot.');
+  await expect(page.getByRole('heading', { name: 'Scan Studio' })).toBeVisible();
+  await expect(page.getByRole('status')).toHaveText('Scene ready — select CAD surfaces to plan your scan.');
   await expect(page.getByRole('img', { name: '3D robot and door scene' })).toBeVisible();
   expect(meshes.size).toBe(8);
   await writeFile(testInfo.outputPath('scene-load.json'), JSON.stringify(await page.evaluate(() => ({ readyAfterNavigationMs: performance.now(), assetRequests: performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('.glb')).map(entry => ({ url: entry.name, bytes: (entry as PerformanceResourceTiming).encodedBodySize })) })), null, 2));
@@ -25,7 +25,7 @@ test('missing supplied door cache has a readable asset outcome', async ({ page }
   await page.route('**/demo-v1/door/door.glb', route => route.fulfill({ status: 404, body: 'Missing door' }));
   await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('Required asset unavailable: door/door.glb');
-  await expect(page.getByRole('status')).toHaveText('Scene unavailable.');
+  await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
 });
 
 test('WebGL2 unavailable reports the browser requirement', async ({ page }) => {
@@ -40,8 +40,8 @@ test('WebGL2 unavailable reports the browser requirement', async ({ page }) => {
   });
   await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('WebGL2 is required');
-  await expect(page.getByLabel('Import STEP')).toBeDisabled();
-  await expect(page.getByRole('status')).toHaveText('Scene unavailable.');
+  await expect(page.getByLabel('Import STEP')).toBeEnabled();
+  await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
   expect(errors).toEqual([]);
 });
 

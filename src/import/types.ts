@@ -15,3 +15,6 @@ export interface PartAsset {
   meshes: PartMesh[];
   partToBase: readonly number[];
 }
+
+/** Initial verified-cache source or genuine parsed import; never a substituted default. */
+export type InitialPart = { cacheSource: Omit<PartAsset, 'meshes'> } | { part: PartAsset };

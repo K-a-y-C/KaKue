@@ -2,15 +2,15 @@
 
 KaKue is a desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Issue #7 adds complete ordered-route preflight and playback, current-point/visited progress, truthful blocked rows and actual five-point runtime acceptance. Issue #8 adds immediate Stop during preparation/transit/dwell, frozen pose, retained honest statuses and terminal failures with fresh-import recovery. Issue #21 adds continuous surface-facing waypoint scans, a dense 240 mm fan and stand-off through 500 mm, preserving #8 Stop semantics. Issue #9 adds separate terminal PLY/CSV and byte-preserving original STEP downloads. Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first. The synchronized [full PRD](.scratch/robot-door-scan-demo/PRD.md) remains authoritative; consult it only for explanation or ambiguity. Ready-for-agent does not bypass the asset or production acceptance gates.
+**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Issue #7 adds complete ordered-route preflight and playback, current-point/visited progress, truthful blocked rows and actual five-point runtime acceptance. Issue #8 adds immediate Stop during preparation/transit/dwell, frozen pose, retained honest statuses and terminal failures with fresh-import recovery. Issue #21 adds continuous surface-facing waypoint scans, a dense 240 mm fan and stand-off through 500 mm, preserving #8 Stop semantics. Issue #9 established immutable PLY/CSV export snapshots. The current presenter amendment bundles the point cloud and coordinates into one successful-scan ZIP Export. Issue #10 verifies the static release, production workflow/layouts and local hardware presentation performance. Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first. The synchronized [full PRD](.scratch/robot-door-scan-demo/PRD.md) remains authoritative; consult it only for explanation or ambiguity. Ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
-1. Load the prepared demo door or import a genuine STEP file locally in the browser.
+1. Open the branded welcome screen, then import a genuine STEP file locally to create the workspace.
 2. Orbit, pan, and zoom; click the door surface to append numbered points and coordinates.
 3. Choose a scanner stand-off from 50–500 mm and press Run.
 4. Preflight every target against the verified robot chain and joint limits. When all targets pass, scan the ordered route continuously with surface-facing motion, progress and endpoint dwells.
-5. Complete or Stop the simulation, then download selected surface points as PLY, coordinates and statuses as CSV, and the exact STEP bytes loaded by the session.
+5. After all visits, the robot returns to its starting home pose with the laser off. A successful completion exposes Export: one ZIP containing the point cloud (PLY) and coordinates (CSV). Stop freezes the current pose, including during return, and keeps the coordinate rows.
 
 The robot and door have one fixed placement and retain their physical dimensions. Points cannot be deleted or reordered. Reloading or importing again begins a fresh session. Exports use robot-base coordinates in millimeters; camera movement never changes them.
 
@@ -18,7 +18,7 @@ This is a visual planning demonstration. It does not acquire scans, reconstruct 
 
 ## Asset gates
 
-The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Issue #5 verifies actual browser picking; issue #3 independently freezes scene placement. Preserve its exact bytes for the original STEP download.
+The sole authoritative door is `3d files/car-front-door-1/DOOR-of-CAR.step`. Earlier door assets are superseded; no CATPart conversion is needed. The supplied file is 14,456,880 bytes with SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Issue #1 independently reopened its actual surfaces in native OpenCascade, measured dimensions, checked the empty window and skin/frame probes, and prepared a meter-space GLB cache. Issue #5 verifies actual browser picking; issue #3 independently freezes scene placement. Retain its source identity for import and geometry verification.
 
 Raw CAD and retained joint/research inputs are tracked after the manually merged source-intake PR. The [source manifest](assets/sources/manifest.json) records byte counts and SHA-256 identities; all retained entries were checked on 2026-10-04. The [source notes](assets/sources/README.md) explain provenance, reference-only material, and the retained license. An implementation agent must still recheck the exact geometry hashes in its checkout before asset preparation.
 
@@ -76,7 +76,7 @@ npm test
 PREVIEW=1 npm test
 ```
 
-Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and the exact bundled STEP, then stage versioned same-origin caches, source and parser/WASM files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh begins with the fixed demo scene. Choose **Import STEP** to replace the active part with a local `.step` or `.stp` file (case-insensitive, at most 50 MiB). Empty, oversized and unsupported files preserve the active part; eligible imports start a fresh home-pose session and show indeterminate loading. Parsing failure leaves an unready session with import available for recovery. Original source bytes stay in memory for the unchanged STEP download; reload releases the session. All imported parts use the same frozen placement without scaling or automatic positioning. Drag to orbit, right-drag to pan and scroll to zoom. Click visible door skin to append numbered markers and matching XYZ rows (robot-base millimeters, one decimal). Duplicate clicks stay separate. Camera gestures, multitouch, outside releases, foreground robot/scanner/floor and the empty window opening cannot select. Selections are append-only; eligible import or reload clears them. Select one or more ordered points, choose a stand-off from 50–500 mm (default 100) and press **Run**. Controls and selection lock during preparation/movement; completed, blocked and failed sessions cannot rerun. A fresh import restores the validated demo home. Endpoints and every scan interpolant must meet 5 mm emitter and 5° axis/full-orientation limits before movement. The wrist-attached dense red fan stays on from the first approach through every transition and one-second endpoint dwell; completion, Stop or failure extinguishes it. Stand-off is established on arrival at the first point. Failed preflight leaves the robot at home. Motion uses conservative 10%-rated joint speeds; it makes no collision or controller claim.
+Development uses `http://127.0.0.1:5173`; production preview uses `http://127.0.0.1:4173`. The browser tests launch installed Chrome and their own server on port 4174. `dev` and `build` rehash all eight prepared CAD caches and the exact bundled STEP, then stage versioned same-origin caches, source and parser/WASM files automatically; a missing or changed cache fails explicitly. The production build includes browser dependency notices under `demo-v1/notices/`. Refresh returns to the import screen without a scene or scan controls. Choose **Import CAD** to open a workspace or replace the active part with a local `.step` or `.stp` file (case-insensitive, at most 50 MiB). Empty, oversized and unsupported files preserve the active part; eligible imports start a fresh home-pose session and show indeterminate loading. Parsing failure leaves an unready session with import available for recovery. Original source bytes stay in memory for the unchanged STEP download; reload releases the session. All imported parts use the same frozen placement without scaling or automatic positioning. Drag to orbit, right-drag to pan and scroll to zoom. Click visible door skin to append numbered markers and matching XYZ rows (robot-base millimeters, one decimal). Duplicate clicks stay separate. Camera gestures, multitouch, outside releases, foreground robot/scanner/floor and the empty window opening cannot select. Selections are append-only; eligible import or reload clears them. Select one or more ordered points, choose a stand-off from 50–500 mm (default 100) and press **Run**. Controls and selection lock during preparation/movement; completed, blocked and failed sessions cannot rerun. A fresh import restores the validated demo home. The exact supplied door uses its accepted GLB cache only when the selected file SHA-256 matches; its original File remains the download source. Other STEP files use the parser worker. Endpoints and every scan interpolant must meet 5 mm emitter and 5° axis/full-orientation limits before movement. The wrist-attached dense red fan stays on from the first approach through every transition and one-second endpoint dwell; completion, Stop or failure extinguishes it. Stand-off is established on arrival at the first point. Failed preflight leaves the robot at home. Motion uses conservative 10%-rated joint speeds; it makes no collision or controller claim.
 
 To build and verify a non-root deployment, use the same base for build and preview:
 
@@ -94,7 +94,7 @@ The [STEP import verification](docs/verification/issue-04.md) and [handoff](docs
 
 The [issue #3 plan](docs/plans/issue-03.md), [browser verification](docs/verification/issue-03.md) and [independent setup evidence](docs/verification/issue-03-geometry.md) record exact commands, actual render screenshots, route solutions and sampled clearance. The [fixed demo manifest](assets/demo/manifest.json) freezes a rigid +90° Z door rotation and placement (nearest surface X=1400 mm; floor Z=0). It also freezes a validated retracted demo home with emitter (900,0,800) mm, replacing the source CAD home for this scene after clearance checks. **Use `manifest.homeAngles` for fresh demo sessions**, while `RobotDefinition.home` retains the measured original CAD pose/provenance. No geometry is scaled or substituted.
 
-Independent setup results are a placement gate; runtime route acceptance and the complete production workflow remain later work. Presenter hardware performance has not yet been accepted. Final browser acceptance is Chrome only following the user’s 2026-10-05 clarification.
+Independent setup results establish placement; runtime route and complete production acceptance are now retained in the issue #7/#21/#10 evidence. Presenter hardware and production acceptance are now recorded under issue #10 below. Final browser acceptance is Chrome only following the user’s 2026-10-05 clarification.
 
 ## Working in vertical slices with TDD
 
@@ -134,7 +134,7 @@ With Node 24 and Chrome, `npm test -- tests/browser/route.spec.ts` exercises ord
 
 ## Continuous scan (#21)
 
-The existing React/TypeScript/Vite/Three.js stack now preflights a surface-position polyline with shortest-arc emitter orientation and the selected normal offset. Intermediate bounded IK waypoints and the actual smoothstep joint interpolants are validated with conservative between-sample error bounds. Opposite-side normals or unsolved transitions block the whole run with a readable point diagnostic. The fan is a 240 mm sheet (opacity 0.28) with 61 dense red rays (opacity 0.65), with axial reach equal to stand-off, inclusive 50–500 mm. It follows the actual emitter and stays on during approach, motion and endpoint dwells.
+The existing React/TypeScript/Vite/Three.js stack now preflights a surface-position polyline with shortest-arc emitter orientation and the selected normal offset. Intermediate bounded IK waypoints and the actual smoothstep joint interpolants are validated with conservative between-sample error bounds. Opposite-side normals or unsolved transitions block the whole run with a readable point diagnostic. The final user amendment replaces the sheet with a 3D rectangular red volume: 80×60 mm aperture, translucent side walls, 117 rays and a filled 240×180 mm end, with axial reach equal to stand-off, inclusive 50–500 mm. It follows the actual emitter and stays on during approach, motion and endpoint dwells.
 
 ```sh
 npm run test:numerical
@@ -143,7 +143,7 @@ npm run build
 PREVIEW=1 npm test
 ```
 
-See the [technical plan](docs/plans/issue-21.md), [verification](docs/verification/issue-21.md) and [handoff](docs/handoffs/issue-21.md). The route follows interpolated selected positions/normals; it does not reconstruct the curved CAD surface between selections. No collision or physical scanning claim is made. #9 exports are implemented; #10 final browser/presenter acceptance remains a separate slice.
+See the [technical plan](docs/plans/issue-21.md), [verification](docs/verification/issue-21.md) and [handoff](docs/handoffs/issue-21.md). The route follows interpolated selected positions/normals; it does not reconstruct the curved CAD surface between selections. No collision or physical scanning claim is made. #9 exports are implemented; #10 records the static release and local Chrome/presenter acceptance.
 
 ## Terminal downloads (#9)
 
@@ -157,3 +157,42 @@ PREVIEW=1 npm test -- tests/browser/downloads.spec.ts
 ```
 
 The [plan](docs/plans/issue-09.md), [verification](docs/verification/issue-09.md) and [handoff](docs/handoffs/issue-09.md) record independent readers, original STEP hash comparisons, terminal failure/cancellation cases and five-point workflow evidence. These are simulated selected CAD coordinates and pose-planning data, not acquired measurements or KUKA programs.
+
+## Verified static delivery (#10)
+
+With Node 24 and the committed lockfile:
+
+```sh
+npm ci
+npm run build
+npm run verify:release
+npm run test:release
+npm run test:numerical
+PREVIEW=1 npm test
+npm run test:presenter
+npm run preview
+```
+
+`verify:release` checks the genuine bundled STEP, eight accepted CAD caches, pinned parser/WASM/notices and compiled local entry/workers, then writes a deterministic `dist/release-manifest.json` containing file sizes and SHA-256. An invalid recheck removes the previous success manifest. To verify a copied release directory, run `npm run verify:release -- --directory /absolute/path/to/release`.
+
+Upload the **complete dist directory** to a static HTTPS host. Serve `.wasm` as `application/wasm`, worker `.js` as JavaScript, and retain all versioned assets/notices. Use a matching `BASE_PATH=/scan-demo/` for a non-root build/preview/tests/release verification. No application server, account, database, runtime CDN or cloud conversion is required. The original STEP remains in browser memory until fresh import/reload.
+
+The release target is current desktop **Chrome**, following your Chrome-only clarification of 2026-10-05. Both 1280×800 and 1440×900 layouts are checked, including resizing and terminal downloads. `test:presenter` opens hardware Chrome instead of SwiftShader, disables Chrome battery-saver/background frame caps in the temporary test browser, and measures the actual five-point route at retina 2× on macOS. The local Apple M1/Chrome 151 measurements passed the **≥30 FPS gate at both sizes** (latest ~30 FPS; earlier ~60 FPS); actual STEP parsing and five-point preflight also remain responsive. Measurements apply to that hardware and those dimensions. On another presentation machine, run the same gate before using it.
+
+See the [technical plan](docs/plans/issue-10.md), [verification/network/performance evidence](docs/verification/issue-10.md), [release inventory](docs/verification/issue-10-release.json) and [handoff](docs/handoffs/issue-10.md). The existing main-bundle size warning is qualified alongside actual transferred byte measurements; npm unpacked size is not a download measurement.
+
+### Rectangular 3D laser projection
+
+The wrist-mounted projection now has a filled rectangular end and visible depth. Its 80×60 mm aperture expands to a 240×180 mm footprint through translucent side walls and a 13×9 grid of rays. These are illustrative dimensions; selected CAD points and all three downloads remain unchanged. Reach follows the accepted 50–500 mm stand-off, and Stop immediately extinguishes the entire volume. [Plan](docs/plans/laser-volume.md), [verification](docs/verification/laser-volume.md), [handoff](docs/handoffs/laser-volume.md).
+
+### Branded import-first workspace
+
+The application starts with the supplied KaKue Automation logo and a CAD import screen. No robot, door, scan controls, CAD asset requests or parser workers appear before choosing a valid model. Successful import opens a compact application header/document toolbar, full 3D viewport and structured scan inspector. Invalid first imports leave the welcome screen available for retry; reload returns to that screen. Model properties are expandable, and the empty selection state explains how to start. The original supplied Logo.jpeg is copied unchanged into src/assets/logo.jpeg and served locally.
+
+[Technical plan](docs/plans/import-first-workspace.md), [verification](docs/verification/import-first-workspace.md), [handoff](docs/handoffs/import-first-workspace.md). The approved source geometry, camera/placement, rectangular laser, Run/Stop and selected-point download contracts remain unchanged. Generic imported parts retain fixed placement and do not imply arbitrary-part reachability.
+
+## Scan result export and home return
+
+The current presenter update replaces separate downloads with one **Export** after successful completion. It packages the selected simulated point cloud (PLY) and matching coordinates (CSV) in a ZIP; source CAD is excluded. Files retain robot-base millimeters, surface coordinates, approach-side normals and pose residuals. The laser activates only on arrival at point 1, remains continuous through scan points, then switches off before the animated home return. Stop during return freezes the robot and retains every visited row. A solid shared platform supports the scene at Z=0 without moving the supplied models.
+
+[Plan](docs/plans/scan-export-home-platform.md), [verification](docs/verification/scan-export-home-platform.md), [handoff](docs/handoffs/scan-export-home-platform.md). Historical issue records below retain the behavior verified at their delivery dates; the current amendment supersedes their export and motion lifecycle descriptions.

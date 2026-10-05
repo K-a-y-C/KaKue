@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test('actual door visit locks controls, moves the joints, dwells then completes', async ({ page }) => {
   test.setTimeout(60000);
@@ -24,8 +24,9 @@ test('actual door visit locks controls, moves the joints, dwells then completes'
   const lit=records.filter(record=>record.laser==='true'); expect(lit.length).toBeGreaterThan(0);
   const off=records.find(record=>record.time>lit[0].time && record.laser==='false')!;
   expect(off.time-lit[0].time).toBeGreaterThanOrEqual(990);
-  expect(new Set(lit.map(record=>record.angles)).size).toBeGreaterThan(2);
-  expect(records.filter(record=>record.laser==='false'&&record.angles!==home).length).toBeLessThanOrEqual(1);
+  expect(new Set(lit.map(record=>record.angles)).size).toBe(1);
+  expect(records.filter(record=>record.laser==='false'&&record.angles!==home).length).toBeGreaterThan(2);
+  await expect(canvas).toHaveAttribute('data-joint-angles',home!);
   const surface=await page.getByRole('row').last().locator('td').allTextContents();
   const normal=(await page.getByRole('row').last().getAttribute('data-base-normal'))!.split(',').map(Number);
   const pose=lit.at(-1)!.pose.split(',').map(Number);

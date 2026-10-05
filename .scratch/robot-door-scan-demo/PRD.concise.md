@@ -1,8 +1,20 @@
 # Robot Door Scan Demo — Product Requirements Document
 
-Status: ready-for-agent · Source version: 1.2 (2026-10-05) · Owner: Kakue
+Status: ready-for-agent · Source version: 1.6 (2026-10-05) · Owner: Kakue
 
-Concise companion to [PRD.md](PRD.md), which is authoritative and synchronized for issue #21. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
+Concise companion to [PRD.md](PRD.md), which is authoritative and synchronized for the scan-result amendment. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
+
+
+## Approved scan-result amendment — 2026-10-05
+
+The presenter request in [the implementation plan](../../docs/plans/scan-export-home-platform.md) supersedes older contradictory requirements below:
+
+- Successful scans return to the exact session starting home joints with bounded smooth interpolation. The laser is off throughout return. Completion and Export appear only after return finishes. Stop can freeze return and retains visited rows.
+- The laser stays off from home until the first accepted scan point is reached, then remains on across scan transitions and dwells. It is off on completion, Stop and failures.
+- Replace terminal Downloads with one successful-scan Export action. One ZIP contains the selected simulated point cloud (PLY) and coordinates (CSV), from the same immutable snapshot. Do not expose source CAD as a scan result or mention a CAD-source download in the interface. Interrupted/blocked/failed runs retain on-screen coordinates and honest statuses, without a successful-scan export.
+- Add a fixed solid platform under the shared Z=0 floor. Do not move, scale or substitute either supplied model. This visual base is permitted despite the earlier no-fixtures scope.
+- Continue to identify the demonstration as a simulation; no acquired measurements or reconstructed surface are claimed.
+
 
 ## Problem Statement
 
@@ -10,7 +22,7 @@ Demonstrate robot scan planning in a desktop browser: show the actual supplied d
 
 ## Solution
 
-One fixed robot and upright door share a grid floor; a rigid wrist scanner displays an illustrative red laser fan without acquiring data. Load the prepared door or import STEP → orbit/pan/zoom → append numbered surface points → set stand-off → Run preflights every pose → move from home in selection order with a continuous surface-facing laser scan if all pass → show progress and truthful terminal outcome → separately download PLY, CSV and unchanged loaded STEP. Fresh import/reload starts over. Placement and dimensions are fixed; no fixtures, tables, placement/scale/robot-selection controls, point editing, pause or reset.
+One fixed robot and upright door share a grid floor; a rigid wrist scanner displays an illustrative red laser fan without acquiring data. Open the branded import screen → import STEP to reveal the workspace → orbit/pan/zoom → append numbered surface points → set stand-off → Run preflights every pose → move from home in selection order with a continuous surface-facing laser scan if all pass → show progress and truthful terminal outcome → separately download PLY, CSV and unchanged loaded STEP. Fresh import/reload starts over. Placement and dimensions are fixed; no fixtures, tables, placement/scale/robot-selection controls, point editing, pause or reset.
 
 ### Success criteria
 
@@ -31,7 +43,7 @@ Original IDs are preserved for GitHub issue references; each row states the acto
 1. Presenter: show robot and door after demo load; make the purpose clear.
 2. Presenter: use actual supplied robot geometry; represent the intended machine.
 3. Presenter: use supplied door geometry; demonstrate the chosen part.
-4. Presenter: bundle the prepared door; avoid repeated local-file navigation.
+4. Presenter: retain the verified supplied-door cache; use it only after importing byte-identical CAD (user import-first amendment, 2026-10-05).
 5. Operator: import STEP; demonstrate loading rather than a hardcoded mesh.
 6. Operator: show honest loading/readable import errors; identify readiness/failure.
 7. Operator: preserve CAD dimensions; maintain compatible robot/door sizes.
@@ -98,7 +110,7 @@ Versioned same-origin parser JS/WASM, explicit WASM URL and correct MIME type mu
 
 Sole source: `3d files/car-front-door-1/DOOR-of-CAR.step`, user-supplied 2026-10-04; 14,456,880 bytes; SHA-256 `a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef`. Initial inspection found ISO-10303-21 opening/closing markers, AP214 AUTOMOTIVE_DESIGN and millimeters; it does not prove parsing, bounds, topology or picking accuracy. Ignore all older doors/CATPart; no conversion remains. JPGs are references only.
 
-Independently reopen STEP in a CAD reader; verify recognizable shape, actual selectable surfaces/window opening, and millimeter bounding box. Preserve complete bytes. Optional GLB startup cache must derive from this STEP and retain settings/provenance/hashes; preview meshes/JPGs do not satisfy import/download acceptance. Missing/invalid geometry is explicit; never substitute older/image-derived geometry or invent conversion history. Browser CATPart import is excluded.
+Independently reopen STEP in a CAD reader; verify recognizable shape, actual selectable surfaces/window opening, and millimeter bounding box. Preserve complete bytes. Optional GLB verified import cache must derive from this STEP and retain settings/provenance/hashes; preview meshes/JPGs do not satisfy import/download acceptance. Missing/invalid geometry is explicit; never substitute older/image-derived geometry or invent conversion history. Browser CATPart import is excluded.
 
 #### Robot gate
 
@@ -151,7 +163,7 @@ Home `(0°, −90°, +90°, 0°, 0°, 0°)` matches supplied CAD and intervals; 
 
 ### 5. Viewer and interface
 
-Compact toolbar, viewport ~75–80% width, narrow point/status panel; downloads appear with terminal result. Toolbar: Import STEP, source name, stand-off mm, Run, Stop. Load prepared door by default after gate; import replaces model, clears selections/results, restores home/new session. Disable import in preparing/running; reload restarts.
+Compact toolbar, viewport ~75–80% width, narrow point/status panel; downloads appear with terminal result. Application header/document toolbar: KaKue logo, Scan Studio and source name/import; scan inspector: stand-off mm, Run, Stop. User amendment (2026-10-05): start with the supplied KaKue logo and import screen, no canvas/scan controls/CAD requests. A validated first import reveals the workspace; only an exact supplied-door SHA match can use the verified cache, retaining the selected File. Other STEP parses locally. Later import replaces model, clears selections/results, restores home/new session. Disable import in preparing/running; reload returns to the import screen.
 
 Three-quarter perspective contains robot/door/scanner/floor. OrbitControls orbit/pan/zoom target interaction center; fit camera after load without scaling. Readable lighting, restrained gray door, recognizable supplied robot; small datum/hint “Click the door to add scan points.” No dense proprietary menus/device panels/branding/fixtures.
 
@@ -171,7 +183,7 @@ Rectangular scanner at tool0 (+90° flange-local Y): initial 80 mm wide×60 high
 
 Stand-off default 100 mm, numeric 50–500 mm before Run; validate/lock during and after preparation. Demo value, not physical scanner spec. Surface p/unit approach normal n → emitter position `p + stand_off*n`, optical axis `−n`. Deterministic roll projects world-up perpendicular to optical axis with fixed alternate reference near parallel; record for repeatability. Flange target composes inverse demo flange-to-emitter mount; emitter target is not wrist position.
 
-Render a rigid scanner-attached red fan with a filled 240 mm wide sheet (opacity 0.28) and 61 dense red rays (opacity 0.65). Axial reach equals the selected stand-off in meters, including 500 mm; off-axis rays are correspondingly longer and retain the same 240 mm patch width. Activate on movement toward the first point after whole-route preflight and keep on continuously during approach, transitions and endpoint dwells. It is off in selecting/preparing and completed/blocked/stopped/failed states; Stop immediately extinguishes it. The fan follows the actual articulated emitter pose, with no independent aiming or repositioning. Exclude it from selection and exports; no acquired measurements, new door geometry, physical laser model, dense point cloud or reconstruction. Written visual requirements are actionable; no unavailable screenshot-match claim.
+Render a rigid scanner-attached 3D red rectangular projection volume, as amended by the user on 2026-10-05 after #9/#10. An 80×60 mm aperture expands into a filled 240×180 mm rectangular end. Four translucent side walls (opacity 0.16), a 13×9 grid of 117 rays (opacity 0.40), and the filled end (opacity 0.38) show depth and a surface area rather than a line. Axial reach equals the selected stand-off in meters, including 500 mm; off-axis rays are correspondingly longer and keep the same rectangular end dimensions. These dimensions are illustrative, not a measured physical scanner specification. Activate on movement toward the first point after whole-route preflight and keep on continuously during approach, transitions and endpoint dwells. It is off in selecting/preparing and completed/blocked/stopped/failed states; Stop immediately extinguishes it. The fan follows the actual articulated emitter pose, with no independent aiming or repositioning. Exclude it from selection and exports; no acquired measurements, new door geometry, physical laser model, dense point cloud or reconstruction. Written visual requirements are actionable; no unavailable screenshot-match claim.
 
 ### 8. Robot kinematics and sequence execution
 
@@ -239,7 +251,7 @@ All selections/outcomes, IDs/order preserved. Surface XYZ exactly matches PLY ba
 
 ### 11. Performance, compatibility, and delivery
 
-Current desktop Chrome/Edge; current Safari/macOS smoke test. WebGL2/WASM/pointing device/sufficient asset memory required; mobile/broad version support excluded. Readable 1280×800 and 1440×900; ≥30 FPS representative run on presenter hardware; responsive UI/camera during parsing/preflight. Measure actual asset load/production transfer sizes, not npm unpacked size. Preprocess/decimate only within surface/pose tolerances.
+Current desktop Chrome is the final browser target, following the user's 2026-10-05 Chrome-only clarification recorded in README. Edge/Safari are excluded from this release gate. WebGL2/WASM/pointing device/sufficient asset memory required; mobile/broad version support excluded. Readable 1280×800 and 1440×900; ≥30 FPS representative run on presenter hardware; responsive UI/camera during parsing/preflight. Measure actual asset load/production transfer sizes, not npm unpacked size. Preprocess/decimate only within surface/pose tolerances.
 
 Deliver reproducible dev/build/preview commands, prepared static assets, license notices, verification record/browser acceptance tests. Static HTTPS hosting; no provider specified. Local browser uploads; no persistence; refresh=fresh session.
 
@@ -250,7 +262,7 @@ Deliver reproducible dev/build/preview commands, prepared static assets, license
 3. **Selection:** door picking/numbering/coordinates/order/drag filtering. Gate: independent hits/transforms within ±5 mm.
 4. **Motion:** manifest FK/full-pose bounded IK/preflight/interpolation/stand-off/laser/progress/Stop. Gate: five-point runtime route, bounds/residuals/truthful failures/Stop.
 5. **Exports:** shared snapshots/byte-preserving STEP. Gate: independent parsers/counts/coordinates/metadata/matching STEP hashes.
-6. **Demo acceptance:** actual-assets production browser workflow/layout/Safari/presenter performance. Gate: all criteria, no unexplained substitutes.
+6. **Demo acceptance:** actual-assets production browser workflow/layout/Chrome/presenter performance. Gate: all criteria, no unexplained substitutes.
 
 No implementation is claimed. Stage 1 freezes asset-dependent placements/home; never defer to operator/runtime UI.
 
@@ -260,7 +272,7 @@ At specification time no codebase/test suite/prior seam exists. Agreed baseline:
 
 ### Browser acceptance
 
-- Load the prepared actual door; confirm robot, door, scanner, and floor are present and UI reaches selecting.
+- Begin with the import screen and explicitly import the supplied actual door; confirm robot, door, scanner, and floor are present and UI reaches selecting.
 - Upload a known valid STEP; confirm a fresh session, fixed placement, unchanged size, cleared selections, home pose, and stored source identity.
 - Select at least five known visible surface locations; verify marker numbering, list order, approximate known robot-base coordinates, and normalized approach-side normals.
 - Orbit and drag the camera; confirm no extra point. Click robot, floor, scanner, laser, and window opening; confirm no extra point.
@@ -270,7 +282,7 @@ At specification time no codebase/test suite/prior seam exists. Agreed baseline:
 - Capture all three downloads. Parse CSV/PLY with independent readers and compare point count, ID/order correspondence, surface coordinates, normals, frame, and units. Compare STEP input/output SHA-256.
 - Confirm stopped/blocked exports retain every selected point and distinguish visited/not-visited/problem rows.
 - Exercise malformed STEP, unsupported CATPart upload, zero-point Run, worker failure, and WebGL2 unavailability with understandable outcomes.
-- Run the same workflow against the static production build, including worker/WASM URL resolution and asset downloads. Smoke-test Safari.
+- Run the same workflow against the static production build, including worker/WASM URL resolution and asset downloads. Run current desktop Chrome acceptance.
 
 ### Independent geometry and math checks
 
@@ -324,10 +336,14 @@ Retain robot verification measurements and screenshots, replacement door provena
 - [Damped least-squares inverse-kinematics survey](https://mathweb.ucsd.edu/~sbuss/ResearchWeb/ikmethods/iksurvey.pdf): primary numerical-method reference; the bounds, orientation weights, seeds, and acceptance criteria are application decisions.
 - [Playwright downloads](https://playwright.dev/docs/downloads): browser-level file verification.
 
-### Current inputs and unresolved asset facts
+### Specification-time inputs and unresolved asset facts (historical)
 
-Planning/research and local supplied CAD exist; no application built/tested yet. Tracker: GitHub K-a-y-C/KaKue, slices published in blocker order; vocabulary/decisions authoritative. Only replacement door and exact robot hashes qualify; provision/check exact inputs in each checkout, never substitute or assume GitHub raw CAD availability. Text planning documents are published. Home/pivots established; final numeric door placement awaits verified replacement dimensions/representative poses, frozen before runtime acceptance. No CATPart prerequisite.
+At specification time, planning/research and local supplied CAD existed; no application had been built/tested yet. Tracker: GitHub K-a-y-C/KaKue, slices published in blocker order; vocabulary/decisions authoritative. Only replacement door and exact robot hashes qualify; provision/check exact inputs in each checkout, never substitute or assume GitHub raw CAD availability. Text planning documents are published. Home/pivots established; final numeric door placement awaits verified replacement dimensions/representative poses, frozen before runtime acceptance. No CATPart prerequisite.
 
 ### Completed actual-geometry verification
 
-Direct STEP cylinders/flange planes (mm): shoulder `(160,0,520)`, elbow `(160,0,1300)`, wrist intersection `(815.000003067,0,1450)`, flange `(968.000003067,0,1450)`. Home FK matches with max center discrepancy ~0.000003067 mm, below declared CAD uncertainty ~0.081886 mm: numerical CAD consistency, not physical metrology. Tessellation/closest-triangle sampling established §3 grouping/residuals. Whole-file visuals differ; retain supplied core, omit fixture/dress accessories, exclude mismatching OPW. Chosen source limits/speeds imply neither payload identification nor controller sign validation. Research tools installed/downloaded only in isolated temporary storage; project research retains images/reports; web app unbuilt/untested.
+Direct STEP cylinders/flange planes (mm): shoulder `(160,0,520)`, elbow `(160,0,1300)`, wrist intersection `(815.000003067,0,1450)`, flange `(968.000003067,0,1450)`. Home FK matches with max center discrepancy ~0.000003067 mm, below declared CAD uncertainty ~0.081886 mm: numerical CAD consistency, not physical metrology. Tessellation/closest-triangle sampling established §3 grouping/residuals. Whole-file visuals differ; retain supplied core, omit fixture/dress accessories, exclude mismatching OPW. Chosen source limits/speeds imply neither payload identification nor controller sign validation. Research tools installed/downloaded only in isolated temporary storage; project research retains images/reports; the web app was unbuilt/untested at that research stage.
+
+### Current delivery evidence (2026-10-05)
+
+The implementation now exists with accepted supplied assets, frozen placement/home/mount, actual five-point runtime scans and independently checked downloads. Static Chrome/layout/hardware acceptance is recorded in [issue #10 verification](../../docs/verification/issue-10.md); the final user amendment and declared hardware scheduling conditions are in [rectangular laser verification](../../docs/verification/laser-volume.md). The earlier specification-time notes above remain historical context, not the current implementation status.

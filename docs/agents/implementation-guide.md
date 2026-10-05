@@ -2,6 +2,10 @@
 
 Read the [concise PRD](../../.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the synchronized [full PRD](../../.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Story numbers and specification headings are preserved. Also read your issue, its blockers, the [backlog](../../.scratch/robot-door-scan-demo/issues/breakdown.md), and [robot verification](../research/robot-verification.md) before changing code. Product decisions, domain vocabulary, six-joint constants, scanner mounting, CSV schema, and state transitions are specified in the PRD. This guide supplies working context; it does not replace that specification.
 
+## Current presenter amendment
+
+Follow [scan export, home return and platform plan](../plans/scan-export-home-platform.md) for the 2026-10-05 update. This overrides previous separate/source downloads, first-approach laser activation and final-target resting pose: scan result ZIP export only after successful laser-off home return; PLY point cloud + CSV coordinates; laser first activates at point 1; a solid platform sits below Z=0. Preserve interrupted statuses and Stop throughout return. Earlier evidence describes historical behavior.
+
 ## Intended result
 
 A desktop browser app shows one actual articulated six-axis robot and one fixed automotive door, lets the presenter append surface points, preflights all scanner target poses, visits them in selection order with a continuous dense red laser fan, and exports PLY/CSV plus unchanged STEP. This is a simulation with truthful completed, blocked, stopped and failed outcomes. There is no backend, database, persistence, account, physical scanning, controller connection or collision planning.
@@ -31,7 +35,7 @@ Render robot primary bodies derived from its supplied STEP. Use the pinned verif
 
 ## Continuous scan — issue #21 requirement change
 
-Issue #21 supersedes endpoint-only laser activation and joint chords from #6–#7; complete it before #9. Preflight endpoints and every executed scan interpolant. Use a surface-position polyline, shortest-arc full emitter orientation and its interpolated normal offset; reject antipodal normals. Keep actual wrist-attached laser on from first approach through all transitions/dwells, off terminally and on Stop. Home approach establishes stand-off on arrival. Validate intermediate poses plus between-sample error bounds, finite hard intervals and smoothstep peak speeds. The 240 mm filled fan/61 rays scales axial reach to the actual 50–500 mm stand-off. Original SelectedPoint/source identity and endpoint data remain available for the immutable #9 snapshot; waypoint samples are simulation planning data, never extra selected/export points. See [technical plan](../plans/issue-21.md).
+Issue #21 supersedes endpoint-only laser activation and joint chords from #6–#7; complete it before #9. Preflight endpoints and every executed scan interpolant. Use a surface-position polyline, shortest-arc full emitter orientation and its interpolated normal offset; reject antipodal normals. Keep actual wrist-attached laser on from first approach through all transitions/dwells, off terminally and on Stop. Home approach establishes stand-off on arrival. Validate intermediate poses plus between-sample error bounds, finite hard intervals and smoothstep peak speeds. The user's final 2026-10-05 amendment replaces the flat sheet with an 80×60 mm aperture, four translucent side walls, 117 rays and a filled 240×180 mm rectangular end, retaining actual 50–500 mm axial stand-off. See [laser-volume plan](../plans/laser-volume.md). Original SelectedPoint/source identity and endpoint data remain available for the immutable #9 snapshot; waypoint samples are simulation planning data, never extra selected/export points. See [technical plan](../plans/issue-21.md).
 
 ## Working one issue at a time
 
@@ -45,3 +49,7 @@ Issue #21 supersedes endpoint-only laser activation and joint chords from #6–#
 8. Provide a concise handoff: behavior delivered, public contracts/evidence, tests run, remaining limitations and next unblocked tickets. Commit passing increments. Never close your ticket with failed or unverified mandatory acceptance criteria.
 
 Source assets and numeric verification are prerequisites, not a request to build horizontal application layers. There is no existing code to prefactor initially. Issue 3 introduces application/test scaffolding as part of the actual scene-loading tracer bullet. Issue 7 proves and freezes the accepted five-point route against the runtime solver; issue 10 verifies the full production workflow on the target browsers and presenter hardware. Earlier scene placement checks must be recorded honestly and reconciled with that runtime gate.
+
+## Import-first branding — final user amendment
+
+Start with the provided KaKue Automation logo and import screen. No scene/scan controls/CAD requests before the user selects a valid STEP. Initialize the workspace with the actual selected source: exact hash-matching supplied CAD may use its accepted cache, all other STEP uses the parser worker. Retain the user's original File/name, never replace it with bundled bytes. Reload returns to the import screen. Shared browser scan fixtures now explicitly import the supplied file before exercising the unchanged motion/export gates. See [plan](../plans/import-first-workspace.md).

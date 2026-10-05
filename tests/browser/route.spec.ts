@@ -1,6 +1,6 @@
 import {measuredEmitter} from '../helpers/measured-emitter';
 import {Matrix4,Quaternion} from 'three';
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures';
 
 test('selected door points run in order with progress and post-dwell visits',async({page})=>{
   test.setTimeout(90000);
@@ -14,12 +14,14 @@ test('selected door points run in order with progress and post-dwell visits',asy
   await expect(page.getByRole('row').nth(1)).toContainText('Moving');
   await expect(page.getByRole('row').nth(2)).toContainText('Ready');
   const canvas=page.getByRole('img',{name:'3D robot and door scene'});
+  const home=await canvas.getAttribute('data-joint-angles');
   await expect(page.getByLabel('Route progress')).toContainText('Current point: 2',{timeout:45000});
   await expect(page.getByRole('row').nth(1)).toContainText('Visited');
   await expect(page.getByLabel('Route progress')).toContainText('Visited: 1 of 2');
   await expect(page.getByRole('status')).toContainText('Simulation complete',{timeout:45000});
   await expect(page.getByLabel('Route progress')).toContainText('Visited: 2 of 2');
   await expect(canvas).toHaveAttribute('data-laser','false');
+  await expect(canvas).toHaveAttribute('data-joint-angles',home!);
   const final=await canvas.getAttribute('data-joint-angles');await page.waitForTimeout(1100);
   await expect(canvas).toHaveAttribute('data-joint-angles',final!);
 });

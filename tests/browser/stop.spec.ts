@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures';
 
 async function loadPoints(page:import('@playwright/test').Page) {
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
@@ -45,7 +45,7 @@ test('Stop during transit freezes joints, retains all points and fresh import re
  const canvas=page.getByRole('img',{name:'3D robot and door scene'}),home=await canvas.getAttribute('data-joint-angles');
  await page.getByRole('button',{name:'Run',exact:true}).click();
  await expect(canvas).not.toHaveAttribute('data-joint-angles',home!);
- await expect(canvas).toHaveAttribute('data-laser','true');
+ await expect(canvas).toHaveAttribute('data-laser','false');
  await page.getByRole('button',{name:'Stop',exact:true}).click();
  const frozen=await canvas.getAttribute('data-joint-angles');
  await expect(page.getByRole('status')).toContainText('Simulation stopped');
@@ -151,4 +151,19 @@ test('laser update and cleanup errors still enter failed with retained selection
  await expect(page.getByRole('alert')).toContainText('Laser update failed');
  await expect(page.getByRole('row').nth(1)).toContainText('Stopped');await expect(page.getByLabel('Route progress')).toContainText('Visited: 0 of 1');
  await expect(page.getByLabel('Import STEP')).toBeEnabled();
+});
+
+test('Stop during home return freezes the robot, keeps all visits and suppresses Export',async({page})=>{
+ test.setTimeout(90000);await loadPoints(page);
+ const canvas=page.getByRole('img',{name:'3D robot and door scene'});
+ await page.getByRole('button',{name:'Run',exact:true}).click();
+ await expect(page.getByRole('status')).toContainText('Returning home',{timeout:60000});
+ await expect(canvas).toHaveAttribute('data-laser','false');
+ await page.getByRole('button',{name:'Stop',exact:true}).click();
+ const frozen=await canvas.getAttribute('data-joint-angles');
+ await expect(page.getByRole('status')).toContainText('Simulation stopped');
+ await expect(page.getByLabel('Route progress')).toContainText('Visited: 2 of 2');
+ for(let i=1;i<=2;i++)await expect(page.getByRole('row').nth(i)).toContainText('Visited');
+ await page.waitForTimeout(1200);await expect(canvas).toHaveAttribute('data-joint-angles',frozen!);
+ await expect(page.getByRole('button',{name:'Export',exact:true})).toHaveCount(0);
 });

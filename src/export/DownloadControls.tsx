@@ -2,7 +2,9 @@ import { useMemo, useEffect, useRef, useState } from 'react';
 import type { PartAsset } from '../import/types';
 import type { RunPlan } from '../motion/preflight';
 import type { SelectedPoint } from '../scene/surface-selection';
-import { captureDownloadSnapshot, selectedPointsPly, selectedCoordinatesCsv, originalStep, type TerminalOutcome } from './downloads';
+import { captureDownloadSnapshot, type TerminalOutcome } from './downloads';
+
+import {scanArchive} from './scan-archive';
 
 interface DownloadControlsProps {
   part: PartAsset | null;
@@ -32,13 +34,13 @@ export function DownloadControls({ part, points, statuses, plan, standOffMm, out
     urls.current.clear();
   }, [snapshot]);
 
-  const save = (format: 'ply' | 'csv' | 'step') => {
-    if (!snapshot && format !== 'step') return;
-    if (format === 'step' && !part) return;
+  const [saving,setSaving]=useState(false);
+  const save = async () => {
+    if (!snapshot || saving) return;
+    setSaving(true);
     setDownloadError('');
     try {
-      const file = format === 'ply' ? selectedPointsPly(snapshot!)
-        : format === 'csv' ? selectedCoordinatesCsv(snapshot!) : originalStep(snapshot ?? part!);
+      const file = await scanArchive(snapshot);
       const url = URL.createObjectURL(file.blob);
       // Give the browser time to acquire the Blob, while bounding its lifetime.
       urls.current.set(url, setTimeout(() => {
@@ -56,15 +58,14 @@ export function DownloadControls({ part, points, statuses, plan, standOffMm, out
       }
     } catch (error) {
       setDownloadError(error instanceof Error ? error.message : String(error));
-    }
+    } finally { setSaving(false); }
   };
 
-  return <section aria-label="Downloads">
-    <h3>Downloads</h3>
+  return <section aria-label="Scan export">
+    <h3>Scan export</h3>
     {(captured.error || downloadError) && <p role="alert">{captured.error || downloadError}</p>}
-    <button disabled={!snapshot || points.length === 0} onClick={() => save('ply')}>Download selected points (PLY)</button>
-    <button disabled={!snapshot || points.length === 0} onClick={() => save('csv')}>Download coordinates (CSV)</button>
-    <button disabled={!part || part.source.size === 0} onClick={() => save('step')}>Download original STEP</button>
-    <p>Selected CAD surface points in robot-base millimeters. Simulated visits, not acquired measurements.</p>
+    <p>Point cloud (PLY) and Coordinates (CSV) in one ZIP file.</p>
+    <button disabled={!snapshot || points.length === 0 || saving} onClick={() => void save()}>{saving?'Preparing export…':'Export'}</button>
+    <p>Simulated point cloud and coordinates · Robot-base · mm</p>
   </section>;
 }
