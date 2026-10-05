@@ -16,6 +16,7 @@
     "prebuild": "npm run prepare:assets"
   },
   "dependencies": {
+    "occt-import-js": "0.0.23",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "three": "0.186.1"

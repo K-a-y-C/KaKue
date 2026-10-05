@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-05",
+  "baseline": "f1e8681",
+  "node": "24.19.0",
+  "browser": {
+    "name": "Google Chrome",
+    "version": "151.0.7922.76",
+    "renderer": "SwiftShader (automated)"
+  },
+  "parser": {
+    "package": "occt-import-js",
+    "version": "0.0.23",
+    "source": "https://registry.npmjs.org/occt-import-js/-/occt-import-js-0.0.23.tgz",
+    "files": {
+      "occt-import-js.js": {
+        "bytes": 96871,
+        "sha256": "3fb44ce11d00611f9b3f3c5775d520ebab48930c1f08279b7b1316f05f0d3379"
+      },
+      "occt-import-js.wasm": {
+        "bytes": 7604031,
+        "sha256": "33391fc9d94ea5c869a6718488bf0a9a464222bac9bdc764dfe1690cef281952"
+      },
+      "license.occt-import-js.txt": {
+        "bytes": 27030,
+        "sha256": "7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe"
+      },
+      "license.occt.txt": {
+        "bytes": 26936,
+        "sha256": "090f8eb6ba63e72887c1f89b009fb1656cfda02d83b6e9805b20468520a5d77f"
+      }
+    }
+  },
+  "archiveIntegrity": "sha512-RFfYQXYFX5C1mB1Aywm0ShcUKzXOr/VzTnlzhBSDJOR6YCAPt1HYCzeXWg1vwwjn/cUxwqRNhhtf1dlewoZYCQ==",
+  "fixtures": {
+    "box-inch.STP": {
+      "bytes": 16789,
+      "sha256": "86d134ffba5b74bd50b8962ce715d329ebd101b50a5f6a83c155214eb5e2b580"
+    },
+    "point-only.step": {
+      "bytes": 1778,
+      "sha256": "0932162cc0fdfb49fa3c5e20ba60a3b847e0f85ebdee09b8881f9820909a3787"
+    },
+    "box-mm.step": {
+      "bytes": 15557,
+      "sha256": "b046b2e1d8c50c37c281dba0fea89d6ac3a70f28b28159fb5e8feb26f591c277"
+    }
+  },
+  "safari": {
+    "tested": false,
+    "reason": "Native safaridriver refused session creation: Allow remote automation is disabled in Safari Settings. Browser settings were not changed."
+  },
+  "edge": {
+    "tested": false,
+    "reason": "Microsoft Edge is not installed in /Applications."
+  }
+}
