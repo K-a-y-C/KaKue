@@ -2,7 +2,7 @@
 
 KaKue is a planned desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Ordered multi-point playback, Stop and downloads remain later ordered slices. Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first. The unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) remains authoritative; consult it only for explanation or ambiguity. Ready-for-agent does not bypass the asset or production acceptance gates.
+**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Issue #7 adds complete ordered-route preflight and playback, current-point/visited progress, truthful blocked rows and actual five-point runtime acceptance. Stop and downloads remain later ordered slices. Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first. The unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) remains authoritative; consult it only for explanation or ambiguity. Ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
@@ -39,7 +39,7 @@ npm run preview --prefix tools/robot-assets
 
 Open the verification preview at `http://127.0.0.1:4172`. It shows actual core CAD, a home source overlay and an articulated wrist/scanner pose. The React/Vite application below uses these accepted links and the independently verified fixed door placement.
 
-Issue #3 freezes and independently verifies actual door placement, replacement demo home, flange-to-emitter mount and a representative five-point setup route. Runtime motion and final demonstration acceptance remain later gates. Missing assets must remain explicit; substitutes cannot satisfy acceptance.
+Issue #3 freezes and independently verifies actual door placement, replacement demo home, flange-to-emitter mount and a representative five-point setup route. Issue #7 verifies the fresh runtime solver and actual surface-click five-point route, including independent endpoint, intermediate joint/speed and sampled actual-mesh clearance checks. Final demonstration acceptance remains a later gate. Missing assets must remain explicit; substitutes cannot satisfy acceptance.
 
 ### Door preparation
 
@@ -123,3 +123,7 @@ Required evidence includes correct surface picking and drag filtering, ordered f
 - [Triage vocabulary](docs/agents/triage-labels.md)
 
 Record source hashes, preprocessing settings, dependency pins, and applicable asset/dependency license notices with implementation. No repository-wide license or permission to redistribute supplied CAD is established by this README.
+
+### Ordered scanner route verification
+
+With Node 24 and Chrome, `npm test -- tests/browser/route.spec.ts` exercises ordered visits, a later actual-door unsolved target blocking all motion, and the five frozen surface-click route. `npm run build` then `PREVIEW=1 npm test` verifies the static production application. `node --experimental-strip-types scripts/verify-runtime-route.mjs` verifies exact CAD/cache identities and solves the frozen surface targets afresh; `node --experimental-strip-types scripts/verify-runtime-route-clicks.mjs` derives the real initial-camera surface clicks. See [issue #7 verification](docs/verification/issue-07.md) for independent Python actual-geometry checks and limitations. No precomputed manifest joint answers enter runtime solving.
