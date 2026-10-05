@@ -45,7 +45,7 @@ test('Stop during transit freezes joints, retains all points and fresh import re
  const canvas=page.getByRole('img',{name:'3D robot and door scene'}),home=await canvas.getAttribute('data-joint-angles');
  await page.getByRole('button',{name:'Run',exact:true}).click();
  await expect(canvas).not.toHaveAttribute('data-joint-angles',home!);
- await expect(canvas).toHaveAttribute('data-laser','false');
+ await expect(canvas).toHaveAttribute('data-laser','true');
  await page.getByRole('button',{name:'Stop',exact:true}).click();
  const frozen=await canvas.getAttribute('data-joint-angles');
  await expect(page.getByRole('status')).toContainText('Simulation stopped');
@@ -65,7 +65,8 @@ test('Stop in the second dwell preserves the first visited point and extinguishe
  test.setTimeout(60000);await loadPoints(page);
  const canvas=page.getByRole('img',{name:'3D robot and door scene'});
  await canvas.evaluate(element=>{
-  new MutationObserver(()=>{if((element as HTMLElement).dataset.laser==='true'&&document.querySelector('[aria-label="Route progress"]')?.textContent?.includes('Current point: 2')){
+  let last='',stable=0;
+  new MutationObserver(()=>{const q=(element as HTMLElement).dataset.jointAngles??'';stable=q===last?stable+1:0;last=q;if(stable>=2&&(element as HTMLElement).dataset.laser==='true'&&document.querySelector('[aria-label="Route progress"]')?.textContent?.includes('Current point: 2')){
    const stop=[...document.querySelectorAll('button')].find(b=>b.textContent==='Stop');stop?.click();
   }}).observe(element,{attributes:true});
  });

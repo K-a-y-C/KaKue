@@ -24,11 +24,11 @@ test('actual door visit locks controls, moves the joints, dwells then completes'
   const lit=records.filter(record=>record.laser==='true'); expect(lit.length).toBeGreaterThan(0);
   const off=records.find(record=>record.time>lit[0].time && record.laser==='false')!;
   expect(off.time-lit[0].time).toBeGreaterThanOrEqual(990);
-  expect(new Set(lit.map(record=>record.angles)).size).toBe(1);
-  expect(records.filter(record=>record.laser==='false'&&record.angles!==home).length).toBeGreaterThan(2);
+  expect(new Set(lit.map(record=>record.angles)).size).toBeGreaterThan(2);
+  expect(records.filter(record=>record.laser==='false'&&record.angles!==home).length).toBeLessThanOrEqual(1);
   const surface=await page.getByRole('row').last().locator('td').allTextContents();
   const normal=(await page.getByRole('row').last().getAttribute('data-base-normal'))!.split(',').map(Number);
-  const pose=lit[0].pose.split(',').map(Number);
+  const pose=lit.at(-1)!.pose.split(',').map(Number);
   const expected=surface.slice(0,3).map((value,i)=>Number(value)/1000+.1*normal[i]);
   expect(Math.hypot(...expected.map((value,i)=>value-pose[12+i]))*1000).toBeLessThanOrEqual(5.1);
   expect(Math.acos(Math.max(-1,Math.min(1,-normal.reduce((sum,value,i)=>sum+value*pose[8+i],0))))*180/Math.PI).toBeLessThanOrEqual(5);

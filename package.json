@@ -13,7 +13,8 @@
     "test": "playwright test",
     "prepare:assets": "node scripts/prepare-runtime-assets.mjs",
     "predev": "npm run prepare:assets",
-    "prebuild": "npm run prepare:assets"
+    "prebuild": "npm run prepare:assets",
+    "test:numerical": "node --test tests/numerical/*.test.ts"
   },
   "dependencies": {
     "occt-import-js": "0.0.23",

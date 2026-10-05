@@ -1,7 +1,7 @@
 # Robot Door Scan Demo — Product Requirements Document
 
 Status: ready-for-agent
-Version: 1.1 — 2026-10-04
+Version: 1.2 — 2026-10-05
 Owner: Kakue
 Readiness: complete implementation specification. Supplied-robot pivot and core-link correspondence have been checked; the replacement door STEP is supplied, and door geometry validation and final runtime asset preparation remain acceptance gates.
 
@@ -25,7 +25,7 @@ The demonstration follows one sequence:
 2. Orbit, pan, and zoom the camera to inspect the fixed scene.
 3. Click the door surface to add numbered markers and coordinate rows.
 4. Press Run. The application checks target poses using the actual robot chain and joint limits.
-5. If every target has a verified solution, the robot moves from its predefined home pose through the points in selection order. At each point, the scanner faces the surface and briefly displays its laser fan.
+5. If every target has a verified solution, the robot moves from its predefined home pose through the points in selection order. The scanner follows a preflighted surface-facing path and displays a continuous dense laser fan from the first approach through every transition and endpoint dwell.
 6. Display progress and a final simulated completion status. If preparation fails or Stop is pressed, display the corresponding outcome accurately.
 7. Download selected points as PLY, selected coordinates and status as CSV, and an unchanged copy of the STEP that was loaded.
 
@@ -55,7 +55,7 @@ The operator does not delete or reorder points, move the door, select another ro
 8. As a presenter, I want one predefined door position, so that the scene is consistent and no setup manipulation is required.
 9. As a viewer, I want the robot and door on one grid floor, so that I can understand their relative locations.
 10. As a viewer, I want a scanner box on the wrist, so that I can understand what the robot is carrying.
-11. As a viewer, I want a visible red laser fan at scan visits, so that I can understand the scanning concept.
+11. As a viewer, I want a continuous dense red laser fan along the ordered scan, so that I can understand the scanning concept.
 12. As an operator, I want to rotate, pan, and zoom the view, so that I can inspect and select the door surface.
 13. As an operator, I want to click any visible door surface, so that I can choose scan locations without entering coordinates manually.
 14. As an operator, I want each click to create a numbered marker, so that the scan order is visually apparent.
@@ -246,13 +246,13 @@ Selected-point IDs and order are 1-based append order. The numeric surface posit
 
 Attach a simple rectangular scanner box rigidly at the source tool0 frame, which is the verified flange frame rotated +90° around local Y. Initial decorative dimensions are 80 mm wide, 60 mm high, and 80 mm deep. Let the mount be the rear face of the box, its local optical axis be +Z, its center be 40 mm along tool0 +Z, and its emitter be 80 mm along tool0 +Z. Thus flange-to-emitter uses the source +90° Y rotation followed by the 80 mm tool-axis translation. Store this exact composition in the manifest. In the default CAD/home pose, the emitter is (1048, 0, 1450) mm with its optical axis along robot-base +X.
 
-Use 100 mm stand-off by default. Allow one numeric setting from 50 to 300 mm before Run; validate and lock it during/after preparation for that run. This remains a demonstration setting and is not derived from a real scanner specification.
+Use 100 mm stand-off by default. Allow one numeric setting from 50 to 500 mm before Run; validate and lock it during/after preparation for that run. This remains a demonstration setting and is not derived from a real scanner specification.
 
 For surface position p and unit approach-side normal n, the scanner-emitter target position is p plus stand-off times n. The optical axis faces the part along −n. Choose roll deterministically by projecting world-up into the plane perpendicular to the optical axis, with a fixed alternate reference when nearly parallel. Record this choice so repeat imports/runs produce the same orientation.
 
 The target is an emitter pose, not a wrist position. Convert it to the required flange pose by composing the inverse of the calibrated-in-the-demo flange-to-emitter transform. Omitting this transform would put the wrong point on the robot at the target.
 
-Show a red translucent fan and approximately 15 thin red rays from the emitter toward a roughly 120 mm wide patch around the current selected point. The fan geometry stays attached to the scanner. Enable it during the 1-second simulated dwell and turn it off during transit and after completion/Stop. It must not add door geometry, create a measured point cloud, affect hit tests, or alter exported positions. No physical laser model, LiDAR simulation, occlusion solver, or measurement reconstruction is required.
+Render a rigid scanner-attached red fan with a filled 240 mm wide sheet (opacity 0.28) and 61 dense red rays (opacity 0.65). Axial reach equals the selected stand-off in meters, including 500 mm; off-axis rays are correspondingly longer and retain the same 240 mm patch width. Activate on movement toward the first point after whole-route preflight and keep on continuously during approach, transitions and endpoint dwells. It is off in selecting/preparing and completed/blocked/stopped/failed states; Stop immediately extinguishes it. The fan follows the actual articulated emitter pose, with no independent aiming or repositioning. Exclude it from selection and exports; no acquired measurements, new door geometry, physical laser model, dense point cloud or reconstruction. Written visual requirements are actionable; no unavailable screenshot-match claim.
 
 ### 8. Robot kinematics and sequence execution
 
@@ -268,9 +268,11 @@ Distinguish a target outside a conservative chain/tool reach bound from a bounde
 
 If any target fails preflight, do not begin the motion sequence. Highlight failed points, show “Sequence blocked,” and allow downloads with accurate statuses. No failed point is silently skipped and no partial sequence is presented as completed. A fresh import/reload is the supported recovery workflow.
 
-If all targets pass, move from home to each solved joint configuration in order. Interpolate joints directly within their finite allowed intervals; do not shortest-angle-wrap across forbidden bounds. Joint interpolation produces a joint-space trajectory, not a guaranteed straight-line scanner trajectory.
+Preflight every inter-point scan transition as well as its endpoints. Linearly interpolate the selected surface-position polyline and shortest-arc interpolate the full deterministic endpoint emitter orientations; the interpolated approach-side normal is minus emitter +Z. The emitter follows that surface position plus the actual selected stand-off along the normal. On a planar region this keeps the scanning face parallel to the surface; curved routes smoothly follow the selected normal/orientation field. Opposite (antipodal) normals are ambiguous and block with a readable diagnostic. This policy does not reconstruct intervening CAD surfaces or plan coverage.
 
-Use conservative demo joint speeds, initially 10% of the exact model’s rated speed limits. For smoothstep interpolation, account for the easing curve’s 1.5 peak derivative when choosing duration; target duration is at least 1.5 times the largest absolute joint displacement divided by its allowed demo speed, with a 1-second minimum. Dwell for 1 second at each endpoint, activate the laser, then mark that point visited. Do not simulate torques, payload dynamics, acceleration limits, or controller blending.
+Solve intermediate emitter targets using the preceding accepted joints and the inverse emitter mount. Adaptively subdivide and validate the exact smoothstep joint interpolants against emitter position, full orientation and optical-axis errors. Use intermediate checks plus conservative between-sample derivative bounds to guarantee ≤5 mm/≤5° over accepted scan segments, hard finite intervals and conservative speeds before any motion; bounded subdivision/search failure blocks the entire run. The home-to-first approach uses bounded joint interpolation and establishes scan stand-off on arrival, without claiming constant distance before reaching the first point.
+
+Execute only the accepted waypoint path. Use 10%-rated demo joint speeds with smoothstep's 1.5 peak derivative: each scan subsegment duration is at least `1.5 * max_j(abs(Δq_j)/demo_speed_j)` (10 ms minimum); home approach retains a 1-second minimum. Keep the laser on continuously from the first approach through all scan transitions and 1-second endpoint dwells. Mark Visited only after each accepted dwell. No angle wrapping through forbidden intervals, torque/payload dynamics, acceleration limits, collision planning or controller blending claims.
 
 The final robot pose remains at the last visited target. Stop cancels preparation or animation using a session/run token, stops the laser, freezes the current joints, and retains visited and not-visited states. Late worker responses from cancelled or replaced sessions cannot change the scene or status.
 
@@ -283,7 +285,7 @@ There are four cohesive application responsibilities: part/asset preparation and
 | PartAsset | Source name/format, original bytes or Blob, source hash, source units, normalized indexed meshes/normals, fixed part-to-base transform, optional CAD face references |
 | RobotDefinition | Geometry/source hashes, base and flange/tool frame conventions, rigid link visual transforms, six ordered joint parent/child relationships, origins, axes, hard bounds, demo speeds, validated home vector, flange-to-emitter transform |
 | SelectedPoint | Stable ID/order, part-local surface position/normal, robot-base surface position/normal, mesh/triangle hit reference, current selection status |
-| RunPlan | Immutable point snapshot, stand-off, target emitter/flange poses, solved six-angle vectors, transition durations, validation residuals and problem reasons |
+| RunPlan | Immutable point snapshot, stand-off, target emitter/flange poses, solved six-angle vectors, verified scan waypoint paths/durations and between-sample error bounds, validation residuals and problem reasons |
 | RunState | Session/run IDs, lifecycle state, current point, visited count, elapsed transition/dwell time, current joint vector, terminal reason |
 | DownloadSnapshot | Source STEP identity plus the same ordered selected surface points/normals and terminal point statuses used by both writers |
 
@@ -337,7 +339,7 @@ Deliver a reproducible development command, a production build, a preview comman
 1. **Prepare and verify assets.** Verify the supplied replacement door STEP and its dimensions; no CATPart conversion is required. Use the completed robot pivot/core correspondence and verified mapping to generate source-CAD link GLBs; check their home-pose reassembly. Generate immutable robot/door manifests and GLB cache assets. Finalize fixed door transform, home pose, scanner mount, and a representative five-point route. Gate: actual shapes, units, pivots, flange, and candidate poses verified.
 2. **Build the static viewer.** Initialize the selected stack and same-origin worker assets. Render robot, door, scanner, and shared floor. Add camera controls and STEP load path. Gate: actual assets visible at correct dimensions/placement in the production preview.
 3. **Add point selection.** Implement door-only surface picking, numbered markers, coordinates, ordered point state, and camera-drag filtering. Gate: independent known hits and frame conversion within ±5 mm.
-4. **Add motion.** Implement manifest-based FK, bounded full-pose IK, preflight, joint interpolation, scanner stand-off, laser dwell, progress, and Stop. Gate: five-point route completes with validated joint bounds and pose residuals; failures and Stop remain truthful.
+4. **Add motion.** Implement manifest-based FK, bounded full-pose IK, preflight, joint interpolation, scanner stand-off, continuous laser scanning, progress, and Stop. Gate: five-point route completes with validated joint bounds and pose residuals; failures and Stop remain truthful.
 5. **Add exports.** Implement identical selected-point snapshots for PLY/CSV and byte-preserving STEP download. Gate: independent parsers confirm counts/coordinates/metadata; input and downloaded STEP hashes match.
 6. **Accept the demonstration.** Run browser acceptance against the actual assets and production build, inspect layout at target sizes, perform Safari smoke test, and measure performance on the presenter’s machine. Gate: all acceptance criteria pass with no unexplained geometry substitutions.
 
@@ -355,7 +357,7 @@ Test observable behavior and file contents rather than component implementation 
 - Upload a known valid STEP; confirm a fresh session, fixed placement, unchanged size, cleared selections, home pose, and stored source identity.
 - Select at least five known visible surface locations; verify marker numbering, list order, approximate known robot-base coordinates, and normalized approach-side normals.
 - Orbit and drag the camera; confirm no extra point. Click robot, floor, scanner, laser, and window opening; confirm no extra point.
-- Run the representative door route; observe link rotation, emitter stand-off, laser dwell, progress, and final visited count.
+- Run the representative door route; observe link rotation, emitter stand-off, continuous laser scanning, progress, and final visited count.
 - Test a known outside-bound target and a deliberately unsolved pose; neither starts a false completed sequence, and their diagnostic categories remain distinct.
 - Stop once during preparation and once during movement; confirm cancellation/frozen pose, inactive laser, retained selections, and no late worker continuation.
 - Capture all three downloads. Parse CSV/PLY with independent readers and compare point count, ID/order correspondence, surface coordinates, normals, frame, and units. Compare STEP input/output SHA-256.

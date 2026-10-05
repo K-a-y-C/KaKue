@@ -1,8 +1,8 @@
 # Robot Door Scan Demo — Product Requirements Document
 
-Status: ready-for-agent · Source version: 1.1 (2026-10-04) · Owner: Kakue
+Status: ready-for-agent · Source version: 1.2 (2026-10-05) · Owner: Kakue
 
-Concise companion to [PRD.md](PRD.md), which remains unchanged at its original path and is authoritative. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
+Concise companion to [PRD.md](PRD.md), which is authoritative and synchronized for issue #21. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
 
 ## Problem Statement
 
@@ -10,7 +10,7 @@ Demonstrate robot scan planning in a desktop browser: show the actual supplied d
 
 ## Solution
 
-One fixed robot and upright door share a grid floor; a rigid wrist scanner displays an illustrative red laser fan without acquiring data. Load the prepared door or import STEP → orbit/pan/zoom → append numbered surface points → set stand-off → Run preflights every pose → move from home in selection order with laser dwells if all pass → show progress and truthful terminal outcome → separately download PLY, CSV and unchanged loaded STEP. Fresh import/reload starts over. Placement and dimensions are fixed; no fixtures, tables, placement/scale/robot-selection controls, point editing, pause or reset.
+One fixed robot and upright door share a grid floor; a rigid wrist scanner displays an illustrative red laser fan without acquiring data. Load the prepared door or import STEP → orbit/pan/zoom → append numbered surface points → set stand-off → Run preflights every pose → move from home in selection order with a continuous surface-facing laser scan if all pass → show progress and truthful terminal outcome → separately download PLY, CSV and unchanged loaded STEP. Fresh import/reload starts over. Placement and dimensions are fixed; no fixtures, tables, placement/scale/robot-selection controls, point editing, pause or reset.
 
 ### Success criteria
 
@@ -38,7 +38,7 @@ Original IDs are preserved for GitHub issue references; each row states the acto
 8. Presenter: predefined door position; consistent scene without setup manipulation.
 9. Viewer: shared grid floor; understand relative locations.
 10. Viewer: wrist scanner box; understand the carried device.
-11. Viewer: red laser fan at visits; explain the scanning concept.
+11. Viewer: continuous dense red laser fan; explain the scanning concept.
 12. Operator: orbit/pan/zoom; inspect and select surfaces.
 13. Operator: click any visible door surface; choose locations without typing coordinates.
 14. Operator: numbered marker per click; reveal scan order.
@@ -169,9 +169,9 @@ Raycast only nearest visible door geometry; exclude robot/scanner/floor/laser/ma
 
 Rectangular scanner at tool0 (+90° flange-local Y): initial 80 mm wide×60 high×80 deep; rear-face mount; optical local +Z; center tool0 +Z 40 mm, emitter +Z 80 mm. Manifest flange-to-emitter=+90° Y rotation then 80 mm tool-axis translation. Home emitter `(1048,0,1450)` mm, optical axis base +X.
 
-Stand-off default 100 mm, numeric 50–300 mm before Run; validate/lock during and after preparation. Demo value, not physical scanner spec. Surface p/unit approach normal n → emitter position `p + stand_off*n`, optical axis `−n`. Deterministic roll projects world-up perpendicular to optical axis with fixed alternate reference near parallel; record for repeatability. Flange target composes inverse demo flange-to-emitter mount; emitter target is not wrist position.
+Stand-off default 100 mm, numeric 50–500 mm before Run; validate/lock during and after preparation. Demo value, not physical scanner spec. Surface p/unit approach normal n → emitter position `p + stand_off*n`, optical axis `−n`. Deterministic roll projects world-up perpendicular to optical axis with fixed alternate reference near parallel; record for repeatability. Flange target composes inverse demo flange-to-emitter mount; emitter target is not wrist position.
 
-Scanner-attached red translucent fan/~15 thin red rays toward ~120 mm patch around current point. On for 1-second endpoint dwell; off in transit/completion/Stop. No new door geometry, measured clouds, hit-test/export effects, physical laser/LiDAR/occlusion/reconstruction.
+Render a rigid scanner-attached red fan with a filled 240 mm wide sheet (opacity 0.28) and 61 dense red rays (opacity 0.65). Axial reach equals the selected stand-off in meters, including 500 mm; off-axis rays are correspondingly longer and retain the same 240 mm patch width. Activate on movement toward the first point after whole-route preflight and keep on continuously during approach, transitions and endpoint dwells. It is off in selecting/preparing and completed/blocked/stopped/failed states; Stop immediately extinguishes it. The fan follows the actual articulated emitter pose, with no independent aiming or repositioning. Exclude it from selection and exports; no acquired measurements, new door geometry, physical laser model, dense point cloud or reconstruction. Written visual requirements are actionable; no unavailable screenshot-match claim.
 
 ### 8. Robot kinematics and sequence execution
 
@@ -181,7 +181,13 @@ Worker preflights entire immutable ordered run; ≤8 deterministic seeds (preced
 
 Conservative chain/tool bound failures=`outside_reach`; bounded-search failures=`pose_unsolved`/“Pose not solved” (not proof of physical unreachability). Record errors/reasons. Any failed target blocks all motion; highlight diagnostics/“Sequence blocked”, enable truthful downloads; never skip/fake completion. Recover by fresh import/reload.
 
-All pass → home to solved configurations in selection order. Interpolate inside finite intervals without shortest-angle wrapping across forbidden bounds; joint-space path need not be straight emitter path. Initial demo speeds=10% rated. Smoothstep duration `max(1 s, 1.5 * max_j(abs(Δq_j)/demo_speed_j))` accounts for peak derivative. Endpoint: laser/dwell 1 s, then visited. No torque/payload dynamics/acceleration/controller blending. End at last visited target. Stop session/run token cancels preparation/animation, laser off, joints frozen, statuses retained; reject late cancelled/replaced worker results.
+Preflight every inter-point scan transition as well as its endpoints. Linearly interpolate the selected surface-position polyline and shortest-arc interpolate the full deterministic endpoint emitter orientations; the interpolated approach-side normal is minus emitter +Z. The emitter follows that surface position plus the actual selected stand-off along the normal. On a planar region this keeps the scanning face parallel to the surface; curved routes smoothly follow the selected normal/orientation field. Opposite (antipodal) normals are ambiguous and block with a readable diagnostic. This policy does not reconstruct intervening CAD surfaces or plan coverage.
+
+Solve intermediate emitter targets using the preceding accepted joints and the inverse emitter mount. Adaptively subdivide and validate the exact smoothstep joint interpolants against emitter position, full orientation and optical-axis errors. Use intermediate checks plus conservative between-sample derivative bounds to guarantee ≤5 mm/≤5° over accepted scan segments, hard finite intervals and conservative speeds before any motion; bounded subdivision/search failure blocks the entire run. The home-to-first approach uses bounded joint interpolation and establishes scan stand-off on arrival, without claiming constant distance before reaching the first point.
+
+Execute only the accepted waypoint path. Use 10%-rated demo joint speeds with smoothstep's 1.5 peak derivative: each scan subsegment duration is at least `1.5 * max_j(abs(Δq_j)/demo_speed_j)` (10 ms minimum); home approach retains a 1-second minimum. Keep the laser on continuously from the first approach through all scan transitions and 1-second endpoint dwells. Mark Visited only after each accepted dwell. No angle wrapping through forbidden intervals, torque/payload dynamics, acceleration limits, collision planning or controller blending claims.
+
+End at last visited target. Stop session/run token cancels preparation/animation, laser off, joints frozen, statuses retained; reject late cancelled/replaced worker results.
 
 ### 9. Data contracts and state
 
@@ -192,7 +198,7 @@ Four cohesive responsibilities: asset/import, scene/picking, kinematics/executio
 | PartAsset | Source name/format, original bytes or Blob, source hash, source units, normalized indexed meshes/normals, fixed part-to-base transform, optional CAD face references |
 | RobotDefinition | Geometry/source hashes, base and flange/tool frame conventions, rigid link visual transforms, six ordered joint parent/child relationships, origins, axes, hard bounds, demo speeds, validated home vector, flange-to-emitter transform |
 | SelectedPoint | Stable ID/order, part-local surface position/normal, robot-base surface position/normal, mesh/triangle hit reference, current selection status |
-| RunPlan | Immutable point snapshot, stand-off, target emitter/flange poses, solved six-angle vectors, transition durations, validation residuals and problem reasons |
+| RunPlan | Immutable point snapshot, stand-off, target emitter/flange poses, solved six-angle vectors, verified scan waypoint paths/durations and between-sample error bounds, validation residuals and problem reasons |
 | RunState | Session/run IDs, lifecycle state, current point, visited count, elapsed transition/dwell time, current joint vector, terminal reason |
 | DownloadSnapshot | Source STEP identity plus the same ordered selected surface points/normals and terminal point statuses used by both writers |
 
@@ -258,7 +264,7 @@ At specification time no codebase/test suite/prior seam exists. Agreed baseline:
 - Upload a known valid STEP; confirm a fresh session, fixed placement, unchanged size, cleared selections, home pose, and stored source identity.
 - Select at least five known visible surface locations; verify marker numbering, list order, approximate known robot-base coordinates, and normalized approach-side normals.
 - Orbit and drag the camera; confirm no extra point. Click robot, floor, scanner, laser, and window opening; confirm no extra point.
-- Run the representative door route; observe link rotation, emitter stand-off, laser dwell, progress, and final visited count.
+- Run the representative door route; observe link rotation, emitter stand-off, continuous laser scanning, progress, and final visited count.
 - Test a known outside-bound target and a deliberately unsolved pose; neither starts a false completed sequence, and their diagnostic categories remain distinct.
 - Stop once during preparation and once during movement; confirm cancellation/frozen pose, inactive laser, retained selections, and no late worker continuation.
 - Capture all three downloads. Parse CSV/PLY with independent readers and compare point count, ID/order correspondence, surface coordinates, normals, frame, and units. Compare STEP input/output SHA-256.
