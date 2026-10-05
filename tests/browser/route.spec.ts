@@ -65,7 +65,7 @@ test('the frozen five actual surface clicks complete with bounded joints and one
  expect(dwells).toHaveLength(5);
  for(let i=0;i<5;i++){
   const dwell=dwells[i],first=dwell[0],last=dwell.at(-1)!;
-  expect(last.time-first.time).toBeGreaterThanOrEqual(980);
+  expect(last.time-first.time).toBeGreaterThanOrEqual(990);
   expect(new Set(dwell.filter(r=>!r.ended).map(r=>r.angles)).size).toBe(1);
   expect(first.progress).toContain(`Current point: ${i+1}`);
   expect(first.statuses[i]).toBe('Moving');

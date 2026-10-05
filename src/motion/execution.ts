@@ -20,7 +20,8 @@ export function visit(from: readonly number[], to: readonly number[], apply: (an
       start ??=now;
       const elapsed=now-start;
       if (elapsed<duration) apply(interpolateJoints(from,to,elapsed/duration));
-      else { apply([...to]); dwellStart ??=now; laser(true); }
+      // The frame timestamp predates FK/render work; dwell starts after actual laser activation.
+      else { apply([...to]); laser(true); dwellStart ??=Math.max(now,performance.now()); }
       if (dwellStart!==undefined && now-dwellStart>=1000) { laser(false); signal.removeEventListener('abort',cancelled); resolve(); }
       else frame=requestAnimationFrame(tick);
       } catch (error) { signal.removeEventListener('abort',cancelled); laser(false); reject(error); }
