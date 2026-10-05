@@ -14,7 +14,10 @@
     "prepare:assets": "node scripts/prepare-runtime-assets.mjs",
     "predev": "npm run prepare:assets",
     "prebuild": "npm run prepare:assets",
-    "test:numerical": "node --test tests/numerical/*.test.ts"
+    "test:numerical": "node --test tests/numerical/*.test.ts",
+    "verify:release": "node scripts/verify-static-release.mjs",
+    "test:release": "node --test tests/release/*.test.ts",
+    "test:presenter": "PREVIEW=1 PRESENTER=1 playwright test tests/browser/delivery.spec.ts -g hardware"
   },
   "dependencies": {
     "occt-import-js": "0.0.23",
