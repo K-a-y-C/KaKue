@@ -2,7 +2,7 @@
 
 KaKue is a planned desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
-**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Ordered multi-point playback, Stop and downloads remain later ordered slices. The [PRD](.scratch/robot-door-scan-demo/PRD.md) is the implementation contract; ready-for-agent does not bypass the asset or production acceptance gates.
+**Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Ordered multi-point playback, Stop and downloads remain later ordered slices. Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first. The unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) remains authoritative; consult it only for explanation or ambiguity. Ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## Intended workflow
 
@@ -63,7 +63,7 @@ The application is a client-side static build. STEP parsing and pose preparation
 
 ## Start development
 
-Read the [PRD](.scratch/robot-door-scan-demo/PRD.md), [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
+Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Also read the [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
 
 With Node 24 LTS on PATH, from the repository root:
 
@@ -112,7 +112,8 @@ Required evidence includes correct surface picking and drag filtering, ordered f
 
 ## Project references
 
-- [Product requirements and acceptance criteria](.scratch/robot-door-scan-demo/PRD.md)
+- [Concise product requirements and acceptance criteria — read first](.scratch/robot-door-scan-demo/PRD.concise.md)
+- [Original full PRD — authoritative fallback](.scratch/robot-door-scan-demo/PRD.md)
 - [Implementation guide](docs/agents/implementation-guide.md)
 - [Ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md)
 - [GitHub issue tracker](https://github.com/K-a-y-C/KaKue/issues)
