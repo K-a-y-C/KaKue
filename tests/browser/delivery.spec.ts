@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {writeFile} from 'node:fs/promises';
+const evidencePrefix=process.env.EVIDENCE_PREFIX??'issue-10';
 
 test('production import and pose preparation resolve local workers/WASM and record actual transfer sizes',async({page})=>{
  test.skip(process.env.PREVIEW!=='1','Static-production delivery gate.');test.setTimeout(90000);
@@ -31,7 +32,7 @@ test('production import and pose preparation resolve local workers/WASM and reco
  const frames=await page.evaluate(({start,end})=>(window as any).deliveryFrames.filter((t:number)=>t>=start&&t<=end) as number[],{start:importStart,end:importEnd});
  expect(frames.length).toBeGreaterThan(2);
  const transfer=await Promise.all(sizes);
- await writeFile(`docs/verification/issue-10-network${process.env.PRESENTER==='1'?'-hardware':''}.json`,JSON.stringify({mode:process.env.PRESENTER==='1'?'static-production-hardware':'static-production-software-WebGL',origin,requests:responses,transfers:transfer,import:{elapsedMs:importEnd-importStart,animationFrames:frames.length,maxFrameGapMs:Math.max(...frames.slice(1).map((t,i)=>t-frames[i]))}},null,2)+'\n');
+ await writeFile(`docs/verification/${evidencePrefix}-network${process.env.PRESENTER==='1'?'-hardware':''}.json`,JSON.stringify({mode:process.env.PRESENTER==='1'?'static-production-hardware':'static-production-software-WebGL',origin,requests:responses,transfers:transfer,import:{elapsedMs:importEnd-importStart,animationFrames:frames.length,maxFrameGapMs:Math.max(...frames.slice(1).map((t,i)=>t-frames[i]))}},null,2)+'\n');
 });
 
 for(const size of [{width:1280,height:800},{width:1440,height:900}])test(`production controls and terminal files remain readable at ${size.width}x${size.height}`,async({page})=>{
@@ -51,7 +52,7 @@ for(const size of [{width:1280,height:800},{width:1440,height:900}])test(`produc
   const box=await button.boundingBox();expect(box!.x).toBeGreaterThanOrEqual(size.width-310);expect(box!.x+box!.width).toBeLessThanOrEqual(size.width);expect(box!.height).toBeGreaterThanOrEqual(32);
  }
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- await page.screenshot({path:`docs/verification/issue-10-layout-${size.width}x${size.height}.png`});
+ await page.screenshot({path:`docs/verification/${evidencePrefix}-layout-${size.width}x${size.height}.png`});
 });
 
 for(const size of [{width:1440,height:900},{width:1280,height:800}])test(`hardware Chrome sustains the actual five-point presentation at ${size.width}x${size.height}`,async({page,browser})=>{
@@ -79,9 +80,9 @@ for(const size of [{width:1440,height:900},{width:1280,height:800}])test(`hardwa
  const intervals=frames.slice(1).map((t,i)=>t-frames[i]),sorted=[...intervals].sort((a,b)=>a-b);
  const fps=(frames.length-1)*1000/(frames.at(-1)!-frames[0]);
  const display=await canvas.evaluate(element=>({devicePixelRatio,bufferWidth:(element as HTMLCanvasElement).width,bufferHeight:(element as HTMLCanvasElement).height}));
- const report={display,browser:browser.version(),mode:'visible hardware Chrome',graphics,viewport:size,standOffMm:100,selectedPoints:5,visited:5,frames:frames.length,activeElapsedMs:frames.at(-1)!-frames[0],fps,p95FrameIntervalMs:sorted[Math.floor(.95*(sorted.length-1))],maxFrameIntervalMs:Math.max(...intervals),frameTimesMs:frames};
- await writeFile(`docs/verification/issue-10-presenter-${size.width}x${size.height}.json`,JSON.stringify(report,null,2)+'\n');
- await page.screenshot({path:`docs/verification/issue-10-presenter-${size.width}x${size.height}.png`});
+ const report={scheduling:'visible hardware; background throttles and Chrome battery-saver frame cap disabled for measurement',visibility:await page.evaluate(()=>({state:document.visibilityState,focused:document.hasFocus()})),display,browser:browser.version(),mode:'visible hardware Chrome',graphics,viewport:size,standOffMm:100,selectedPoints:5,visited:5,frames:frames.length,activeElapsedMs:frames.at(-1)!-frames[0],fps,p95FrameIntervalMs:sorted[Math.floor(.95*(sorted.length-1))],maxFrameIntervalMs:Math.max(...intervals),frameTimesMs:frames};
+ await writeFile(`docs/verification/${evidencePrefix}-presenter-${size.width}x${size.height}.json`,JSON.stringify(report,null,2)+'\n');
+ await page.screenshot({path:`docs/verification/${evidencePrefix}-presenter-${size.width}x${size.height}.png`});
  expect(fps).toBeGreaterThanOrEqual(30);
 });
 
@@ -102,6 +103,6 @@ test('hardware production five-point preparation keeps camera and animation resp
  const preparationIntervals=preparationFrames.slice(1).map((t,i)=>t-preparationFrames[i]);expect(Math.max(...preparationIntervals)).toBeLessThan(250);
  const preparation={cameraChanged:true,selectedPointsRetained:5,frames:preparationFrames.length,elapsedMs:preparationFrames.at(-1)!-preparationFrames[0],maxFrameGapMs:Math.max(...preparationIntervals),frameTimesMs:preparationFrames};
  await page.getByRole('button',{name:'Stop',exact:true}).click();await expect(page.getByRole('status')).toContainText('Simulation stopped');
- await writeFile('docs/verification/issue-10-preparation.json',JSON.stringify(preparation,null,2)+'\n');
- await writeFile('docs/verification/issue-10-preparation-before.png',beforeCamera);await writeFile('docs/verification/issue-10-preparation-after.png',afterCamera);
+ await writeFile(`docs/verification/${evidencePrefix}-preparation.json`,JSON.stringify(preparation,null,2)+'\n');
+ await writeFile(`docs/verification/${evidencePrefix}-preparation-before.png`,beforeCamera);await writeFile(`docs/verification/${evidencePrefix}-preparation-after.png`,afterCamera);
 });
