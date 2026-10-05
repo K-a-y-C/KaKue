@@ -1,6 +1,6 @@
 # Issue execution and review
 
-Approved by the user on 2026-10-04: use one dedicated agent per issue, write its technical plan before implementation, perform one public behavior red/green cycle at a time, verify its acceptance gates, commit locally, publish an issue branch, and open a PR for manual review. Never push to main or merge PRs.
+Approved by the user on 2026-10-05: resume from issue #6 with one dedicated live agent per issue. Write its technical plan before implementation, perform one public behavior red/green cycle at a time, verify its acceptance gates, commit locally, publish an issue branch, open a PR, review it, and merge when mandatory slice checks pass. Then proceed to the next unblocked issue. This supersedes the earlier manual-review-only instruction. Keep main changes behind reviewed PRs; do not bypass acceptance gates. Focused supporting subagents are authorized when useful.
 
 The application stack is React, TypeScript, Vite, direct Three.js, local STEP/IK workers, and same-origin parser/WASM. Asset prerequisites use reproducible command-line preparation and independent CAD checks. Application scaffolding begins with issue #3, not in a speculative separate layer.
 
