@@ -57,7 +57,7 @@ export default function App() {
       const preparation=prepareRun(points,distance); workerCancel.current=preparation.cancel;
       const prepared=await preparation.promise; if (token!==runToken.current) return;
       workerCancel.current=null; plan.current=prepared;
-      setStatuses(Object.fromEntries(prepared.points.map(entry=>[entry.point.id,entry.status==='ready'?'Ready':entry.status==='outside_reach'?'Outside reach':'Pose not solved'])));
+      setStatuses(Object.fromEntries(prepared.points.map(entry=>[entry.point.id,entry.status==='ready'?(prepared.blocked?'Not visited':'Ready'):entry.status==='outside_reach'?'Outside reach':'Pose not solved'])));
       if (prepared.blocked) { setPhase('blocked'); return; }
       setPhase('running');
       let previous=prepared.homeAngles;
