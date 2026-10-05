@@ -1,7 +1,6 @@
 import { prepareRun } from './motion/preflight-client';
 import type { RunPlan } from './motion/preflight';
 import { visit } from './motion/execution';
-import manifest from '../assets/demo/manifest.json';
 import type { SelectedPoint } from './scene/surface-selection';
 import React, { useEffect, useRef, useState } from 'react';
 import { openDemoScene, type SceneHandle, type SceneInformation } from './scene/demo-scene';
@@ -10,6 +9,8 @@ import type { PartAsset } from './import/types';
 export default function App() {
   const [phase,setPhase] = useState<'selecting'|'preparing'|'running'|'completed'|'blocked'|'failed'>('selecting');
   const [standOff,setStandOff]=useState('100');
+  const [currentPoint,setCurrentPoint]=useState<number|null>(null);
+  const [visitedCount,setVisitedCount]=useState(0);
   const [statuses,setStatuses]=useState<Record<number,string>>({});
   const runToken=useRef(0);
   const runAbort=useRef<AbortController|null>(null);
@@ -35,7 +36,7 @@ export default function App() {
   }, []);
   const replace = async (file: File) => {
     try { validateStepFile(file); } catch (error) { setError(error instanceof Error ? error.message : String(error)); return; }
-    runToken.current++; runAbort.current?.abort(); workerCancel.current?.(); plan.current=null; setPhase('selecting'); setStatuses({}); scene.current?.setSelectionEnabled(true);
+    runToken.current++; runAbort.current?.abort(); workerCancel.current?.(); plan.current=null; setPhase('selecting'); setStatuses({}); setCurrentPoint(null); setVisitedCount(0); scene.current?.setSelectionEnabled(true);
     const id = ++request.current;
     pending.current?.abort();
     const controller = new AbortController(); pending.current = controller;
@@ -49,7 +50,7 @@ export default function App() {
   };
   const run=async () => {
     const distance=Number(standOff);
-    if (locked || !information || !source.current || points.length!==1 || !Number.isFinite(distance) || distance<50 || distance>300) return;
+    if (locked || !information || !source.current || points.length===0 || !Number.isFinite(distance) || distance<50 || distance>300) return;
     const token=++runToken.current, controller=new AbortController(); runAbort.current=controller;
     scene.current?.setSelectionEnabled(false); setPhase('preparing'); setError('');
     try {
@@ -59,12 +60,18 @@ export default function App() {
       setStatuses(Object.fromEntries(prepared.points.map(entry=>[entry.point.id,entry.status==='ready'?'Ready':entry.status==='outside_reach'?'Outside reach':'Pose not solved'])));
       if (prepared.blocked) { setPhase('blocked'); return; }
       setPhase('running');
-      const entry=prepared.points[0];
+      let previous=prepared.homeAngles;
+      for (const entry of prepared.points) {
+      setCurrentPoint(entry.point.order);
       if (!entry.angles) throw new Error('Preflight did not return a verified joint pose.');
       setStatuses(old=>({...old,[entry.point.id]:'Moving'}));
-      await visit(manifest.homeAngles,entry.angles,angles=>scene.current?.setJoints(angles),on=>scene.current?.setLaser(on,distance/1000),controller.signal);
+      await visit(previous,entry.angles,angles=>scene.current?.setJoints(angles),on=>scene.current?.setLaser(on,distance/1000),controller.signal);
       if (token!==runToken.current) return;
       setStatuses(old=>({...old,[entry.point.id]:'Visited'}));
+      setVisitedCount(count=>count+1);
+      previous=entry.angles;
+      }
+      setCurrentPoint(null);
       setPhase('completed');
     } catch (failure) {
       if (token!==runToken.current) return;
@@ -78,7 +85,7 @@ export default function App() {
     {error && <p role="alert">{error}</p>}
     <p>Drag to orbit · right-drag to pan · scroll to zoom.</p>
     <label>Import STEP<input type="file" accept=".step,.stp" disabled={!sceneReady || phase==='preparing' || phase==='running'} onChange={event => { const file = event.target.files?.[0]; event.target.value = ''; if (file) void replace(file); }}/></label>
-    <section aria-label="Scanner visit"><h3>Scanner visit</h3><label>Stand-off (mm)<input type="number" min="50" max="300" value={standOff} disabled={locked} onChange={event=>setStandOff(event.target.value)}/></label><button onClick={()=>void run()} disabled={locked || !information || points.length!==1 || !Number.isFinite(Number(standOff)) || Number(standOff)<50 || Number(standOff)>300}>Run</button><p>{points.length>1?'Select one point for a scanner visit. Reload or import to start again.':'Illustrative simulation · 100 mm default stand-off · laser dwell 1 second.'}</p></section><hr/><h3>Current part</h3><p>{sourceName}</p><p>The robot and door keep their original physical dimensions on one shared floor.</p>
+    <section aria-label="Scanner visit"><h3>Scanner visit</h3><label>Stand-off (mm)<input type="number" min="50" max="300" value={standOff} disabled={locked} onChange={event=>setStandOff(event.target.value)}/></label><button onClick={()=>void run()} disabled={locked || !information || points.length===0 || !Number.isFinite(Number(standOff)) || Number(standOff)<50 || Number(standOff)>300}>Run</button><p>Illustrative simulation · selection order · laser dwell 1 second.</p><p aria-label="Route progress">Current point: {currentPoint??'—'} · Visited: {visitedCount} of {points.length}</p></section><hr/><h3>Current part</h3><p>{sourceName}</p><p>The robot and door keep their original physical dimensions on one shared floor.</p>
     {information && <dl aria-label="Scene measurements"><dt>Door width × height</dt><dd>{information.doorWidthMm} × {information.doorHeightMm} mm</dd><dt>Robot core links</dt><dd>{information.robotLinkCount}</dd><dt>Scanner emitter at home</dt><dd>{information.emitterMm.join(', ')} mm</dd><dt>Coordinate frame</dt><dd>Robot-base · +Z up · floor Z=0</dd></dl>}
     <section aria-label="Surface selection"><h3>Selected points ({points.length})</h3><p>Click door surfaces to append points. XYZ: robot-base mm.</p><table aria-label="Selected surface points"><thead><tr><th>Point</th><th>X</th><th>Y</th><th>Z</th><th>Status</th></tr></thead><tbody>{points.map(point => <tr key={point.id} data-part-position={point.partPosition.join(',')} data-part-normal={point.partNormal.join(',')} data-base-normal={point.baseNormal.join(',')}><th>{point.order}</th>{point.basePosition.map((value, i) => <td key={i}>{(value*1000).toFixed(1)}</td>)}<td>{statuses[point.id]??'Selected'}</td></tr>)}</tbody></table></section></aside></div>
   </main>;
