@@ -1,0 +1,11 @@
+# Issue 5 handoff
+
+Delivered ordered, append-only actual-door surface selection: numbered markers and corresponding Selected rows with robot-base XYZ in mm to one decimal. Duplicate clicks stay separate; camera movements cannot rewrite stored coordinates. Qualified primary-pointer release within 5 CSS pixels maximum travel, single pointer and canvas bounds. Rejects non-door/empty window and closer visible opaque robot/scanner/floor, while markers/grid do not obstruct picking. Cancelled touch recovers. Selection requires verified asset readiness.
+
+`SelectedPoint` in `src/scene/surface-selection.ts` retains immutable 1-based id/order, source part-local and robot-base surface position (meters), unit approach normals with permanent clicked-side sign, mesh/triangle hit reference and `selected` status. Scene selection callback is the React seam; scene owns disposable sprite textures/materials, gesture listeners and marker lifecycle. Barycentric mesh normals with triangle fallback use actual mesh node transforms; source part coordinates use root inverse. Existing fixed `PartAsset.partToBase` remains authoritative. Eligible import clears rows/markers/IDs/gesture state immediately, including later parse failure; unsupported validation preserves current selections.
+
+See `docs/plans/issue-05.md`, `docs/verification/issue-05.md` and sequential public behavior tests in `tests/browser/selection.spec.ts`. No new dependency or motion state/settings introduced.
+
+Next: issue #6 after manual merge. Use retained SelectedPoint surface positions/normals, promote `selected` to preflight/run statuses rather than overwriting surfaces with emitter targets. Existing `manifest.homeAngles` governs fresh sessions. Emitter mount and immutable robot definition remain unchanged. Integration of selection/run locking is #6 scope. Source-module numerical fixtures supplement actual production UI, and complete-demo browser/hardware gates remain #10.
+
+Final owner checks: development 36 passed / 1 production-only skip; TypeScript/static build passed; static preview 30 passed / 7 source-module fixture skips. Independent review found and verified the corrected actual robot occlusion case, with no remaining actionable findings. See verification for retained screenshots and limitations.

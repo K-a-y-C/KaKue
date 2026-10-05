@@ -1,8 +1,10 @@
+import type { SelectedPoint } from './scene/surface-selection';
 import React, { useEffect, useRef, useState } from 'react';
 import { openDemoScene, type SceneHandle, type SceneInformation } from './scene/demo-scene';
 import { importStep, validateStepFile } from './import/step-import';
 import type { PartAsset } from './import/types';
 export default function App() {
+  const [points, setPoints] = useState<SelectedPoint[]>([]);
   const viewport = useRef<HTMLDivElement>(null);
   const [information, setInformation] = useState<SceneInformation | null>(null);
   const scene = useRef<SceneHandle | null>(null);
@@ -15,7 +17,7 @@ export default function App() {
   const [error, setError] = useState('');
   useEffect(() => {
     if (!viewport.current) return;
-    scene.current = openDemoScene(viewport.current, (info, part) => { setInformation(info); setSceneReady(true); source.current = part; }, setError);
+    scene.current = openDemoScene(viewport.current, (info, part) => { setInformation(info); setSceneReady(true); source.current = part; }, setError, point => setPoints(points => [...points, point]));
     return () => { request.current++; pending.current?.abort(); source.current = null; scene.current?.dispose(); };
 
   }, []);
@@ -24,7 +26,7 @@ export default function App() {
     const id = ++request.current;
     pending.current?.abort();
     const controller = new AbortController(); pending.current = controller;
-    source.current = null; scene.current?.clearPart(); setInformation(null); setError(''); setLoading(true); setSourceName(file.name);
+    source.current = null; scene.current?.clearPart(); setPoints([]); setInformation(null); setError(''); setLoading(true); setSourceName(file.name);
     try {
       const part = await importStep(file, { signal: controller.signal });
       if (id !== request.current) return;
@@ -41,6 +43,6 @@ export default function App() {
     <label>Import STEP<input type="file" accept=".step,.stp" disabled={!sceneReady} onChange={event => { const file = event.target.files?.[0]; event.target.value = ''; if (file) void replace(file); }}/></label>
     <hr/><h3>Current part</h3><p>{sourceName}</p><p>The robot and door keep their original physical dimensions on one shared floor.</p>
     {information && <dl aria-label="Scene measurements"><dt>Door width × height</dt><dd>{information.doorWidthMm} × {information.doorHeightMm} mm</dd><dt>Robot core links</dt><dd>{information.robotLinkCount}</dd><dt>Scanner emitter at home</dt><dd>{information.emitterMm.join(', ')} mm</dd><dt>Coordinate frame</dt><dd>Robot-base · +Z up · floor Z=0</dd></dl>}
-    <p className="note">Inspect the door and robot with the camera.</p></aside></div>
+    <section aria-label="Surface selection"><h3>Selected points ({points.length})</h3><p>Click door surfaces to append points. XYZ: robot-base mm.</p><table aria-label="Selected surface points"><thead><tr><th>Point</th><th>X</th><th>Y</th><th>Z</th><th>Status</th></tr></thead><tbody>{points.map(point => <tr key={point.id} data-part-position={point.partPosition.join(',')} data-part-normal={point.partNormal.join(',')} data-base-normal={point.baseNormal.join(',')}><th>{point.order}</th>{point.basePosition.map((value, i) => <td key={i}>{(value*1000).toFixed(1)}</td>)}<td>Selected</td></tr>)}</tbody></table></section></aside></div>
   </main>;
 }
