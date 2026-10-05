@@ -1,9 +1,21 @@
 # Robot Door Scan Demo — Product Requirements Document
 
 Status: ready-for-agent
-Version: 1.2 — 2026-10-05
+Version: 1.6 — 2026-10-05
 Owner: Kakue
 Readiness: complete implementation specification. Supplied-robot pivot and core-link correspondence have been checked; the replacement door STEP is supplied, and door geometry validation and final runtime asset preparation remain acceptance gates.
+
+
+## Approved scan-result amendment — 2026-10-05
+
+The presenter request in [the implementation plan](../../docs/plans/scan-export-home-platform.md) supersedes older contradictory requirements below:
+
+- Successful scans return to the exact session starting home joints with bounded smooth interpolation. The laser is off throughout return. Completion and Export appear only after return finishes. Stop can freeze return and retains visited rows.
+- The laser stays off from home until the first accepted scan point is reached, then remains on across scan transitions and dwells. It is off on completion, Stop and failures.
+- Replace terminal Downloads with one successful-scan Export action. One ZIP contains the selected simulated point cloud (PLY) and coordinates (CSV), from the same immutable snapshot. Do not expose source CAD as a scan result or mention a CAD-source download in the interface. Interrupted/blocked/failed runs retain on-screen coordinates and honest statuses, without a successful-scan export.
+- Add a fixed solid platform under the shared Z=0 floor. Do not move, scale or substitute either supplied model. This visual base is permitted despite the earlier no-fixtures scope.
+- Continue to identify the demonstration as a simulation; no acquired measurements or reconstructed surface are claimed.
+
 
 ## Problem Statement
 

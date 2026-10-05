@@ -64,6 +64,10 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   const light = new THREE.DirectionalLight(0xffffff, 3); light.position.set(2, -3, 4); scene.add(light);
   const grid = new THREE.GridHelper(4, 40, 0x8593a3, 0xc7d0d9); grid.rotation.x = Math.PI/2; scene.add(grid);
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(4,4), new THREE.MeshStandardMaterial({ color: 0xe3e9ee, roughness: 1, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
+  // A solid shared platform grounds the cell. Its top is the existing Z=0 datum.
+  const platform = new THREE.Mesh(new THREE.BoxGeometry(4,4,.18), new THREE.MeshStandardMaterial({color:0x687b8c,roughness:.9}));
+  platform.position.z=-.09;
+  scene.add(platform);
   scene.add(floor);
   const majorGrid = new THREE.GridHelper(4, 8, 0x708498, 0xa1b0bf); majorGrid.rotation.x = Math.PI/2; scene.add(majorGrid);
   const resize = () => { const { width, height } = host.getBoundingClientRect(); renderer.setSize(width, height); camera.aspect = width/height; camera.updateProjectionMatrix(); };
@@ -128,7 +132,7 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
     partReady=true;
     scene.updateMatrixWorld(true);
     const doorSize = new THREE.Box3().setFromObject(door).getSize(new THREE.Vector3());
-    const bounds = new THREE.Box3(); scene.children.filter(child => child !== selection?.markers && child !== floor && child !== grid && child !== majorGrid && !(child instanceof THREE.Light)).forEach(child => bounds.expandByObject(child));
+    const bounds = new THREE.Box3(); scene.children.filter(child => child !== selection?.markers && child !== platform && child !== floor && child !== grid && child !== majorGrid && !(child instanceof THREE.Light)).forEach(child => bounds.expandByObject(child));
     const center = bounds.getCenter(new THREE.Vector3());
     controls.target.copy(center);
     const distance = bounds.getSize(new THREE.Vector3()).length() / (2*Math.sin(THREE.MathUtils.degToRad(20))) * 1.1;

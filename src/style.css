@@ -464,13 +464,13 @@ tbody th {
   border-top:1px solid #eef1f5
 }
 
-[aria-label="Downloads"] {
+[aria-label="Scan export"] {
   border-top:1px solid #e6ebf2;
   margin-top:18px;
   padding-top:2px
 }
 
-[aria-label="Downloads"] button {
+[aria-label="Scan export"] button {
   display:block;
   width:100%;
   margin:7px 0;
@@ -480,7 +480,7 @@ tbody th {
   background:#f5f8fc
 }
 
-[aria-label="Downloads"] p {
+[aria-label="Scan export"] p {
   font-size:10px;
   color:#8b99aa
 }

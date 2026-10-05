@@ -2,6 +2,10 @@
 
 Read the [concise PRD](../../.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the synchronized [full PRD](../../.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Story numbers and specification headings are preserved. Also read your issue, its blockers, the [backlog](../../.scratch/robot-door-scan-demo/issues/breakdown.md), and [robot verification](../research/robot-verification.md) before changing code. Product decisions, domain vocabulary, six-joint constants, scanner mounting, CSV schema, and state transitions are specified in the PRD. This guide supplies working context; it does not replace that specification.
 
+## Current presenter amendment
+
+Follow [scan export, home return and platform plan](../plans/scan-export-home-platform.md) for the 2026-10-05 update. This overrides previous separate/source downloads, first-approach laser activation and final-target resting pose: scan result ZIP export only after successful laser-off home return; PLY point cloud + CSV coordinates; laser first activates at point 1; a solid platform sits below Z=0. Preserve interrupted statuses and Stop throughout return. Earlier evidence describes historical behavior.
+
 ## Intended result
 
 A desktop browser app shows one actual articulated six-axis robot and one fixed automotive door, lets the presenter append surface points, preflights all scanner target poses, visits them in selection order with a continuous dense red laser fan, and exports PLY/CSV plus unchanged STEP. This is a simulation with truthful completed, blocked, stopped and failed outcomes. There is no backend, database, persistence, account, physical scanning, controller connection or collision planning.

@@ -1,0 +1,22 @@
+[
+  {
+    "standOffMm": 100,
+    "sampleCount": 123,
+    "maxPositionMm": 0.07559001521138674,
+    "maxOrientationDeg": 0.06440723152392462,
+    "maxPublishedPoseError": 2.220446049250313e-16,
+    "firstLitProgress": "Current point: 1 \u00b7 Visited: 0 of 5",
+    "finalJointAngles": "-1.1948796625424642e-12,-1.4991149354654876,2.5589706720627787,-3.7127858775179435e-12,-1.0598557365971875,-1.5707963267922191",
+    "finalLaser": "false"
+  },
+  {
+    "standOffMm": 500,
+    "sampleCount": 117,
+    "maxPositionMm": 0.0933765305345218,
+    "maxOrientationDeg": 0.06711797525232634,
+    "maxPublishedPoseError": 2.220446049250313e-16,
+    "firstLitProgress": "Current point: 1 \u00b7 Visited: 0 of 5",
+    "finalJointAngles": "-1.1948796625424642e-12,-1.4991149354654876,2.5589706720627787,-3.7127858775179435e-12,-1.0598557365971875,-1.5707963267922191",
+    "finalLaser": "false"
+  }
+]

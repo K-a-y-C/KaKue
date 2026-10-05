@@ -1,6 +1,6 @@
 import {test,expect} from './fixtures';
 
-test('Run keeps the laser on from first approach through transit; Stop extinguishes and freezes it',async({page})=>{
+test('Run keeps the laser off until point 1, then on through scan transit; Stop extinguishes and freezes it',async({page})=>{
  test.setTimeout(60000);
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
  await page.mouse.click(704,498);await page.mouse.click(712,520);
@@ -11,10 +11,11 @@ test('Run keeps the laser on from first approach through transit; Stop extinguis
  });
  await page.getByRole('button',{name:'Run',exact:true}).click();
  await expect(canvas).not.toHaveAttribute('data-joint-angles',home!);
- await expect(canvas).toHaveAttribute('data-laser','true');
+ await expect(canvas).toHaveAttribute('data-laser','false');
+ await expect(canvas).toHaveAttribute('data-laser','true',{timeout:45000});
  await expect(page.getByLabel('Route progress')).toContainText('Current point: 2',{timeout:45000});
  await expect(canvas).toHaveAttribute('data-laser','true');
- expect(await page.evaluate(()=>(window as any).laserStates)).toEqual(['true']);
+ expect(await page.evaluate(()=>(window as any).laserStates)).toEqual(['false','true']);
  await page.getByRole('button',{name:'Stop',exact:true}).click();
  await expect(canvas).toHaveAttribute('data-laser','false');
  const frozen=await canvas.getAttribute('data-joint-angles');await page.waitForTimeout(1200);

@@ -177,7 +177,8 @@ test('worker crash is truthful and another import uses a fresh worker', async ({
   await expect(page.getByRole('alert')).toContainText('Worker failure');
   await expect(page.getByRole('status')).toHaveText('Scene unavailable.');
   await page.getByLabel('Import STEP').setInputFiles(box);
-  await expect(page.getByRole('status')).toContainText('Scene ready');
+  // Cold WASM startup after a terminated worker can exceed the ordinary UI deadline.
+  await expect(page.getByRole('status')).toContainText('Scene ready', {timeout:15000});
 });
 
 test('recognized allocation exhaustion is reported distinctly and recovers', async ({ page }) => {

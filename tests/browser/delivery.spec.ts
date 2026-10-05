@@ -36,18 +36,18 @@ test('production import and pose preparation resolve local workers/WASM and reco
 });
 
 for(const size of [{width:1280,height:800},{width:1440,height:900}])test(`production controls and terminal files remain readable at ${size.width}x${size.height}`,async({page})=>{
- test.skip(process.env.PREVIEW!=='1','Static-production layout gate.');
+ test.skip(process.env.PREVIEW!=='1','Static-production layout gate.');test.setTimeout(90000);
  await page.setViewportSize(size);await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
  const canvas=page.getByRole('img',{name:'3D robot and door scene'}),bounds=await canvas.boundingBox();
  expect(bounds!.width/size.width).toBeGreaterThan(.75);expect(bounds!.height).toBeGreaterThan(500);
  await expect(page.getByLabel('Import STEP')).toBeVisible();await page.getByRole('button',{name:'Run',exact:true}).scrollIntoViewIfNeeded();
  await page.setViewportSize({width:1440,height:900});await expect.poll(async()=>{const box=await canvas.boundingBox();return {width:Math.round(box!.width),height:Math.round(box!.height)};}).toEqual({width:1130,height:790});await page.mouse.click(704,498);await page.mouse.click(712,520);
  await page.getByRole('button',{name:'Run',exact:true}).click();await expect(page.getByRole('row').nth(1)).toContainText('Moving');
- await page.getByRole('button',{name:'Stop',exact:true}).click();await expect(page.getByRole('status')).toContainText('Simulation stopped');
+ await expect(page.getByRole('status')).toContainText('Simulation complete',{timeout:60000});
  await page.setViewportSize(size);
  await expect.poll(async()=>Math.round((await canvas.boundingBox())!.height)).toBe(size.height-110);
  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
- for(const name of ['Download selected points (PLY)','Download coordinates (CSV)','Download original STEP']){
+ for(const name of ['Export']){
   const button=page.getByRole('button',{name,exact:true});await button.scrollIntoViewIfNeeded();await expect(button).toBeVisible();
   const box=await button.boundingBox();expect(box!.x).toBeGreaterThanOrEqual(size.width-310);expect(box!.x+box!.width).toBeLessThanOrEqual(size.width);expect(box!.height).toBeGreaterThanOrEqual(32);
  }
