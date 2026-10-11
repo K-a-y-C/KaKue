@@ -83,7 +83,7 @@ test('replacement rejects stale callbacks and reload returns to import before a 
   await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
   await expect(page.locator('dl')).toContainText('900.0, 0.0, 800.0 mm');
   await page.reload();
-  await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
+  await expect(page.getByText('No model open',{exact:true})).toBeVisible();
   await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');
   await expect(page.getByRole('status')).toContainText('Scene ready');
   await expect(page.getByText('DOOR-of-CAR.step', { exact: true })).toBeVisible();

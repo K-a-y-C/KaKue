@@ -25,7 +25,7 @@ test('missing supplied door cache has a readable asset outcome', async ({ page }
   await page.route('**/demo-v1/door/door.glb', route => route.fulfill({ status: 404, body: 'Missing door' }));
   await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('Required asset unavailable: door/door.glb');
-  await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
+  await expect(page.getByText('No model open',{exact:true})).toBeVisible();
 });
 
 test('WebGL2 unavailable reports the browser requirement', async ({ page }) => {
@@ -41,7 +41,7 @@ test('WebGL2 unavailable reports the browser requirement', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('WebGL2 is required');
   await expect(page.getByLabel('Import STEP')).toBeEnabled();
-  await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
+  await expect(page.getByText('No model open',{exact:true})).toBeVisible();
   expect(errors).toEqual([]);
 });
 

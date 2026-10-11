@@ -1,0 +1,290 @@
+{
+  "baseline": "5d0f941154c75b9fef46fbed787f397a878ae418",
+  "date": "2026-10-11",
+  "mode": "development Chrome/software WebGL",
+  "assets": {
+    "3d files/car-front-door-1/DOOR-of-CAR.step": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef",
+    "3d files/Robot/KR22_R1610-KR16_R1610.stp": "8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1"
+  },
+  "routes": [
+    {
+      "standOffMm": 100,
+      "clicks": [
+        [
+          681.160927,
+          480.122642
+        ],
+        [
+          681.219904,
+          506.444347
+        ],
+        [
+          680.244766,
+          523.942241
+        ],
+        [
+          761.506759,
+          575.148953
+        ],
+        [
+          764.290822,
+          528.705958
+        ]
+      ],
+      "reference": [
+        [
+          1648.553932,
+          300,
+          550
+        ],
+        [
+          1658.438598,
+          300,
+          400
+        ],
+        [
+          1658.438587,
+          300,
+          300
+        ],
+        [
+          1656.719024,
+          -300,
+          300
+        ],
+        [
+          1645.645252,
+          -300,
+          550
+        ]
+      ],
+      "maxPositionMm": 0.0755894605787983,
+      "maxOrientationDeg": 0.0669456674864421,
+      "maxPublishedPoseError": 2.220446049250313e-16
+    },
+    {
+      "standOffMm": 500,
+      "clicks": [
+        [
+          681.160927,
+          480.122642
+        ],
+        [
+          681.219904,
+          506.444347
+        ],
+        [
+          680.244766,
+          523.942241
+        ],
+        [
+          761.506759,
+          575.148953
+        ],
+        [
+          764.290822,
+          528.705958
+        ]
+      ],
+      "reference": [
+        [
+          1648.553932,
+          300,
+          550
+        ],
+        [
+          1658.438598,
+          300,
+          400
+        ],
+        [
+          1658.438587,
+          300,
+          300
+        ],
+        [
+          1656.719024,
+          -300,
+          300
+        ],
+        [
+          1645.645252,
+          -300,
+          550
+        ]
+      ],
+      "maxPositionMm": 0.11227735197164605,
+      "maxOrientationDeg": 0.06782290266942058,
+      "maxPublishedPoseError": 2.220446049250313e-16
+    }
+  ],
+  "canvas": {
+    "1440x900": {
+      "x": 221,
+      "y": 188,
+      "width": 948,
+      "height": 688
+    },
+    "1280x800": {
+      "x": 221,
+      "y": 188,
+      "width": 788,
+      "height": 588
+    }
+  },
+  "release": {
+    "schemaVersion": 1,
+    "deploymentBase": "/",
+    "package": "kakue-robot-door-scan-demo",
+    "version": "0.1.0",
+    "sourceDoorSha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef",
+    "sourceRobotSha256": "8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1",
+    "dependencies": {
+      "occt-import-js": "0.0.23",
+      "react": "19.3.0",
+      "react-dom": "19.3.0",
+      "three": "0.186.1"
+    },
+    "files": [
+      {
+        "path": "assets/index-C78GNMoP.css",
+        "bytes": 7904,
+        "sha256": "98cc2020f99d92556cb31bee074ab997e931c3d027956f2ad73ff98168a07657"
+      },
+      {
+        "path": "assets/index-D_wut8JW.js",
+        "bytes": 908302,
+        "sha256": "a9c4282d2c61e40452a5e5e06396f11d94a5d26db6d8a7361a7397b4ff222d11"
+      },
+      {
+        "path": "assets/logo-vRokyGXm.jpeg",
+        "bytes": 16520,
+        "sha256": "f81ba9a1604bef4389851fbb4986148d9d042500ff1524d92e38d0764e43f9ed"
+      },
+      {
+        "path": "assets/preflight.worker-BbmP-5G7.js",
+        "bytes": 103407,
+        "sha256": "4ab8267df1fac74583d5893f0026cf565842e47e50cfe5b5ed73814148fb93f9"
+      },
+      {
+        "path": "assets/step.worker-knQcvfcx.js",
+        "bytes": 2945,
+        "sha256": "068382e33243eb9a18f33a9a552fa1810ebe2988f789a3f1f91ae0a62d50480d"
+      },
+      {
+        "path": "demo-v1/door/DOOR-of-CAR.step",
+        "bytes": 14456880,
+        "sha256": "a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef"
+      },
+      {
+        "path": "demo-v1/door/door.glb",
+        "bytes": 4260444,
+        "sha256": "4059bd8e252b8ada125adbcdb1232c4bf26ec5bdd4d8689d8a21ac572e0f9b43"
+      },
+      {
+        "path": "demo-v1/notices/README.md",
+        "bytes": 1154,
+        "sha256": "8afd5f3dcb9865875e58e6b4ffeec8a85ada6810ed432c32e7802d42283ad9a9"
+      },
+      {
+        "path": "demo-v1/notices/react-LICENSE",
+        "bytes": 1088,
+        "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+      },
+      {
+        "path": "demo-v1/notices/react-dom-LICENSE",
+        "bytes": 1088,
+        "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+      },
+      {
+        "path": "demo-v1/notices/scheduler-LICENSE",
+        "bytes": 1088,
+        "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+      },
+      {
+        "path": "demo-v1/notices/three-LICENSE",
+        "bytes": 1081,
+        "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+      },
+      {
+        "path": "demo-v1/robot/base_link.glb",
+        "bytes": 1435344,
+        "sha256": "81ee869b4e7be2b42b86caf86e8cc37f51922b330495e29cd174685bcbd2d39d"
+      },
+      {
+        "path": "demo-v1/robot/link_1.glb",
+        "bytes": 2316988,
+        "sha256": "b71ee7771f20efcc6a3b3ab4099ca845432e8e98c8bd8f73d4ae716e7b3331a8"
+      },
+      {
+        "path": "demo-v1/robot/link_2.glb",
+        "bytes": 3413716,
+        "sha256": "3c4d2ab926bd58192f0405f082eb516a6600fefdfa3062e4df59fda86fc9faad"
+      },
+      {
+        "path": "demo-v1/robot/link_3.glb",
+        "bytes": 4255304,
+        "sha256": "31106365a71017c111a0dae89a8a5b8ded3f9b5295b06db4bd7c26f5ef031573"
+      },
+      {
+        "path": "demo-v1/robot/link_4.glb",
+        "bytes": 1267704,
+        "sha256": "70622a27f574a60eda35a3558dc00b1c0a5c9ceb476e8146c83ad4d00e7d7d88"
+      },
+      {
+        "path": "demo-v1/robot/link_5.glb",
+        "bytes": 1443232,
+        "sha256": "9dec70ae705a78582da960c0dffb6d73c991a297c0880e27904de9137af6ca31"
+      },
+      {
+        "path": "demo-v1/robot/link_6.glb",
+        "bytes": 98096,
+        "sha256": "26ea2162e902fd07dac6f22569e0e7b470ed0b6eaa3072a1fc8020c99dd0fdba"
+      },
+      {
+        "path": "index.html",
+        "bytes": 388,
+        "sha256": "8cfafe7a7deb43aae99a56bc3971a7282d2a02588bf28f2bb25db22a5b531690"
+      },
+      {
+        "path": "parser/occt-import-js/0.0.23/license.occt-import-js.txt",
+        "bytes": 27030,
+        "sha256": "7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe"
+      },
+      {
+        "path": "parser/occt-import-js/0.0.23/license.occt.txt",
+        "bytes": 26936,
+        "sha256": "090f8eb6ba63e72887c1f89b009fb1656cfda02d83b6e9805b20468520a5d77f"
+      },
+      {
+        "path": "parser/occt-import-js/0.0.23/manifest.json",
+        "bytes": 726,
+        "sha256": "717d66dd53c9de88cc0dc04d4c5fb090ed98281029b31c1ab096b8a53976d843"
+      },
+      {
+        "path": "parser/occt-import-js/0.0.23/occt-import-js.js",
+        "bytes": 96871,
+        "sha256": "3fb44ce11d00611f9b3f3c5775d520ebab48930c1f08279b7b1316f05f0d3379"
+      },
+      {
+        "path": "parser/occt-import-js/0.0.23/occt-import-js.wasm",
+        "bytes": 7604031,
+        "sha256": "33391fc9d94ea5c869a6718488bf0a9a464222bac9bdc764dfe1690cef281952"
+      }
+    ],
+    "totalBytes": 41748267
+  },
+  "developmentChecks": {
+    "broadPass": 75,
+    "broadSkipped": 7,
+    "initialFailures": 3,
+    "focusedPass": 9,
+    "completePreviewInventoryPass": 1,
+    "runnableBehaviorsVerified": 80
+  },
+  "productionChecks": {
+    "pass": 28,
+    "intentionalSkipped": 4,
+    "finalLayoutPass": 5
+  }
+}

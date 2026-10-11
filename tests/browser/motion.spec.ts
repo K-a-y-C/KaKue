@@ -1,3 +1,4 @@
+import {clickScene} from './scene-clicks';
 import { test, expect } from './fixtures';
 
 test('actual door visit locks controls, moves the joints, dwells then completes', async ({ page }) => {
@@ -5,7 +6,7 @@ test('actual door visit locks controls, moves the joints, dwells then completes'
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
   await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
   await expect(page.getByLabel('Stand-off (mm)')).toHaveValue('100');
-  await page.mouse.click(704,498);
+  await clickScene(page,704,498);
   await expect(page.getByRole('row')).toHaveCount(2);
   const canvas=page.getByRole('img',{name:'3D robot and door scene'});
   const home=await canvas.getAttribute('data-joint-angles');
@@ -34,9 +35,9 @@ test('actual door visit locks controls, moves the joints, dwells then completes'
   expect(Math.hypot(...expected.map((value,i)=>value-pose[12+i]))*1000).toBeLessThanOrEqual(5.1);
   expect(Math.acos(Math.max(-1,Math.min(1,-normal.reduce((sum,value,i)=>sum+value*pose[8+i],0))))*180/Math.PI).toBeLessThanOrEqual(5);
   await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
-  await page.mouse.click(705,500); await expect(page.getByRole('row')).toHaveCount(2);
+  await clickScene(page,705,500); await expect(page.getByRole('row')).toHaveCount(2);
   await page.getByRole('row').last().scrollIntoViewIfNeeded();
-  await page.screenshot({path:'docs/verification/issue-06-visit.png'});
+  await page.screenshot({path:'docs/verification/ribbon-completed-1440-development.png'});
 });
 
 test('distant imported STEP point blocks without motion or laser', async ({ page }) => {
@@ -44,7 +45,7 @@ test('distant imported STEP point blocks without motion or laser', async ({ page
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
   await page.getByLabel('Import STEP').setInputFiles('tests/fixtures/box-mm.step');
   await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.click(749,723);
+  await clickScene(page,749,723);
   await expect(page.getByRole('row')).toHaveCount(2);
   const canvas=page.getByRole('img',{name:'3D robot and door scene'}), home=await canvas.getAttribute('data-joint-angles');
   await page.getByRole('button',{name:'Run',exact:true}).click();

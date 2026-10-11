@@ -1,3 +1,4 @@
+import {clickScene,setStandOff} from './scene-clicks';
 import {measuredEmitter} from '../helpers/measured-emitter';
 import {Matrix4,Quaternion} from 'three';
 import {test,expect} from './fixtures';
@@ -5,16 +6,16 @@ import {test,expect} from './fixtures';
 test('selected door points run in order with progress and post-dwell visits',async({page})=>{
   test.setTimeout(90000);
   await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.click(704,498);await page.mouse.click(712,520);
+  await clickScene(page,704,498);await clickScene(page,712,520);
   await expect(page.getByRole('row')).toHaveCount(3);
   await expect(page.getByRole('button',{name:'Run',exact:true})).toBeEnabled();
+  const canvas=page.getByRole('img',{name:'3D robot and door scene'});
+  const home=await canvas.getAttribute('data-joint-angles');
   await page.getByRole('button',{name:'Run',exact:true}).click();
   await expect(page.getByLabel('Route progress')).toContainText('Current point: 1');
   await expect(page.getByLabel('Route progress')).toContainText('Visited: 0 of 2');
   await expect(page.getByRole('row').nth(1)).toContainText('Moving');
   await expect(page.getByRole('row').nth(2)).toContainText('Ready');
-  const canvas=page.getByRole('img',{name:'3D robot and door scene'});
-  const home=await canvas.getAttribute('data-joint-angles');
   await expect(page.getByLabel('Route progress')).toContainText('Current point: 2',{timeout:45000});
   await expect(page.getByRole('row').nth(1)).toContainText('Visited');
   await expect(page.getByLabel('Route progress')).toContainText('Visited: 1 of 2');
@@ -28,7 +29,7 @@ test('selected door points run in order with progress and post-dwell visits',asy
 
 test('a later unsolved actual door target blocks every motion and leaves earlier points not visited',async({page})=>{
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
- await page.mouse.click(704,498);await page.mouse.click(780,500);
+ await clickScene(page,704,498);await clickScene(page,780,500);
  await expect(page.getByRole('row')).toHaveCount(3);
  const canvas=page.getByRole('img',{name:'3D robot and door scene'}),home=await canvas.getAttribute('data-joint-angles');
  await canvas.evaluate(element=>{(window as any).motionStarted=false;new MutationObserver(()=>{if((element as HTMLElement).dataset.jointAngles!==((window as any).initialAngles)||(element as HTMLElement).dataset.laser==='true')(window as any).motionStarted=true;}).observe(element,{attributes:true});(window as any).initialAngles=(element as HTMLElement).dataset.jointAngles;});
@@ -49,7 +50,7 @@ for(const standOffMm of [100,500])test(`the frozen five actual surface clicks co
  });
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
  const clicks=[[681.160927,480.122642],[681.219904,506.444347],[680.244766,523.942241],[761.506759,575.148953],[764.290822,528.705958]];
- for(const [x,y] of clicks)await page.mouse.click(x,y);
+ for(const [x,y] of clicks)await clickScene(page,x,y);
  await expect(page.getByRole('row')).toHaveCount(6);
  const surfaces=await page.getByRole('row').all();
  const reference=[[1648.553932,300,550],[1658.438598,300,400],[1658.438587,300,300],[1656.719024,-300,300],[1645.645252,-300,550]];
@@ -61,10 +62,10 @@ for(const standOffMm of [100,500])test(`the frozen five actual surface clicks co
   const records:any[]=[];(window as any).routeEvidence=records;
   new MutationObserver(()=>records.push({time:performance.now(),angles:(element as HTMLElement).dataset.jointAngles,pose:(element as HTMLElement).dataset.emitterPose,laser:(element as HTMLElement).dataset.laser,progress:document.querySelector('[aria-label="Route progress"]')?.textContent,statuses:[...document.querySelectorAll('tbody tr')].map(r=>r.lastElementChild?.textContent)})).observe(element,{attributes:true});
  });
- await page.getByLabel('Stand-off (mm)').fill(String(standOffMm));
+ await setStandOff(page,String(standOffMm));
  await page.getByRole('button',{name:'Run',exact:true}).click();
  await expect(page.getByLabel('Route progress')).toContainText('Current point: 2',{timeout:90000});
- await page.screenshot({path:`docs/verification/issue-21-motion-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.png`});
+ await page.screenshot({path:`docs/verification/ribbon-scan-motion-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.png`});
  await expect(page.getByRole('status')).toContainText('Simulation complete',{timeout:125000});
  await expect(page.getByLabel('Route progress')).toContainText('Visited: 5 of 5');
  for(let i=1;i<=5;i++)await expect(page.getByRole('row').nth(i)).toContainText('Visited');
@@ -117,6 +118,6 @@ for(const standOffMm of [100,500])test(`the frozen five actual surface clicks co
   return {id:i+1,order:i+1,partPosition,basePosition:[.9203385949134826-partPosition[1],-2.0353724360466003+partPosition[0],-.367240297+partPosition[2]],baseNormal:(await row.getAttribute('data-base-normal'))!.split(',').map(Number)};
  }));
  const {writeFile}=await import('node:fs/promises');
- await writeFile(`docs/verification/issue-21-browser-route-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.json`,JSON.stringify({standOffMm,clicks,reference,selectedPoints,maxPositionMm,maxOrientationDeg,maxPublishedPoseError,records},null,2)+'\n');
- await page.getByLabel('Route progress').scrollIntoViewIfNeeded();await page.screenshot({path:`docs/verification/issue-21-route-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.png`});
+ await writeFile(`docs/verification/ribbon-scan-browser-route-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.json`,JSON.stringify({standOffMm,clicks,reference,selectedPoints,maxPositionMm,maxOrientationDeg,maxPublishedPoseError,records},null,2)+'\n');
+ await page.getByLabel('Route progress').scrollIntoViewIfNeeded();await page.screenshot({path:`docs/verification/ribbon-scan-route-${standOffMm}${process.env.PREVIEW==='1'?'-production':''}.png`});
 });

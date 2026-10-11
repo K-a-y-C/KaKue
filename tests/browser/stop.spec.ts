@@ -1,8 +1,9 @@
+import {clickScene} from './scene-clicks';
 import {test,expect} from './fixtures';
 
 async function loadPoints(page:import('@playwright/test').Page) {
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
- await page.mouse.click(704,498);await page.mouse.click(712,520);
+ await clickScene(page,704,498);await clickScene(page,712,520);
  await expect(page.getByRole('row')).toHaveCount(3);
 }
 
@@ -53,7 +54,7 @@ test('Stop during transit freezes joints, retains all points and fresh import re
  await expect(page.getByRole('row').nth(2)).toContainText('Not visited');
  await page.waitForTimeout(1200);await expect(canvas).toHaveAttribute('data-joint-angles',frozen!);
  await expect(canvas).toHaveAttribute('data-laser','false');
- await page.mouse.click(704,498);await expect(page.getByRole('row')).toHaveCount(3);
+ await clickScene(page,704,498);await expect(page.getByRole('row')).toHaveCount(3);
  await page.getByLabel('Import STEP').setInputFiles('tests/fixtures/box-mm.step');
  await expect(page.getByRole('status')).toContainText('Scene ready');
  await expect(page.getByRole('row')).toHaveCount(1);await expect(canvas).toHaveAttribute('data-joint-angles',home!);
@@ -137,7 +138,7 @@ test('queued animation callbacks after cancellation or completion cannot touch a
 
 test('laser update and cleanup errors still enter failed with retained selections',async({page})=>{
  test.setTimeout(45000);
- await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');await page.mouse.click(704,498);
+ await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');await clickScene(page,704,498);
  const canvas=page.getByRole('img',{name:'3D robot and door scene'});
  await canvas.evaluate(element=>{
   const dataset=(element as HTMLElement).dataset;
@@ -165,5 +166,5 @@ test('Stop during home return freezes the robot, keeps all visits and suppresses
  await expect(page.getByLabel('Route progress')).toContainText('Visited: 2 of 2');
  for(let i=1;i<=2;i++)await expect(page.getByRole('row').nth(i)).toContainText('Visited');
  await page.waitForTimeout(1200);await expect(canvas).toHaveAttribute('data-joint-angles',frozen!);
- await expect(page.getByRole('button',{name:'Export',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'Export',exact:true})).toBeDisabled();
 });
