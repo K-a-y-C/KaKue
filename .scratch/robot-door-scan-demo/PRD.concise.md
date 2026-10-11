@@ -5,6 +5,10 @@ Status: ready-for-agent · Source version: 1.6 (2026-10-05) · Owner: Kakue
 Concise companion to [PRD.md](PRD.md), which is authoritative and synchronized for the scan-result amendment. Read this file first; consult the full PRD only for additional explanation or ambiguity. Story numbers and specification headings retain the original mapping. Keep both documents synchronized when requirements change; resolve conflicts against the full PRD and correct this companion. Supplied-robot pivots/core correspondence are checked; replacement-door validation and runtime asset preparation remain acceptance gates. Ready-for-agent means specified, not accepted or unblocked.
 
 
+## Approved interface amendment — 2026-10-11
+
+Issue #28 gives the existing workspace a professional CAD software appearance: application menus, workflow tabs, scene tree, compact Run/Stop command bar, inspector and viewport status strip. Modeling commands may be disabled placeholders. Preserve all current import, selection, camera, preparation, scan, Stop, home-return and successful ZIP export behavior, asset identities and physical dimensions. Keep the existing React/TypeScript/Vite/Three.js stack. See [technical plan](../../docs/plans/issue-28.md).
+
 ## Approved scan-result amendment — 2026-10-05
 
 The presenter request in [the implementation plan](../../docs/plans/scan-export-home-platform.md) supersedes older contradictory requirements below:

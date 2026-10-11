@@ -32,18 +32,26 @@ for(const standOffMm of [50,500])test(`${standOffMm} mm is accepted and the rigi
  for(const value of ['49','501','']){await input.fill(value);await expect(run).toBeDisabled();}
  await input.fill(String(standOffMm));await expect(run).toBeEnabled();
  await page.mouse.move(700,450);await page.mouse.wheel(0,-700);
+ // Capture the short endpoint dwell atomically in the browser. Separate protocol
+ // reads can straddle laser-off home return, which restores idle beam dimensions.
+ await canvas.evaluate(element=>{
+  new MutationObserver(()=>{
+   const data=(element as HTMLElement).dataset;
+   if(data.laser==='true'&&data.jointAngles===(window as any).fanPlan?.points[0].angles?.join(','))
+    (window as any).activeFan={...data};
+  }).observe(element,{attributes:true});
+ });
  await run.click();await expect(input).toBeDisabled();
- await expect(canvas).toHaveAttribute('data-laser','true',{timeout:15000});
- await expect(canvas).toHaveAttribute('data-fan-reach-m',String(standOffMm/1000));
- await expect(canvas).toHaveAttribute('data-fan-width-m','0.24');
- await expect(canvas).toHaveAttribute('data-fan-height-m','0.18');
- const corners=JSON.parse((await canvas.getAttribute('data-fan-end-corners-m'))!);
+ await page.waitForFunction(()=>(window as any).activeFan,{},{timeout:15000});
+ const fan=await page.evaluate(()=>(window as any).activeFan as Record<string,string>);
+ expect(fan.laser).toBe('true');expect(fan.fanReachM).toBe(String(standOffMm/1000));
+ expect(fan.fanWidthM).toBe('0.24');expect(fan.fanHeightM).toBe('0.18');
+ const corners=JSON.parse(fan.fanEndCornersM);
  expect(corners).toEqual([[-.12,-.09,standOffMm/1000],[.12,-.09,standOffMm/1000],[.12,.09,standOffMm/1000],[-.12,.09,standOffMm/1000]]);
- await expect(canvas).toHaveAttribute('data-fan-rays','117');
- await page.waitForFunction(()=>document.querySelector('canvas')?.getAttribute('data-joint-angles')===(window as any).fanPlan?.points[0].angles?.join(','));
+ expect(fan.fanRays).toBe('117');
  const mode=process.env.PREVIEW==='1'?'-production':'';
  const {writeFile}=await import('node:fs/promises');
- await writeFile(`docs/verification/laser-volume-${standOffMm}${mode}.json`,JSON.stringify({standOffMm,cornersM:corners,widthM:Number(await canvas.getAttribute('data-fan-width-m')),heightM:Number(await canvas.getAttribute('data-fan-height-m')),rays:Number(await canvas.getAttribute('data-fan-rays')),emitterPose:(await canvas.getAttribute('data-emitter-pose'))!.split(',').map(Number),angles:(await canvas.getAttribute('data-joint-angles'))!.split(',').map(Number)},null,2)+'\n');
+ await writeFile(`docs/verification/laser-volume-${standOffMm}${mode}.json`,JSON.stringify({standOffMm,cornersM:corners,widthM:Number(fan.fanWidthM),heightM:Number(fan.fanHeightM),rays:Number(fan.fanRays),emitterPose:fan.emitterPose.split(',').map(Number),angles:fan.jointAngles.split(',').map(Number)},null,2)+'\n');
  await page.screenshot({path:`docs/verification/laser-volume-${standOffMm}${mode}.png`});
  await expect(page.getByRole('status')).toContainText('Simulation complete',{timeout:45000});
  await expect(canvas).toHaveAttribute('data-laser','false');

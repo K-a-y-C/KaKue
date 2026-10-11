@@ -6,6 +6,10 @@ Owner: Kakue
 Readiness: complete implementation specification. Supplied-robot pivot and core-link correspondence have been checked; the replacement door STEP is supplied, and door geometry validation and final runtime asset preparation remain acceptance gates.
 
 
+## Approved interface amendment — 2026-10-11
+
+Issue #28 gives the existing workspace a professional CAD software appearance: application menus, workflow tabs, scene tree, compact Run/Stop command bar, inspector and viewport status strip. Modeling commands may be disabled placeholders. Preserve all current import, selection, camera, preparation, scan, Stop, home-return and successful ZIP export behavior, asset identities and physical dimensions. Keep the existing React/TypeScript/Vite/Three.js stack. See [technical plan](../../docs/plans/issue-28.md).
+
 ## Approved scan-result amendment — 2026-10-05
 
 The presenter request in [the implementation plan](../../docs/plans/scan-export-home-platform.md) supersedes older contradictory requirements below:
