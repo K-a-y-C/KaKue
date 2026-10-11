@@ -6,7 +6,7 @@ test('fresh application waits for CAD import before showing any scene or scan co
  await expect(page).toHaveTitle('KaKue Scan Studio');
  await expect(page.getByRole('img',{name:'3D robot and door scene'})).toHaveCount(0);
  await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
- await expect(page.getByRole('img',{name:'KaKue Automation'})).toBeVisible();
+ await expect(page.locator('.title-bar').getByRole('img',{name:'KaKue Automation'})).toBeVisible();
  await expect(page.getByText('No model open',{exact:true})).toBeVisible();
  await expect(page.getByLabel('Import STEP')).toBeEnabled();
  await page.waitForTimeout(350);expect(cadRequests).toEqual([]);
@@ -19,7 +19,7 @@ test('imported actual CAD opens a branded inspection workspace with the selected
  await page.getByLabel('Import STEP').setInputFiles({name:'Presenter door.stp',mimeType:'application/octet-stream',buffer:source});
  await expect(page.getByRole('status')).toContainText('Scene ready');
  await expect(page.getByText('No model open',{exact:true})).toHaveCount(0);
- await expect(page.getByText('Presenter door.stp',{exact:true})).toBeVisible();
+ await expect(page.locator('.document-strip').getByText('Presenter door.stp — 3D view',{exact:true})).toBeVisible();
  const canvas=page.getByRole('img',{name:'3D robot and door scene'});
  await expect.poll(async()=>{const box=await canvas.boundingBox();return {y:Math.round(box!.y),width:Math.round(box!.width),height:Math.round(box!.height)};}).toEqual({y:188,width:948,height:688});
  expect(requests.some(url=>url.endsWith('DOOR-of-CAR.step'))).toBe(false);
@@ -33,7 +33,7 @@ test('invalid first imports stay on the import screen and another STEP opens onl
  await expect(page.getByRole('alert')).toContainText('CATPart is not supported');await expect(page.getByRole('img',{name:'3D robot and door scene'})).toHaveCount(0);
  await page.getByLabel('Import STEP').setInputFiles({name:'malformed.step',mimeType:'application/octet-stream',buffer:Buffer.from('not a STEP model')});await expect(page.getByRole('alert')).toBeVisible();await expect(page.getByRole('img',{name:'3D robot and door scene'})).toHaveCount(0);
  await page.getByLabel('Import STEP').setInputFiles('tests/fixtures/box-mm.step');await expect(page.getByRole('status')).toContainText('Scene ready');
- await expect(page.getByText('box-mm.step',{exact:true})).toBeVisible();await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
+ await expect(page.locator('.document-strip').getByText('box-mm.step — 3D view', {exact:true})).toBeVisible();await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
  expect(requests.some(url=>url.endsWith('/door/door.glb')||url.endsWith('DOOR-of-CAR.step'))).toBe(false);
  await page.reload();await expect(page.getByText('No model open',{exact:true})).toBeVisible();await expect(page.getByRole('img',{name:'3D robot and door scene'})).toHaveCount(0);await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
 });
@@ -45,6 +45,6 @@ test('a later first import owns the workspace even if old cache loading finishes
  await started;await expect(page.getByText('Preparing your workspace',{exact:true})).toBeVisible();
  await page.getByLabel('Import STEP').setInputFiles('tests/fixtures/box-mm.step');
  try{await expect(page.getByRole('status')).toContainText('Scene ready',{timeout:20000});}finally{release();}
- await page.waitForTimeout(500);await expect(page.getByText('box-mm.step',{exact:true})).toBeVisible();await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
+ await page.waitForTimeout(500);await expect(page.locator('.document-strip').getByText('box-mm.step — 3D view', {exact:true})).toBeVisible();await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
  await expect(page.getByRole('alert')).toHaveCount(0);
 });

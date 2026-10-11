@@ -152,13 +152,6 @@ dd {
   font-size:12px
 }
 
-.active-filename {
-  color:#a7a7a7;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap
-}
-
 .quick-access {
   display:flex;
   margin-left:auto
@@ -209,6 +202,22 @@ dd {
   background:#2d2d2d;
   flex-shrink:0;
   border-bottom:1px solid #484848
+}
+
+.ribbon-brand {
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden
+}
+
+.ribbon-brand img {
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto
 }
 
 .ribbon-group {
