@@ -47,7 +47,7 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   let publishPart: (part: THREE.Group, asset: PartAsset) => void = () => {};
   const clearPart = () => { partReady=false; selection?.clear(); if (currentPart) { scene.remove(currentPart); disposeObject(currentPart); currentPart = undefined; } };
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#3a3a3a');
+  scene.background = new THREE.Color('#004097');
   let renderer: THREE.WebGLRenderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
   catch { fail('WebGL2 is required to display this scene. Use a desktop browser with hardware acceleration enabled, then reload.'); return { clearPart() {}, replacePart() {}, setSelectionEnabled() {}, setJoints() {}, setLaser() {}, dispose() {} }; }

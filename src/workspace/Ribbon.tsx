@@ -1,5 +1,6 @@
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {ToolIcon,commandIcon} from './Chrome';
+import logo from '../assets/logo.jpeg';
 export function CommandButton({label,icon=commandIcon(label),large=false,disabled=false,onClick,active=false,preview}:{label:string;icon?:Parameters<typeof ToolIcon>[0]['name'];large?:boolean;disabled?:boolean;onClick?:()=>void;active?:boolean;preview?:(label:string)=>void}) {
  return <button aria-label={label} className={`command ${large?'large':''}`} disabled={disabled} onClick={preview?()=>preview(label):onClick} aria-pressed={active||undefined} title={preview?`${label} · Preview command`:label}><ToolIcon name={icon}/><span>{label}</span></button>;
 }
@@ -25,6 +26,7 @@ export function ScanRibbon({onImport,importLocked,onRun,runDisabled,onStop,stopD
  <RibbonGroup name="Sequence"><CommandButton label="Run" icon="play" large onClick={onRun} disabled={runDisabled}/><CommandButton label="Stop" icon="stop" large onClick={onStop} disabled={stopDisabled}/><div className="command-stack">{['Route options','Validate route'].map(label=><CommandButton key={label} label={label} preview={preview}/>)}</div></RibbonGroup>
  <RibbonGroup name="Output">{output}<div className="command-stack">{['Point cloud','Coordinates','Report'].map(label=><CommandButton key={label} label={label} preview={preview} icon="grid"/>)}</div></RibbonGroup>
  </>:Object.entries(previewTabs[tab]).map(([group,commands])=><RibbonGroup key={group} name={group}>{commands.map(label=><CommandButton key={label} label={label} large preview={preview}/>)}</RibbonGroup>)}
+ {tab==='Scan'&&<div className="ribbon-brand"><img src={logo} alt="KaKue Automation"/></div>}
  </section></>;
 }
 

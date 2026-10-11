@@ -7,7 +7,7 @@ test('operator imports STEP at its physical size and starts at demo home', async
   await page.getByLabel('Import STEP').setInputFiles(box);
   await expect(page.getByRole('status')).toHaveText('Loading model…');
   await expect(page.getByRole('status')).toContainText('Scene ready', { timeout: 20000 });
-  await expect(page.getByText('box-mm.step', { exact: true })).toBeVisible();
+  await expect(page.locator('.document-strip').getByText('box-mm.step — 3D view', {exact:true})).toBeVisible();
   await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
   await expect(page.locator('dl')).toContainText('900.0, 0.0, 800.0 mm');
 });
@@ -77,7 +77,7 @@ test('replacement rejects stale callbacks and reload returns to import before a 
   await page.getByLabel('Import STEP').setInputFiles(box);
   await page.getByLabel('Import STEP').setInputFiles(resolve('tests/fixtures/box-inch.STP'));
   await expect(page.getByRole('status')).toContainText('Scene ready', { timeout: 20000 });
-  await expect(page.getByText('box-inch.STP', { exact: true })).toBeVisible();
+  await expect(page.locator('.document-strip').getByText('box-inch.STP — 3D view', {exact:true})).toBeVisible();
   await page.waitForTimeout(1700);
   await expect(page.getByRole('alert')).toHaveCount(0);
   await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
@@ -86,7 +86,7 @@ test('replacement rejects stale callbacks and reload returns to import before a 
   await expect(page.getByText('No model open',{exact:true})).toBeVisible();
   await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');
   await expect(page.getByRole('status')).toContainText('Scene ready');
-  await expect(page.getByText('DOOR-of-CAR.step', { exact: true })).toBeVisible();
+  await expect(page.locator('.document-strip').getByText('DOOR-of-CAR.step — 3D view', {exact:true})).toBeVisible();
   await expect(page.locator('dl')).toContainText('1212.5 × 1116.1 mm');
 });
 
@@ -95,7 +95,7 @@ test('unsupported CATPart preserves the current part and permits another import'
   await expect(page.getByRole('status')).toContainText('Scene ready');
   await page.getByLabel('Import STEP').setInputFiles({ name: 'door.CATPart', mimeType: 'application/octet-stream', buffer: Buffer.from('unsupported') });
   await expect(page.getByRole('alert')).toContainText('CATPart is not supported');
-  await expect(page.getByText('DOOR-of-CAR.step', { exact: true })).toBeVisible();
+  await expect(page.locator('.document-strip').getByText('DOOR-of-CAR.step — 3D view', {exact:true})).toBeVisible();
   await expect(page.locator('dl')).toContainText('1212.5 × 1116.1 mm');
   await page.getByLabel('Import STEP').setInputFiles(box);
   await expect(page.getByRole('status')).toContainText('Scene ready');
@@ -251,7 +251,7 @@ test('production import serves worker, parser, WASM and exact STEP from same ori
   await expect(page.getByRole('status')).toContainText('Scene ready');
   await page.getByLabel('Import STEP').setInputFiles(resolve('tests/fixtures/box-inch.STP'));
   await expect(page.getByRole('status')).toContainText('Scene ready');
-  await expect(page.getByText('box-inch.STP', { exact: true })).toBeVisible();
+  await expect(page.locator('.document-strip').getByText('box-inch.STP — 3D view', {exact:true})).toBeVisible();
   await expect(page.locator('dl')).toContainText('100.0 × 300.0 mm');
   expect(workers.length).toBe(1);
   const origin = new URL(page.url()).origin;
