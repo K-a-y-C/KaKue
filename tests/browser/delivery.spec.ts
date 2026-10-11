@@ -1,6 +1,7 @@
+import {clickScene,moveScene} from './scene-clicks';
 import {test,expect} from './fixtures';
 import {writeFile} from 'node:fs/promises';
-const evidencePrefix=process.env.EVIDENCE_PREFIX??'issue-10';
+const evidencePrefix=process.env.EVIDENCE_PREFIX??'ribbon';
 
 test('production import and pose preparation resolve local workers/WASM and record actual transfer sizes',async({page})=>{
  test.skip(process.env.PREVIEW!=='1','Static-production delivery gate.');test.setTimeout(90000);
@@ -16,11 +17,11 @@ test('production import and pose preparation resolve local workers/WASM and reco
  const importStart=await page.evaluate(()=>performance.now());
  await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');
  await expect(page.getByRole('status')).toContainText('Loading model');
- await page.mouse.move(460,380);await page.mouse.down();await page.mouse.move(510,410);await page.mouse.up();
+ await moveScene(page,460,380);await page.mouse.down();await moveScene(page,510,410);await page.mouse.up();
  await expect(page.getByRole('status')).toContainText('Scene ready',{timeout:45000});
  const importEnd=await page.evaluate(()=>performance.now());
  // A fresh import fits the initial camera; actual supplied surface click remains valid.
- await page.mouse.click(704,498);await expect(page.getByRole('row')).toHaveCount(2);
+ await clickScene(page,704,498);await expect(page.getByRole('row')).toHaveCount(2);
  await page.getByRole('button',{name:'Run',exact:true}).click();await expect(page.getByRole('row').nth(1)).toContainText('Moving');
  await page.getByRole('button',{name:'Stop',exact:true}).click();await expect(page.getByRole('status')).toContainText('Simulation stopped');
  const origin=new URL(page.url()).origin;expect(failures).toEqual([]);
@@ -39,17 +40,18 @@ for(const size of [{width:1280,height:800},{width:1440,height:900}])test(`produc
  test.skip(process.env.PREVIEW!=='1','Static-production layout gate.');test.setTimeout(90000);
  await page.setViewportSize(size);await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
  const canvas=page.getByRole('img',{name:'3D robot and door scene'}),bounds=await canvas.boundingBox();
- expect(bounds!.width/size.width).toBeGreaterThan(.75);expect(bounds!.height).toBeGreaterThan(500);
- await expect(page.getByLabel('Import STEP')).toBeVisible();await page.getByRole('button',{name:'Run',exact:true}).scrollIntoViewIfNeeded();
- await page.setViewportSize({width:1440,height:900});await expect.poll(async()=>{const box=await canvas.boundingBox();return {width:Math.round(box!.width),height:Math.round(box!.height)};}).toEqual({width:1130,height:790});await page.mouse.click(704,498);await page.mouse.click(712,520);
+ expect(bounds!.width/size.width).toBeGreaterThan(.6);expect(bounds!.height).toBeGreaterThan(500);
+ await expect(page.getByRole('button',{name:'Import CAD',exact:true})).toBeVisible();await page.getByRole('button',{name:'Run',exact:true}).scrollIntoViewIfNeeded();
+ await expect.poll(async()=>{const box=await canvas.boundingBox();return {width:Math.round(box!.width),height:Math.round(box!.height)};}).toEqual({width:size.width-492,height:size.height-212});await clickScene(page,704,498);await clickScene(page,712,520);
  await page.getByRole('button',{name:'Run',exact:true}).click();await expect(page.getByRole('row').nth(1)).toContainText('Moving');
+ await page.setViewportSize(size);await page.screenshot({path:`docs/verification/ribbon-running-${size.width}-production.png`});
  await expect(page.getByRole('status')).toContainText('Simulation complete',{timeout:60000});
  await page.setViewportSize(size);
- await expect.poll(async()=>Math.round((await canvas.boundingBox())!.height)).toBe(size.height-110);
+ await expect.poll(async()=>Math.round((await canvas.boundingBox())!.height)).toBe(size.height-212);
  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
  for(const name of ['Export']){
   const button=page.getByRole('button',{name,exact:true});await button.scrollIntoViewIfNeeded();await expect(button).toBeVisible();
-  const box=await button.boundingBox();expect(box!.x).toBeGreaterThanOrEqual(size.width-310);expect(box!.x+box!.width).toBeLessThanOrEqual(size.width);expect(box!.height).toBeGreaterThanOrEqual(32);
+  const box=await button.boundingBox();expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.y).toBeGreaterThanOrEqual(58);expect(box!.y+box!.height).toBeLessThanOrEqual(162);expect(box!.x+box!.width).toBeLessThanOrEqual(size.width);expect(box!.height).toBeGreaterThanOrEqual(32);
  }
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:`docs/verification/${evidencePrefix}-layout-${size.width}x${size.height}.png`});
@@ -72,8 +74,8 @@ for(const size of [{width:1440,height:900},{width:1280,height:800}])test(`hardwa
  });
  expect(graphics.renderer).not.toMatch(/swiftshader|software|llvmpipe|unavailable/i);
  const clicks=[[681.160927,480.122642],[681.219904,506.444347],[680.244766,523.942241],[761.506759,575.148953],[764.290822,528.705958]];
- for(const [x,y] of clicks)await page.mouse.click(x,y);await expect(page.getByRole('row')).toHaveCount(6);
- await page.setViewportSize(size);await expect.poll(async()=>Math.round((await canvas.boundingBox())!.height)).toBe(size.height-110);
+ for(const [x,y] of clicks)await clickScene(page,x,y);await expect(page.getByRole('row')).toHaveCount(6);
+ await page.setViewportSize(size);await expect.poll(async()=>Math.round((await canvas.boundingBox())!.height)).toBe(size.height-212);
  await page.getByRole('button',{name:'Run',exact:true}).click();
  await expect(page.getByRole('status')).toContainText('Simulation complete',{timeout:125000});await expect(page.getByLabel('Route progress')).toContainText('Visited: 5 of 5');
  const frames=await page.evaluate(()=>(window as any).presenterFrames as number[]);expect(frames.length).toBeGreaterThan(30);
@@ -92,10 +94,10 @@ test('hardware production five-point preparation keeps camera and animation resp
  await page.addInitScript(()=>{(window as any).preparationFrames=[];const frame=(time:number)=>{if(document.querySelector('[role="status"]')?.textContent?.includes('Preparing scanner poses'))(window as any).preparationFrames.push(time);requestAnimationFrame(frame);};requestAnimationFrame(frame);});
  await page.goto('./');await page.bringToFront();await expect(page.getByRole('status')).toContainText('Scene ready');
  const canvas=page.getByRole('img',{name:'3D robot and door scene'});
- for(const [x,y] of [[681.160927,480.122642],[681.219904,506.444347],[680.244766,523.942241],[761.506759,575.148953],[764.290822,528.705958]])await page.mouse.click(x,y);
+ for(const [x,y] of [[681.160927,480.122642],[681.219904,506.444347],[680.244766,523.942241],[761.506759,575.148953],[764.290822,528.705958]])await clickScene(page,x,y);
  const beforeCamera=await canvas.screenshot();await page.getByRole('button',{name:'Run',exact:true}).click();
  await expect(page.getByRole('status')).toContainText('Preparing scanner poses');
- await page.mouse.move(440,350);await page.mouse.down();await page.mouse.move(480,375,{steps:5});await page.mouse.up();await page.waitForTimeout(150);
+ await moveScene(page,440,350);await page.mouse.down();await moveScene(page,480,375,{steps:5});await page.mouse.up();await page.waitForTimeout(150);
  await expect(page.getByRole('status')).toContainText('Preparing scanner poses');
  const afterCamera=await canvas.screenshot();expect(afterCamera.equals(beforeCamera)).toBe(false);await expect(page.getByRole('row')).toHaveCount(6);
  await expect(canvas).toHaveAttribute('data-laser','true',{timeout:45000});

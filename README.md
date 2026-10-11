@@ -6,13 +6,15 @@ KaKue is a desktop web demonstration of selecting scan locations on an automotiv
 
 ## CAD workspace appearance
 
-[Issue #28](https://github.com/K-a-y-C/KaKue/issues/28) adds a desktop CAD-style shell: File/Edit/View/Tools/Help menus, workflow tabs, scene assembly tree, Run/Stop command bar, inspector and viewport status strip. Scan planning is the active workspace. Additional modeling/menu commands are visibly disabled placeholders; menus close with Escape or an outside click. Import CAD, surface picking, camera gestures, stand-off, scan motion, Stop, home return and successful ZIP Export retain their existing behavior. The React/TypeScript/Vite/Three.js stack and dependency lockfile are unchanged.
+[Issue #30](https://github.com/K-a-y-C/KaKue/issues/30) implements the dark desktop ribbon redesign: a compact KaKue title strip, selectable workflow tabs, grouped Scan commands, searchable docked project outline, Properties/Scan data panes, document strip and full-width simulation status bar. The empty workspace offers Import CAD before any scene or worker loads. Set stand-off opens an Apply/Cancel editor for 50–500 mm. Import, surface picking, camera gestures, Run, Stop, home return and successful ZIP Export retain their existing behavior.
 
-See the [technical plan](docs/plans/issue-28.md), [verification](docs/verification/issue-28.md) and [handoff](docs/handoffs/issue-28.md) for this visual slice.
+Additional CAD tools are enabled **preview commands**: activation shows a three-second status message and cannot edit geometry, selections, settings or robot motion. Their tooltips identify them as previews. No native packaging, CAD editing, persistence, backend or new dependency is included. The pinned React/TypeScript/Vite/direct Three.js stack and lockfile are unchanged.
+
+See the [technical implementation plan](docs/plans/desktop-cad-ribbon-implementation.md), [visual specification](docs/plans/desktop-cad-ribbon-redesign.md), [verification](docs/verification/desktop-cad-ribbon.md) and [handoff](docs/handoffs/desktop-cad-ribbon.md).
 
 ## Intended workflow
 
-1. Open the branded welcome screen, then import a genuine STEP file locally to create the workspace.
+1. Open the empty desktop workspace, then use Import CAD to import a genuine STEP file locally.
 2. Orbit, pan, and zoom; click the door surface to append numbered points and coordinates.
 3. Choose a scanner stand-off from 50–500 mm and press Run.
 4. Preflight every target against the verified robot chain and joint limits. When all targets pass, scan the ordered route continuously with surface-facing motion, progress and endpoint dwells.
@@ -193,7 +195,7 @@ The wrist-mounted projection now has a filled rectangular end and visible depth.
 
 ### Branded import-first workspace
 
-The application starts with the supplied KaKue Automation logo and a CAD import screen. No robot, door, scan controls, CAD asset requests or parser workers appear before choosing a valid model. Successful import opens a compact application header/document toolbar, full 3D viewport and structured scan inspector. Invalid first imports leave the welcome screen available for retry; reload returns to that screen. Model properties are expandable, and the empty selection state explains how to start. The original supplied Logo.jpeg is copied unchanged into src/assets/logo.jpeg and served locally.
+The application starts with the supplied KaKue Automation logo and the empty desktop workspace. Real scan commands are disabled and no robot, door, CAD asset requests or parser workers load before choosing a valid model. Successful import fills the docked panes and central 3D viewport. Invalid first imports leave Import CAD available for retry; reload returns to the empty workspace. Model properties are expandable, and the empty data table states that no surface points are selected. The original supplied Logo.jpeg is copied unchanged into src/assets/logo.jpeg and served locally.
 
 [Technical plan](docs/plans/import-first-workspace.md), [verification](docs/verification/import-first-workspace.md), [handoff](docs/handoffs/import-first-workspace.md). The approved source geometry, camera/placement, rectangular laser, Run/Stop and selected-point download contracts remain unchanged. Generic imported parts retain fixed placement and do not imply arbitrary-part reachability.
 

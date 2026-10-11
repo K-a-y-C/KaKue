@@ -1,3 +1,4 @@
+import {CommandButton} from '../workspace/Ribbon';
 import { useMemo, useEffect, useRef, useState } from 'react';
 import type { PartAsset } from '../import/types';
 import type { RunPlan } from '../motion/preflight';
@@ -61,11 +62,6 @@ export function DownloadControls({ part, points, statuses, plan, standOffMm, out
     } finally { setSaving(false); }
   };
 
-  return <section aria-label="Scan export">
-    <h3>Scan export</h3>
-    {(captured.error || downloadError) && <p role="alert">{captured.error || downloadError}</p>}
-    <p>Point cloud (PLY) and Coordinates (CSV) in one ZIP file.</p>
-    <button disabled={!snapshot || points.length === 0 || saving} onClick={() => void save()}>{saving?'Preparing export…':'Export'}</button>
-    <p>Simulated point cloud and coordinates · Robot-base · mm</p>
-  </section>;
+  return <div className="ribbon-export"><CommandButton label={saving?'Preparing export…':'Export'} icon="export" large disabled={!snapshot||points.length===0||saving} onClick={()=>void save()}/>{(captured.error||downloadError)&&<p role="alert">{captured.error||downloadError}</p>}</div>;
+
 }

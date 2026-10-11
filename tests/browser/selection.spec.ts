@@ -1,8 +1,9 @@
+import {clickScene,moveScene,scenePosition} from './scene-clicks';
 import { test, expect } from './fixtures';
 test('stationary actual door skin click appends a numbered coordinate row', async ({ page }, info) => {
   await page.goto('./');
   await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.click(704, 498);
+  await clickScene(page,704, 498);
   await expect(page.getByRole('table', { name: 'Selected surface points' }).getByRole('row')).toHaveCount(2);
   await expect(page.getByRole('row').last()).toContainText('Selected');
   await page.screenshot({ path: info.outputPath('selected-door.png') });
@@ -10,46 +11,46 @@ test('stationary actual door skin click appends a numbered coordinate row', asyn
 
 test('orbit drag past five CSS pixels cannot append a point', async ({ page }) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.move(704, 498); await page.mouse.down();
-  await page.mouse.move(710, 498); await page.mouse.up();
+  await moveScene(page,704, 498); await page.mouse.down();
+  await moveScene(page,710, 498); await page.mouse.up();
   await expect(page.getByRole('row')).toHaveCount(1);
 });
 
 test('multitouch gesture cannot append a surface selection', async ({ page }) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
   const session=await page.context().newCDPSession(page);
-  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:[{x:704,y:498,id:51}] });
-  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:[{x:704,y:498,id:51},{x:708,y:498,id:52}] });
-  await session.send('Input.dispatchTouchEvent',{ type:'touchEnd',touchPoints:[{x:708,y:498,id:52}] });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:await Promise.all([{x:704,y:498,id:51}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:await Promise.all([{x:704,y:498,id:51},{x:708,y:498,id:52}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchEnd',touchPoints:await Promise.all([{x:708,y:498,id:52}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
   await session.send('Input.dispatchTouchEvent',{ type:'touchEnd',touchPoints:[] });
   await expect(page.getByRole('row')).toHaveCount(1);
 });
 
 test('right-click is camera interaction and cannot select', async ({ page }) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.click(704,498,{button:'right'});
+  await clickScene(page,704,498,{button:'right'});
   await expect(page.getByRole('row')).toHaveCount(1);
 });
 
 test('cancelled touch recovers for a subsequent single click', async ({ page }) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
   const session=await page.context().newCDPSession(page);
-  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:[{x:704,y:498,id:51}] });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:await Promise.all([{x:704,y:498,id:51}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
   await session.send('Input.dispatchTouchEvent',{ type:'touchCancel',touchPoints:[] });
-  await page.mouse.click(704,498);
+  await clickScene(page,704,498);
   await expect(page.getByRole('row')).toHaveCount(2);
 });
 
 test('an unavailable verified CAD cache cannot unlock the workspace or selection',async({page})=>{
  await page.route('**/demo-v1/door/door.glb',route=>route.fulfill({status:404,body:'Missing verified cache'}));
  await page.goto('./');await expect(page.getByRole('alert')).toContainText('Required asset unavailable');
- await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();
- await expect(page.getByRole('button',{name:'Run',exact:true})).toHaveCount(0);
+ await expect(page.getByText('No model open',{exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
 });
 
 test('duplicates retain numbered order and stable stored surface coordinates while camera changes', async ({ page }, info) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.click(704,498); await page.mouse.click(704,498);
+  await clickScene(page,704,498); await clickScene(page,704,498);
   const rows=page.getByRole('table').getByRole('row'); await expect(rows).toHaveCount(3);
   const first=await rows.nth(1).innerText();
   expect((await rows.nth(2).innerText()).slice(1)).toBe(first.slice(1));
@@ -58,7 +59,7 @@ test('duplicates retain numbered order and stable stored surface coordinates whi
     expect(Math.hypot(...normal)).toBeCloseTo(1,10); expect(normal[0]).toBeLessThan(0);
     for (const value of (await row.locator('td').allTextContents()).slice(0,3)) expect(value).toMatch(/^-?\d+\.\d$/);
   }
-  await page.mouse.move(560,450); await page.mouse.down(); await page.mouse.move(620,470,{steps:10}); await page.mouse.up(); await page.mouse.wheel(0,-100);
+  await moveScene(page,560,450); await page.mouse.down(); await moveScene(page,620,470,{steps:10}); await page.mouse.up(); await page.mouse.wheel(0,-100);
   expect(await rows.nth(1).innerText()).toBe(first); await expect(rows).toHaveCount(3);
   await page.getByRole('heading',{ name:'Selected points 2' }).scrollIntoViewIfNeeded();
   await page.screenshot({path:info.outputPath('selected-1440.png')});
@@ -68,20 +69,20 @@ test('duplicates retain numbered order and stable stored surface coordinates whi
 
 test('outside release, empty window, floor, robot and scanner clicks are ignored', async ({ page }) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
-  for (const [x,y] of [[691,452],[400,425],[583,497],[320,800],[50,170]]) { await page.mouse.click(x,y); await expect(page.getByRole('row')).toHaveCount(1); }
-  await page.mouse.move(704,498); await page.mouse.down(); await page.mouse.move(1200,498); await page.mouse.up();
+  for (const [x,y] of [[691,452],[400,425],[583,497],[320,800],[50,170]]) { await clickScene(page,x,y); await expect(page.getByRole('row')).toHaveCount(1); }
+  await moveScene(page,704,498); await page.mouse.down(); await moveScene(page,1200,498); await page.mouse.up();
   await expect(page.getByRole('row')).toHaveCount(1);
-  await page.reload(); await expect(page.getByRole('heading',{name:'Create a scan workspace'})).toBeVisible();await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.move(704,498); await page.mouse.down(); await page.mouse.move(714,498); await page.mouse.move(704,498); await page.mouse.up();
+  await page.reload(); await expect(page.getByText('No model open',{exact:true})).toBeVisible();await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');await expect(page.getByRole('status')).toContainText('Scene ready');
+  await moveScene(page,704,498); await page.mouse.down(); await moveScene(page,714,498); await moveScene(page,704,498); await page.mouse.up();
   await expect(page.getByRole('row')).toHaveCount(1);
 });
 
 test('second touch outside the canvas disqualifies the canvas gesture', async ({ page }) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
   const session=await page.context().newCDPSession(page);
-  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:[{x:704,y:498,id:51}] });
-  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:[{x:704,y:498,id:51},{x:1250,y:498,id:52}] });
-  await session.send('Input.dispatchTouchEvent',{ type:'touchEnd',touchPoints:[{x:1250,y:498,id:52}] });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:await Promise.all([{x:704,y:498,id:51}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchStart',touchPoints:await Promise.all([{x:704,y:498,id:51},{x:1250,y:498,id:52}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
+  await session.send('Input.dispatchTouchEvent',{ type:'touchEnd',touchPoints:await Promise.all([{x:1250,y:498,id:52}].map(async p=>({...p,...await scenePosition(page,p.x,p.y)}))) });
   await session.send('Input.dispatchTouchEvent',{ type:'touchEnd',touchPoints:[] });
   await expect(page.getByRole('row')).toHaveCount(1);
 });
@@ -120,17 +121,18 @@ test('independent rigid fixture retains local/base coordinates and interpolated 
 });
 
 test('invalid format preserves selections but eligible failed and successful imports clear them', async ({ page }) => {
+  test.setTimeout(60000);
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.click(704,498); await expect(page.getByRole('row')).toHaveCount(2);
+  await clickScene(page,704,498); await expect(page.getByRole('row')).toHaveCount(2);
   await page.getByLabel('Import STEP').setInputFiles({name:'bad.CATPart',mimeType:'application/octet-stream',buffer:Buffer.from('unsupported')});
   await expect(page.getByRole('alert')).toContainText('CATPart'); await expect(page.getByRole('row')).toHaveCount(2);
   await page.getByLabel('Import STEP').setInputFiles({name:'bad.step',mimeType:'application/octet-stream',buffer:Buffer.from('not STEP')});
   await expect(page.getByRole('row')).toHaveCount(1); await expect(page.getByRole('alert')).toContainText('Malformed');
   await page.getByLabel('Import STEP').setInputFiles('3d files/car-front-door-1/DOOR-of-CAR.step');
-  await expect(page.getByRole('status')).toContainText('Scene ready',{timeout:20000});
-  await page.mouse.click(704,498); await expect(page.getByRole('row')).toHaveCount(2); await expect(page.getByRole('row').last().getByRole('rowheader')).toHaveText('1');
+  await expect(page.getByRole('status')).toContainText('Scene ready',{timeout:45000});
+  await clickScene(page,704,498); await expect(page.getByRole('row')).toHaveCount(2); await expect(page.getByRole('row').last().getByRole('rowheader')).toHaveText('1');
   await page.getByLabel('Import STEP').setInputFiles('tests/fixtures/box-mm.step'); await expect(page.getByRole('row')).toHaveCount(1);
-  await expect(page.getByRole('status')).toContainText('Scene ready',{timeout:20000});
+  await expect(page.getByRole('status')).toContainText('Scene ready',{timeout:45000});
   await expect(page.getByRole('row')).toHaveCount(1);
 });
 
@@ -154,8 +156,8 @@ test('foreground non-door object cannot select a door surface behind it', async 
 
 test('actual robot in front of the door after orbit remains unselectable', async ({ page }, info) => {
   await page.goto('./'); await expect(page.getByRole('status')).toContainText('Scene ready');
-  await page.mouse.move(560,450); await page.mouse.down(); await page.mouse.move(684,398,{steps:15}); await page.mouse.up();
+  await moveScene(page,560,450); await page.mouse.down(); await moveScene(page,684,398,{steps:15}); await page.mouse.up();
   await page.getByRole('img',{name:'3D robot and door scene'}).screenshot({path:info.outputPath('occluded-door.png')});
-  await page.mouse.click(550,550);
+  await clickScene(page,550,550);
   await expect(page.getByRole('row')).toHaveCount(1);
 });

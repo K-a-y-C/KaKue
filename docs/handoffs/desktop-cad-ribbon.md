@@ -1,0 +1,9 @@
+# Issue #30 — desktop CAD ribbon handoff
+
+The user approved the attached redesign, implementation, TDD, local commits and a review PR. Baseline main is 5d0f941 (merged #28/PR #29); existing #21 and scan/export/home-return deliverables were inspected.
+
+The visual slice retains React 19.3.0, TypeScript 5.9.3, Vite 8.3.2, direct Three.js 0.186.1, local workers/WASM and the dependency lockfile. Ribbon.tsx owns workflow/menu presentation; Chrome.tsx owns local SVGs and searchable/collapsible/selectable project rows. StandOffEditor holds only an uncommitted draft; Apply updates App's existing committed stand-off. App retains source/points/lifecycle and passes existing Import/Run/Stop callbacks. DownloadControls renders its unchanged snapshot/ZIP action in Output. Preview commands only change transient status text. Stop remains accessible on other workflow tabs during preparation/running.
+
+The viewport is docked between 220/270 px panes with one-pixel separators, below the document tab. Its existing ResizeObserver updates rendering/camera aspect. Camera pose, supplied geometry, placement, mount, joints, picking, motion and export serializers stay unchanged. Scene edits only adjust background/floor/grid colors. Browser hit fixtures reproject independently recorded original surface locations using unchanged vertical FOV and actual canvas dimensions; five-point reference coordinates still pass.
+
+Read the [technical plan](../plans/desktop-cad-ribbon-implementation.md) and [verification](../verification/desktop-cad-ribbon.md) for sequential red/green evidence, checks and screenshots. Source assets must continue to match the supplied STEP identities. Added modeling/view/robot/project commands remain previews; no follow-on CAD editing, native packaging or persistence is implemented. Review and merge remain the user's step. No new Safari or presenter-hardware FPS acceptance is claimed.
