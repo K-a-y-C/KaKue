@@ -14,6 +14,8 @@ See the [technical implementation plan](docs/plans/desktop-cad-ribbon-implementa
 
 [Issue #32](https://github.com/K-a-y-C/KaKue/issues/32) applies the three screenshot branding amendments: `KaKue scan studio` with no title-strip filename, the supplied logo in the unused ribbon rectangle, and the logo's company blue in the 3D background. See its [plan](docs/plans/issue-32.md), [verification](docs/verification/issue-32.md) and [handoff](docs/handoffs/issue-32.md).
 
+The 3D viewport grid extends beyond the solid base and follows camera inspection without a square boundary. The original solid platform stays the same size; the company-blue background remains visible between grid lines outside it. See [grid verification and handoff](docs/verification/infinite-grid.md).
+
 ## Intended workflow
 
 1. Open the empty desktop workspace, then use Import CAD to import a genuine STEP file locally.

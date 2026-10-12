@@ -6,6 +6,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { robotDefinition } from '../robot/definition';
 import { forwardKinematics } from '../robot/forward-kinematics';
 import manifest from '../../assets/demo/manifest.json';
+import { infiniteGrid } from './infinite-grid';
 export interface SceneInformation { doorWidthMm: string; doorHeightMm: string; robotLinkCount: number; emitterMm: string[] }
 function disposeObject(object: THREE.Object3D) {
   object.traverse(node => {
@@ -62,14 +63,13 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
   controls.enableDamping = true;
   scene.add(new THREE.HemisphereLight(0xffffff, 0x7c8896, 2));
   const light = new THREE.DirectionalLight(0xffffff, 3); light.position.set(2, -3, 4); scene.add(light);
-  const grid = new THREE.GridHelper(4, 40, 0x6d6d6d, 0x515151); grid.rotation.x = Math.PI/2; scene.add(grid);
+  const grid = infiniteGrid(camera.far); scene.add(grid);
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(4,4), new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 1, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
   // A solid shared platform grounds the cell. Its top is the existing Z=0 datum.
   const platform = new THREE.Mesh(new THREE.BoxGeometry(4,4,.18), new THREE.MeshStandardMaterial({color:0x687b8c,roughness:.9}));
   platform.position.z=-.09;
   scene.add(platform);
   scene.add(floor);
-  const majorGrid = new THREE.GridHelper(4, 8, 0x777777, 0x626262); majorGrid.rotation.x = Math.PI/2; scene.add(majorGrid);
   const resize = () => { const { width, height } = host.getBoundingClientRect(); renderer.setSize(width, height); camera.aspect = width/height; camera.updateProjectionMatrix(); };
   const observer = new ResizeObserver(resize); observer.observe(host); resize();
   const loader = new GLTFLoader();
@@ -132,13 +132,14 @@ export function openDemoScene(host: HTMLElement, ready: (info: SceneInformation,
     partReady=true;
     scene.updateMatrixWorld(true);
     const doorSize = new THREE.Box3().setFromObject(door).getSize(new THREE.Vector3());
-    const bounds = new THREE.Box3(); scene.children.filter(child => child !== selection?.markers && child !== platform && child !== floor && child !== grid && child !== majorGrid && !(child instanceof THREE.Light)).forEach(child => bounds.expandByObject(child));
+    const bounds = new THREE.Box3(); scene.children.filter(child => child !== selection?.markers && child !== platform && child !== floor && child !== grid && !(child instanceof THREE.Light)).forEach(child => bounds.expandByObject(child));
     const center = bounds.getCenter(new THREE.Vector3());
     controls.target.copy(center);
     const distance = bounds.getSize(new THREE.Vector3()).length() / (2*Math.sin(THREE.MathUtils.degToRad(20))) * 1.1;
     camera.position.copy(center).add(new THREE.Vector3(-1.6,-2.4,1.5).normalize().multiplyScalar(distance));
     controls.update();
-    renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+    grid.position.set(camera.position.x, camera.position.y, .001);
+    renderer.setAnimationLoop(() => { controls.update(); grid.position.set(camera.position.x, camera.position.y, .001); renderer.render(scene, camera); });
     renderer.render(scene,camera);
     ready({ doorWidthMm: (doorSize.y*1000).toFixed(1), doorHeightMm: (doorSize.z*1000).toFixed(1), robotLinkCount: robotDefinition.links.length, emitterMm: Array.from(pose.emitter.slice(12,15), n => (n*1000).toFixed(1)) }, asset);
     };
