@@ -6,7 +6,7 @@ test('fresh application waits for CAD import before showing any scene or scan co
  await expect(page).toHaveTitle('KaKue Scan Studio');
  await expect(page.getByRole('img',{name:'3D robot and door scene'})).toHaveCount(0);
  await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
- await expect(page.locator('.title-bar').getByRole('img',{name:'KaKue Automation'})).toBeVisible();
+ await expect(page.getByRole('img',{name:'KaKue Automation'})).toHaveCount(0);
  await expect(page.getByText('No model open',{exact:true})).toBeVisible();
  await expect(page.getByLabel('Import STEP')).toBeEnabled();
  await page.waitForTimeout(350);expect(cadRequests).toEqual([]);
