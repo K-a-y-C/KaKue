@@ -2,7 +2,7 @@
 
 ## Portfolio website
 
-The public app is hosted at [k-a-y-c.github.io/KaKue](https://k-a-y-c.github.io/KaKue/). Use desktop Chrome. On the current import-first screen, choose **Import CAD** and a STEP file; the supplied door is available in this repository at `3d files/car-front-door-1/DOOR-of-CAR.step`. PR #35 adds a **Try example** entry point for visitors without a local CAD file.
+The public app is hosted at [k-a-y-c.github.io/KaKue](https://k-a-y-c.github.io/KaKue/). Use desktop Chrome. Choose **Try example** to open the supplied door without a local file, or **Import CAD** to choose a STEP file. The supplied door is retained in this repository at `3d files/car-front-door-1/DOOR-of-CAR.step`.
 
 The `Verify and publish portfolio` GitHub Actions workflow checks PRs against `main`. After a merge or direct push to `main`, it builds with `BASE_PATH=/KaKue/`, verifies genuine assets and the static release, runs numerical and production-browser route/export checks, and publishes the complete `dist` directory only if those checks pass. PR branches do not deploy. Failed checks leave the previous website available. Deployment progress and errors appear in the repository's **Actions** tab. Pages uses **GitHub Actions** as its publishing source.
 
