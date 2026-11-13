@@ -1,0 +1,58 @@
+name: Verify and publish portfolio
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BASE_PATH: /KaKue/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Check supplied source identities
+        run: |
+          echo 'a2662bda82f6bb30ffd70266ad4fc6398871c36c5d2803f138ef9abd57ef53ef  3d files/car-front-door-1/DOOR-of-CAR.step' | sha256sum --check
+          echo '8b6808af0ca85237dbf5dd73624385ae5fdf36654ef6fd6e4c6cd277683f96a1  3d files/Robot/KR22_R1610-KR16_R1610.stp' | sha256sum --check
+      - run: npm run build
+      - run: npm run verify:release
+      - run: npm run test:numerical
+      - name: Install Chrome
+        run: npx playwright install --with-deps chrome
+      - name: Verify production import, motion and export under the site path
+        run: PREVIEW=1 npm test -- tests/browser/route.spec.ts tests/browser/downloads.spec.ts
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
