@@ -1,7 +1,6 @@
 import {StandOffEditor} from './workspace/StandOffEditor';
 import {ScanRibbon,CommandButton} from './workspace/Ribbon';
 import {SceneTree, ToolIcon} from './workspace/Chrome';
-import logo from './assets/logo.jpeg';
 import {DownloadControls} from './export/DownloadControls';
 import { prepareRun } from './motion/preflight-client';
 import type { RunPlan } from './motion/preflight';
@@ -9,7 +8,7 @@ import { visit, returnHome } from './motion/execution';
 import type { SelectedPoint } from './scene/surface-selection';
 import React, { useEffect, useRef, useState } from 'react';
 import { openDemoScene, type SceneHandle, type SceneInformation } from './scene/demo-scene';
-import { importStep, prepareInitialStep, validateStepFile } from './import/step-import';
+import { importStep, loadBundledSource, prepareInitialStep, validateStepFile } from './import/step-import';
 import type { InitialPart, PartAsset } from './import/types';
 function interruptedStatuses(points: readonly SelectedPoint[], statuses: Record<number,string>) {
   return Object.fromEntries(points.map(point=> {
@@ -63,14 +62,19 @@ export default function App() {
     scene.current=handle;
     return ()=>{handle.dispose();if(scene.current===handle)scene.current=null;};
   }, [initialPart]);
-  const replace = async (file: File) => {
-    try { validateStepFile(file); } catch (error) { setError(error instanceof Error ? error.message : String(error)); return; }
+  const replace = async (file?: File) => {
+    try { if(file) validateStepFile(file); } catch (error) { setError(error instanceof Error ? error.message : String(error)); return; }
     runActive.current=false; runToken.current++; runAbort.current?.abort(); workerCancel.current?.(); plan.current=null; setPhase('selecting'); setReturning(false); setStatuses({}); setCurrentPoint(null); setVisitedCount(0); scene.current?.setSelectionEnabled(true);
     const id = ++request.current;
     pending.current?.abort();
     const controller = new AbortController(); pending.current = controller;
-    source.current = null; scene.current?.clearPart(); setPoints([]); setInformation(null); setError(''); setLoading(true); setSourceName(file.name);
+    source.current = null; scene.current?.clearPart(); setPoints([]); setInformation(null); setError(''); setLoading(true); setSourceName(file?.name??'DOOR-of-CAR.step');
     try {
+      if(!file){
+        const cacheSource=await loadBundledSource({signal:controller.signal});
+        if(id===request.current)setInitialPart({cacheSource});
+        return;
+      }
       if(!sceneReady){
         const initial=await prepareInitialStep(file,{signal:controller.signal});
         if(id===request.current){setInitialPart(initial);}
@@ -131,9 +135,9 @@ export default function App() {
   const preview=(label:string)=>{if(previewTimer.current)clearTimeout(previewTimer.current);setPreviewMessage(`${label} — preview command`);previewTimer.current=setTimeout(()=>setPreviewMessage(''),3000);};
   const importControl=<label className="import-control"><span>＋ Import CAD</span><input ref={fileInput} aria-label="Import STEP" type="file" accept=".step,.stp" disabled={phase==='preparing'||phase==='running'} onChange={event=>{const file=event.target.files?.[0];event.target.value='';if(file)void replace(file);}}/></label>;
   return <main className={sceneReady?'app-shell':'app-shell awaiting-import'}>
-    <header className="app-header"><div className="title-bar"><div className="brand"><img src={logo} alt="KaKue Automation"/><div><h1>KaKue scan studio</h1></div></div><div className="quick-access">{["New","Open","Save","Undo","Redo"].map(label=><CommandButton key={label} label={label} preview={preview} icon={label==='Undo'?'undo':label==='Redo'?'redo':'file'}/>)}</div></div></header>
+    <header className="app-header"><div className="title-bar"><div className="brand"><div><h1>KaKue scan studio</h1></div></div><div className="quick-access">{["New","Open","Save","Undo","Redo"].map(label=><CommandButton key={label} label={label} preview={preview} icon={label==='Undo'?'undo':label==='Redo'?'redo':'file'}/>)}</div></div></header>
 <ScanRibbon preview={preview} onImport={()=>fileInput.current?.click()} importLocked={phase==='preparing'||phase==='running'} onRun={()=>void run()} runDisabled={locked||!information||!points.length||!Number.isFinite(Number(standOff))||Number(standOff)<50||Number(standOff)>500} onStop={stop} stopDisabled={phase!=='preparing'&&phase!=='running'} onStandOff={()=>{distanceTrigger.current=document.activeElement as HTMLElement;setDistanceEditor(true);}} settingsDisabled={locked||!information} onSelect={()=>viewport.current?.focus()} onProperties={()=>{setInspector('properties');document.querySelector<HTMLDetailsElement>('.model-properties')?.setAttribute('open','');document.querySelector<HTMLButtonElement>('[role=tab][aria-controls=properties-panel]')?.focus();}} output={phase==='completed'?<DownloadControls part={source.current} points={points} statuses={statuses} plan={plan.current} standOffMm={Number(standOff)} outcome={phase}/>:<CommandButton label="Export" large disabled/>}/><div className="ribbon-import">{importControl}</div>
-    <div className="workspace" id="scan-workspace" aria-label="Scan workspace"><SceneTree pointCount={points.length} sourceName={information?sourceName:''} preview={preview}/><div className="document-view"><div className="document-strip"><span>{information?`${sourceName} — 3D view`:"No document"}</span><CommandButton label="New view" icon="plus" preview={preview}/></div><div className="viewport" ref={viewport} tabIndex={0} aria-label="Scan viewport">{sceneReady&&<div className="view-tools">{["Perspective","Fit","Orbit","Pan","Grid","Axes"].map(label=><button key={label} aria-label={`${label} view tool`} title={`${label} · Preview command`} onClick={()=>preview(label)}><ToolIcon name={label==='Grid'?'grid':label==='Fit'?'zoom':label==='Orbit'?'rotate':'move'}/></button>)}</div>}{!sceneReady&&<div className="empty-workspace"><strong>{loading?"Preparing your workspace":"No model open"}</strong><p>{loading?"Verifying model and loading assets…":"Import CAD to begin"}</p></div>}</div></div>
+    <div className="workspace" id="scan-workspace" aria-label="Scan workspace"><SceneTree pointCount={points.length} sourceName={information?sourceName:''} preview={preview}/><div className="document-view"><div className="document-strip"><span>{information?`${sourceName} — 3D view`:"No document"}</span><CommandButton label="New view" icon="plus" preview={preview}/></div><div className="viewport" ref={viewport} tabIndex={0} aria-label="Scan viewport">{sceneReady&&<div className="view-tools">{["Perspective","Fit","Orbit","Pan","Grid","Axes"].map(label=><button key={label} aria-label={`${label} view tool`} title={`${label} · Preview command`} onClick={()=>preview(label)}><ToolIcon name={label==='Grid'?'grid':label==='Fit'?'zoom':label==='Orbit'?'rotate':'move'}/></button>)}</div>}{!sceneReady&&<div className="empty-workspace"><strong>{loading?"Preparing your workspace":"No model open"}</strong><p>{loading?"Verifying model and loading assets…":"Try the supplied door example or import your own STEP file."}</p>{!loading&&<button className="try-example" onClick={()=>void replace()}>Try example</button>}</div>}</div></div>
     <aside className="dock-panel"><div className="pane-tabs" role="tablist" aria-label="Inspector panes">{['Properties','Scan data'].map(name=><button key={name} role="tab" aria-selected={inspector===(name==='Properties'?'properties':'data')} aria-controls={name==='Properties'?'properties-panel':'data-panel'} onClick={()=>setInspector(name==='Properties'?'properties':'data')}>{name}</button>)}</div><div className="inspector-content"><p role="status">{phase==='completed'?'Simulation complete':phase==='blocked'?'Sequence blocked — no robot movement.':phase==='failed'?'Simulation failed':phase==='stopped'?'Simulation stopped':phase==='preparing'?'Preparing scanner poses…':phase==='running'?(returning?'Returning home…':'Simulation running…'):loading ? 'Loading model…' : information ? 'Scene ready — select CAD surfaces to plan your scan.' : error ? 'Scene unavailable.' : 'Import CAD to begin.'}</p>
     {error && <p role="alert">{error}</p>}
     <div id="properties-panel" hidden={inspector!=='properties'}><details open><summary>Scanner</summary><section aria-label="Scanner visit"><h3>Scanner settings</h3><label>Stand-off (mm)<input type="number" min="50" max="500" value={standOff} disabled={locked||!information} onChange={event=>setStandOff(event.target.value)}/></label><p className="simulation-note">Continuous scan · 1 second at each point</p></section></details>
