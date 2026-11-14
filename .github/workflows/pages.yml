@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      BASE_PATH: /KaKue/
+      BASE_PATH: /${{ github.event.repository.name }}/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -36,7 +36,7 @@ jobs:
       - name: Install Chrome
         run: npx playwright install --with-deps chrome
       - name: Verify production import, motion and export under the site path
-        run: PREVIEW=1 npm test -- tests/browser/route.spec.ts tests/browser/downloads.spec.ts
+        run: PREVIEW=1 npm test -- tests/browser/branding.spec.ts tests/browser/workspace.spec.ts tests/browser/route.spec.ts tests/browser/downloads.spec.ts
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:

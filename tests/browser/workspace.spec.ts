@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test';
 test('fresh application waits for CAD import before showing any scene or scan controls',async({page})=>{
  const cadRequests:string[]=[];page.on('request',request=>{if(/\.glb$|\.step$|\.wasm$|worker/.test(request.url()))cadRequests.push(request.url());});
  await page.goto('./');
- await expect(page).toHaveTitle('KaKue Scan Studio');
+ await expect(page).toHaveTitle('Scan Studio');
  await expect(page.getByRole('img',{name:'3D robot and door scene'})).toHaveCount(0);
  await expect(page.getByRole('button',{name:'Run',exact:true})).toBeDisabled();
  await expect(page.getByRole('img',{name:'KaKue Automation'})).toHaveCount(0);

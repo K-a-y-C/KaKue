@@ -1,9 +1,11 @@
 import {test,expect} from './fixtures';
 
-test('title bar shows KaKue scan studio and no source filename while the document keeps its name',async({page})=>{
+test('title bar shows Scan Studio and no source filename while the document keeps its name',async({page})=>{
  await page.goto('./');await expect(page.getByRole('status')).toContainText('Scene ready');
  const title=page.locator('.title-bar');
- await expect(title.getByRole('heading',{level:1})).toHaveText('KaKue scan studio');
+ await expect(page).toHaveTitle('Scan Studio');
+ await expect(page.locator('body')).not.toContainText(/kakue/i);
+ await expect(title.getByRole('heading',{level:1})).toHaveText('Scan Studio');
  await expect(title).not.toContainText('DOOR-of-CAR.step');
  await expect(page.locator('.document-strip')).toContainText('DOOR-of-CAR.step — 3D view');
  await expect(page.getByRole('region',{name:'Scene tree'})).toContainText('Imported part — DOOR-of-CAR.step');
@@ -14,7 +16,7 @@ test('workspace has no KaKue logos at either desktop size',async({page})=>{
  for(const size of [{width:1440,height:900},{width:1280,height:800}]){
   await page.setViewportSize(size);
   await expect(page.getByRole('img',{name:'KaKue Automation'})).toHaveCount(0);
-  await expect(page.getByRole('heading',{level:1})).toHaveText('KaKue scan studio');
+  await expect(page.getByRole('heading',{level:1})).toHaveText('Scan Studio');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  }
 });
