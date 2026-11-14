@@ -6,7 +6,7 @@ test('presenter opens the actual fixed robot and door scene', async ({ page }, t
   const meshes = new Set<string>();
   page.on('response', response => { if (response.url().endsWith('.glb') && response.ok()) meshes.add(new URL(response.url()).pathname); });
   await page.goto('./');
-  await expect(page.getByRole('heading', { name: 'KaKue scan studio' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Scan Studio' })).toBeVisible();
   await expect(page.getByRole('status')).toHaveText('Scene ready — select CAD surfaces to plan your scan.');
   await expect(page.getByRole('img', { name: '3D robot and door scene' })).toBeVisible();
   expect(meshes.size).toBe(8);

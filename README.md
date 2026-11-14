@@ -1,28 +1,28 @@
-# KaKue — Robot Door Scan Demo
+# Scan Studio — Robot Door Scan Demo
 
 ## Portfolio website
 
-The public app is hosted at [k-a-y-c.github.io/KaKue](https://k-a-y-c.github.io/KaKue/). Use desktop Chrome. Choose **Try example** to open the supplied door without a local file, or **Import CAD** to choose a STEP file. The supplied door is retained in this repository at `3d files/car-front-door-1/DOOR-of-CAR.step`.
+The public app is hosted at [k-a-y-c.github.io/scan-studio](https://k-a-y-c.github.io/scan-studio/). Use desktop Chrome. Choose **Try example** to open the supplied door without a local file, or **Import CAD** to choose a STEP file. The supplied door is retained in this repository at `3d files/car-front-door-1/DOOR-of-CAR.step`.
 
-The `Verify and publish portfolio` GitHub Actions workflow checks PRs against `main`. After a merge or direct push to `main`, it builds with `BASE_PATH=/KaKue/`, verifies genuine assets and the static release, runs numerical and production-browser route/export checks, and publishes the complete `dist` directory only if those checks pass. PR branches do not deploy. Failed checks leave the previous website available. Deployment progress and errors appear in the repository's **Actions** tab. Pages uses **GitHub Actions** as its publishing source.
+The `Verify and publish portfolio` GitHub Actions workflow checks PRs against `main`. After a merge or direct push to `main`, it builds with `BASE_PATH=/scan-studio/`, verifies genuine assets and the static release, runs numerical and production-browser route/export checks, and publishes the complete `dist` directory only if those checks pass. PR branches do not deploy. Failed checks leave the previous website available. Deployment progress and errors appear in the repository's **Actions** tab. Pages uses **GitHub Actions** as its publishing source.
 
 Hosting uses GitHub Pages and standard Ubuntu runners for this public repository. No paid hosting service, custom domain, backend, or deployment secret is required. The same public URL is retained for future releases.
 
-KaKue is a desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
+Scan Studio is a desktop web demonstration of selecting scan locations on an automotive door and watching a six-axis robot visit them. It uses the supplied door CAD and robot geometry, with a wrist-mounted scanner and an illustrative red laser fan.
 
 **Current status:** the supplied assets are accepted, and issue #3 delivers the fixed browser scene with actual door, articulated CAD robot, scanner, floor and camera inspection. Issue #4 adds local STEP import, exact source retention, fresh model sessions and readable import failures. Issue #5 adds ordered surface selection, numbered markers, coordinate inspection and gesture/occlusion filtering. Issue #6 adds one verified scanner visit: stand-off settings, bounded local-worker pose preflight, articulated joint motion and one-second laser dwell, or an honest blocked result. Issue #7 adds complete ordered-route preflight and playback, current-point/visited progress, truthful blocked rows and actual five-point runtime acceptance. Issue #8 adds immediate Stop during preparation/transit/dwell, frozen pose, retained honest statuses and terminal failures with fresh-import recovery. Issue #21 adds continuous surface-facing waypoint scans, a dense 240 mm fan and stand-off through 500 mm, preserving #8 Stop semantics. Issue #9 established immutable PLY/CSV export snapshots. The current presenter amendment bundles the point cloud and coordinates into one successful-scan ZIP Export. Issue #10 verifies the static release, production workflow/layouts and local hardware presentation performance. Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first. The synchronized [full PRD](.scratch/robot-door-scan-demo/PRD.md) remains authoritative; consult it only for explanation or ambiguity. Ready-for-agent does not bypass the asset or production acceptance gates.
 
 ## CAD workspace appearance
 
-[Issue #30](https://github.com/K-a-y-C/KaKue/issues/30) implements the dark desktop ribbon redesign: a compact KaKue title strip, selectable workflow tabs, grouped Scan commands, searchable docked project outline, Properties/Scan data panes, document strip and full-width simulation status bar. The empty workspace offers **Try example** to load the supplied door automatically, or **Import CAD** to choose a local STEP file. No scene or worker loads until either action. Set stand-off opens an Apply/Cancel editor for 50–500 mm. Import, surface picking, camera gestures, Run, Stop, home return and successful ZIP Export retain their existing behavior.
+[Issue #30](https://github.com/K-a-y-C/scan-studio/issues/30) implements the dark desktop ribbon redesign: a compact Scan Studio title strip, selectable workflow tabs, grouped Scan commands, searchable docked project outline, Properties/Scan data panes, document strip and full-width simulation status bar. The empty workspace offers **Try example** to load the supplied door automatically, or **Import CAD** to choose a local STEP file. No scene or worker loads until either action. Set stand-off opens an Apply/Cancel editor for 50–500 mm. Import, surface picking, camera gestures, Run, Stop, home return and successful ZIP Export retain their existing behavior.
 
 Additional CAD tools are enabled **preview commands**: activation shows a three-second status message and cannot edit geometry, selections, settings or robot motion. Their tooltips identify them as previews. No native packaging, CAD editing, persistence, backend or new dependency is included. The pinned React/TypeScript/Vite/direct Three.js stack and lockfile are unchanged.
 
 See the [technical implementation plan](docs/plans/desktop-cad-ribbon-implementation.md), [visual specification](docs/plans/desktop-cad-ribbon-redesign.md), [verification](docs/verification/desktop-cad-ribbon.md) and [handoff](docs/handoffs/desktop-cad-ribbon.md).
 
-[Issue #32](https://github.com/K-a-y-C/KaKue/issues/32) applies the three screenshot branding amendments: `KaKue scan studio` with no title-strip filename, the supplied logo in the unused ribbon rectangle, and the logo's company blue in the 3D background. The later [example-start amendment](docs/verification/try-example.md) removes both visible logos and adds the opening **Try example** action; the title and blue scene background remain. See its [plan](docs/plans/issue-32.md), [verification](docs/verification/issue-32.md) and [handoff](docs/handoffs/issue-32.md).
+The portfolio uses the neutral **Scan Studio** title without company logos. The **Try example** action opens the supplied door, and the existing blue scene background is preserved. Historical appearance evidence is retained in the issue plans and verification records.
 
-The 3D viewport grid extends beyond the solid base and follows camera inspection without a square boundary. The original solid platform stays the same size; the company-blue background remains visible between grid lines outside it. See [grid verification and handoff](docs/verification/infinite-grid.md).
+The 3D viewport grid extends beyond the solid base and follows camera inspection without a square boundary. The original solid platform stays the same size; the blue background remains visible between grid lines outside it. See [grid verification and handoff](docs/verification/infinite-grid.md).
 
 ## Intended workflow
 
@@ -83,7 +83,7 @@ The application is a client-side static build. STEP parsing and pose preparation
 
 ## Start development
 
-Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Also read the [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/KaKue/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
+Read the [concise PRD](.scratch/robot-door-scan-demo/PRD.concise.md) first; consult the unchanged [full PRD](.scratch/robot-door-scan-demo/PRD.md) only for additional explanation or ambiguity. Also read the [implementation guide](docs/agents/implementation-guide.md), [robot verification evidence](docs/research/robot-verification.md), and [stack decisions](docs/research/web-stack.md) before implementing. Follow the [ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md) and select an approved [GitHub issue](https://github.com/K-a-y-C/scan-studio/issues) whose blockers are complete. Asset preparation and evidence are prerequisites for accepting work that relies on the real door or runtime robot geometry.
 
 With Node 24 LTS on PATH, from the repository root:
 
@@ -136,7 +136,7 @@ Required evidence includes correct surface picking and drag filtering, ordered f
 - [Original full PRD — authoritative fallback](.scratch/robot-door-scan-demo/PRD.md)
 - [Implementation guide](docs/agents/implementation-guide.md)
 - [Ordered issue backlog](.scratch/robot-door-scan-demo/issues/breakdown.md)
-- [GitHub issue tracker](https://github.com/K-a-y-C/KaKue/issues)
+- [GitHub issue tracker](https://github.com/K-a-y-C/scan-studio/issues)
 - [Robot geometry measurements and retained evidence](docs/research/robot-verification.md)
 - [Web stack selection and version baseline](docs/research/web-stack.md)
 - [Issue tracker configuration](docs/agents/issue-tracker.md)
@@ -205,9 +205,9 @@ See the [technical plan](docs/plans/issue-10.md), [verification/network/performa
 
 The wrist-mounted projection now has a filled rectangular end and visible depth. Its 80×60 mm aperture expands to a 240×180 mm footprint through translucent side walls and a 13×9 grid of rays. These are illustrative dimensions; selected CAD points and all three downloads remain unchanged. Reach follows the accepted 50–500 mm stand-off, and Stop immediately extinguishes the entire volume. [Plan](docs/plans/laser-volume.md), [verification](docs/verification/laser-volume.md), [handoff](docs/handoffs/laser-volume.md).
 
-### Branded import-first workspace
+### Import-first workspace
 
-The application starts with the supplied KaKue Automation logo and the empty desktop workspace. Real scan commands are disabled and no robot, door, CAD asset requests or parser workers load before choosing a valid model. Successful import fills the docked panes and central 3D viewport. Invalid first imports leave Import CAD available for retry; reload returns to the empty workspace. Model properties are expandable, and the empty data table states that no surface points are selected. The original supplied Logo.jpeg is copied unchanged into src/assets/logo.jpeg and served locally.
+The application starts with the Scan Studio title and an empty desktop workspace. Real scan commands are disabled and no robot, door, CAD asset requests or parser workers load before choosing a valid model. Successful import fills the docked panes and central 3D viewport. Invalid first imports leave Import CAD available for retry; reload returns to the empty workspace. Model properties are expandable, and the empty data table states that no surface points are selected. The portfolio uses neutral Scan Studio text branding.
 
 [Technical plan](docs/plans/import-first-workspace.md), [verification](docs/verification/import-first-workspace.md), [handoff](docs/handoffs/import-first-workspace.md). The approved source geometry, camera/placement, rectangular laser, Run/Stop and selected-point download contracts remain unchanged. Generic imported parts retain fixed placement and do not imply arbitrary-part reachability.
 
